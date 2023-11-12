@@ -1,0 +1,11 @@
+export const DWORD = "i32";
+export const QWORD = "i64";
+export const c_int_32 = "i32";
+export const c_int_64 = "i64";
+export const c_float = "f32";
+export const c_double = "f64";
+export const HWND = "i64";
+export const c_void = "void";
+export const c_ptr = "pointer";
+export const buffer = "buffer";
+export const c_bool = "bool";
