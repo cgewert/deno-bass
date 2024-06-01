@@ -9,7 +9,7 @@ import {
   c_ptr,
 } from "./ctypes.ts";
 
-export const library = Deno.dlopen("../bass.dll", {
+export const library = Deno.dlopen(".\\binaries\\win64\\bass.dll", {
   BASS_GetDevice: { parameters: [], result: c_int_32 },
   BASS_GetDeviceInfo: {
     parameters: [DWORD, "buffer"],
@@ -30,8 +30,10 @@ export const library = Deno.dlopen("../bass.dll", {
   BASS_ChannelFree: { parameters: [QWORD], result: c_bool },
   BASS_SetVolume: { parameters: ["f32"], result: c_bool },
   BASS_ChannelGetLevel: { parameters: ["i64"], result: DWORD },
+  BASS_GetVersion: { parameters: [], result: DWORD },
 } as const);
 
+// Classic C Style API
 export const BASS_Init = library.symbols.BASS_Init;
 export const BASS_Free = library.symbols.BASS_Free;
 export const BASS_StreamCreateFile = library.symbols.BASS_StreamCreateFile;
@@ -43,3 +45,4 @@ export const BASS_GetDevice = library.symbols.BASS_GetDevice;
 export const BASS_GetDeviceInfo = library.symbols.BASS_GetDeviceInfo;
 export const BASS_GetCPU = library.symbols.BASS_GetCPU;
 export const BASS_ChannelGetLevel = library.symbols.BASS_ChannelGetLevel;
+export const BASS_GetVersion = library.symbols.BASS_GetVersion;

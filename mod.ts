@@ -12,5 +12,6 @@ export {
   BASS_GetDeviceInfo,
   BASS_GetCPU,
   BASS_ChannelGetLevel,
+  BASS_GetVersion,
   library,
 } from "./lib/bindings.ts";
