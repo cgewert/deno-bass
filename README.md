@@ -19,5 +19,5 @@ You have to provide the correct shared library for your platform yourself. Downl
 Because FFI is an unstable Deno feature you have to run your code with --allow-ffi and --unstable flags provided:
 
 ```sh
-$ deno run --allow-ffi --unstable yourscript.ts
+$ deno run --allow-ffi --unstable-ffi yourscript.ts
 ```
