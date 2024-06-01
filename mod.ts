@@ -15,3 +15,4 @@ export {
   BASS_GetVersion,
   library,
 } from "./lib/bindings.ts";
+export { HIWORD, LOWORD } from "./lib/utilities.ts";
