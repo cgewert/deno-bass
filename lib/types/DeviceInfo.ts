@@ -1,4 +1,4 @@
-export class BassDeviceInfo {
+export class DeviceInfo {
   public static SIZE = 24;
   public Infostruct: Uint8Array;
 
@@ -22,23 +22,12 @@ export class BassDeviceInfo {
   }
 
   public get Flags() {
-    /*if (this.Infostruct) {
-      const flagsPointer = Deno.UnsafePointer.create(
-        Number(new BigUint64Array(this.Infostruct.subarray(16, 4).buffer)[0])
-      );
-      let flags = 0;
-      try {
-        flags = flagsPointer.getInt32(0);
-      } catch (err) {
-        console.log("Error while getting device info: ", err);
-      }
-
-      return flags;
+    if (this.Infostruct) {
+      return new DataView(this.Infostruct.buffer).getUint32(16, true);
     } else {
       // Infostruct was null or undefined and must be initialized first.
-      return "";
-    }*/
-    throw new Error("Currently not supported!");
+      return 0;
+    }
   }
 
   public get Driver() {
@@ -63,6 +52,6 @@ export class BassDeviceInfo {
   }
 
   constructor() {
-    this.Infostruct = new Uint8Array(BassDeviceInfo.SIZE);
+    this.Infostruct = new Uint8Array(DeviceInfo.SIZE);
   }
 }
