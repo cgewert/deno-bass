@@ -21,3 +21,11 @@ Because FFI is an unstable Deno feature you have to run your code with --allow-f
 ```sh
 $ deno run --allow-ffi --unstable-ffi yourscript.ts
 ```
+
+### Test coverage
+
+Use Deno to run tests:
+
+```sh
+$ deno test --allow-ffi --unstable-ffi
+```
