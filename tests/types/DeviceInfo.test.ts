@@ -1,5 +1,5 @@
-import * as assertions from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { describe, it } from "https://deno.land/std@0.224.0/testing/bdd.ts";
+import * as assertions from "std/assert/mod.ts";
+import { describe, it } from "std/testing/bdd.ts";
 import { DeviceInfo } from "../../lib/types/DeviceInfo.ts";
 
 describe("DeviceInfo", () => {

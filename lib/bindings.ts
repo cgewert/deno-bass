@@ -29,6 +29,7 @@ export const library = Deno.dlopen(".\\binaries\\win64\\bass.dll", {
   BASS_ChannelPlay: { parameters: [QWORD, c_bool], result: c_bool },
   BASS_ChannelFree: { parameters: [QWORD], result: c_bool },
   BASS_SetVolume: { parameters: ["f32"], result: c_bool },
+  BASS_SetConfig: { parameters: [DWORD, DWORD], result: c_bool },
   BASS_ChannelGetLevel: { parameters: ["i64"], result: DWORD },
   BASS_GetVersion: { parameters: [], result: DWORD },
 } as const);
@@ -46,3 +47,4 @@ export const BASS_GetDeviceInfo = library.symbols.BASS_GetDeviceInfo;
 export const BASS_GetCPU = library.symbols.BASS_GetCPU;
 export const BASS_ChannelGetLevel = library.symbols.BASS_ChannelGetLevel;
 export const BASS_GetVersion = library.symbols.BASS_GetVersion;
+export const BASS_SetConfig = library.symbols.BASS_SetConfig;

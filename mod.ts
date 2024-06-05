@@ -13,6 +13,7 @@ export {
   BASS_GetCPU,
   BASS_ChannelGetLevel,
   BASS_GetVersion,
+  BASS_SetConfig,
   library,
 } from "./lib/bindings.ts";
 export {
