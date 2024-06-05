@@ -1,4 +1,5 @@
 import { BASS_GetDeviceInfo } from "../bindings.ts";
+import { CreatePointerX64 } from "../../mod.ts";
 
 export class DeviceInfo {
   private _infostruct: Uint8Array;
@@ -7,6 +8,10 @@ export class DeviceInfo {
   private _driver: string;
 
   public static SIZE = 24;
+
+  public static OFFSET_NAME = 0;
+  public static OFFSET_DRIVER = 8;
+  public static OFFSET_FLAGS = 16;
 
   constructor(device_idx = 0) {
     this._name = "";
@@ -43,10 +48,10 @@ export class DeviceInfo {
 
   private initProperties() {
     // Reading name string from c pointer to struct.
-    const dataView = new DataView(this._infostruct.buffer);
-    const deviceNamePointer = Deno.UnsafePointer.create(
-      dataView.getBigUint64(0, true)
-    ) as Deno.PointerObject;
+    const deviceNamePointer = CreatePointerX64(
+      this._infostruct,
+      DeviceInfo.OFFSET_NAME
+    );
     let name = "";
     try {
       name = Deno.UnsafePointerView.getCString(deviceNamePointer);
@@ -55,9 +60,10 @@ export class DeviceInfo {
     }
     this.Name = name;
     // Reading device driver
-    const driverIdentificationPointer = Deno.UnsafePointer.create(
-      new BigUint64Array(this._infostruct.subarray(8, 8).buffer)[0]
-    ) as Deno.PointerObject;
+    const driverIdentificationPointer = CreatePointerX64(
+      this._infostruct,
+      DeviceInfo.OFFSET_DRIVER
+    );
     let driverIdentification = "";
     try {
       driverIdentification = Deno.UnsafePointerView.getCString(
@@ -68,6 +74,9 @@ export class DeviceInfo {
     }
     this.Driver = driverIdentification;
     // Reading flags
-    this.Flags = new DataView(this._infostruct.buffer).getUint32(16, true);
+    this.Flags = new DataView(this._infostruct.buffer).getUint32(
+      DeviceInfo.OFFSET_FLAGS,
+      true
+    );
   }
 }

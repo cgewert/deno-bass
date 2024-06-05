@@ -17,3 +17,9 @@ export const IsHeadphone = (x: DeviceInfo) =>
   Boolean(x.Flags & BASS_DEVICE_TYPE_HEADPHONES);
 export const IsEnabled = (x: DeviceInfo) =>
   Boolean(x.Flags & BASS_DEVICE_ENABLED);
+export const CreatePointerX64 = (data: Uint8Array, offset: number) => {
+  // Create a 64-Bit Pointer based on the array buffer
+  return Deno.UnsafePointer.create(
+    new BigUint64Array(data.subarray(offset, offset + 8).buffer)[0]
+  ) as Deno.PointerObject;
+};

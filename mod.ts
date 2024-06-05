@@ -21,4 +21,5 @@ export {
   IsHeadphone,
   IsMicrophone,
   IsEnabled,
+  CreatePointerX64,
 } from "./lib/utilities.ts";
