@@ -1,4 +1,10 @@
+/*
+ *  This example shows how to play a MP3 audio file.
+ *
+ */
+
 import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
+import { BASS_CONFIG_UNICODE } from "../lib/options.ts";
 import {
   BASS_Init,
   BASS_GetDeviceInfo,
@@ -12,38 +18,41 @@ import {
   BASS_ChannelFree,
   BASS_Free,
   library,
+  BASS_SetConfig,
 } from "../mod.ts";
+import { ErrorCodeToString } from "../lib/utilities.ts";
+import { DeviceInfo } from "../lib/types/DeviceInfo.ts";
 
+BASS_SetConfig(BASS_CONFIG_UNICODE, 1);
 let initialization = BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);
+console.log("Initialized BASS: ", initialization);
 
 // Enumerate all audio devices.
-let deviceInfo = new Uint8Array(24); // Mimicking BASS_DEVICEINFO struct
-for (let a = 0; BASS_GetDeviceInfo(a, deviceInfo); a++) {
-  const deviceNamePointer = Deno.UnsafePointer.create(
-    Number(new BigUint64Array(deviceInfo.subarray(0, 8).buffer)[0])
-  );
-  let name = "";
-  try {
-    name = Deno.UnsafePointerView.getCString(deviceNamePointer);
-
-    // Read and create a JavaScript string from the `char *` pointer.
-    console.log("Audio Device found: ", name);
-  } catch (err) {
-    console.log("Error while enumerating audio devices: ", err);
-  }
+let deviceInfo = new DeviceInfo();
+let error = 0;
+for (let a = 0; BASS_GetDeviceInfo(a, deviceInfo.Infostruct); a++) {
+  deviceInfo.readValuesFromStruct();
+  console.log("Audio Device found: ", deviceInfo.Name);
 }
-console.log("Initialized: ", initialization);
-const fileNameBuffer = new TextEncoder().encode(
-  "E:\\Programmieren\\deno-tutorial\\ffi\\001-c\\track.mp3"
-);
-const streamHandle = BASS_StreamCreateFile(
-  false,
-  fileNameBuffer,
-  0,
-  0,
-  BASS_SAMPLE_FLOAT
-);
-console.log("Streamhandle: ", streamHandle);
+// Bis hier hin alles tutti
+
+try {
+  const fileNameBuffer = new TextEncoder().encode(
+    "E:\\Programmieren\\deno-tutorial\\ffi\\001-c\\track.mp3"
+  );
+  const streamHandle = BASS_StreamCreateFile(
+    false,
+    fileNameBuffer,
+    0,
+    0,
+    BASS_SAMPLE_FLOAT
+  );
+  console.log("Streamhandle: ", streamHandle);
+  error = BASS_ErrorGetCode();
+  console.log(ErrorCodeToString(error));
+  Deno.exit(error);
+} catch (error) {}
+
 if (streamHandle == 0) {
   console.log("Could not load stream: ", BASS_ErrorGetCode());
   Deno.exit(-1);

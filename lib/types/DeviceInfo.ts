@@ -13,13 +13,19 @@ export class DeviceInfo {
   public static OFFSET_DRIVER = 8;
   public static OFFSET_FLAGS = 16;
 
-  constructor(device_idx = 0) {
+  constructor(device_idx = -1) {
     this._name = "";
     this._driver = "";
     this._flags = 0;
     this._infostruct = new Uint8Array(DeviceInfo.SIZE);
-    BASS_GetDeviceInfo(device_idx, this._infostruct);
-    this.initProperties();
+    if (device_idx > -1) {
+      BASS_GetDeviceInfo(device_idx, this._infostruct);
+      this.readValuesFromStruct();
+    }
+  }
+
+  public get Infostruct() {
+    return this._infostruct;
   }
 
   public get Name() {
@@ -46,7 +52,8 @@ export class DeviceInfo {
     this._driver = value;
   }
 
-  private initProperties() {
+  /* Call after Infostruct was set or updated to read the values stored in the structure. */
+  public readValuesFromStruct() {
     // Reading name string from c pointer to struct.
     const deviceNamePointer = CreatePointerX64(
       this._infostruct,

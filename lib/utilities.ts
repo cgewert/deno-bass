@@ -1,5 +1,4 @@
-// Utility lambdas mimicking c macros
-
+import { ERROR_MAP } from "./errors.ts";
 import {
   BASS_DEVICE_ENABLED,
   BASS_DEVICE_TYPE_HEADPHONES,
@@ -7,6 +6,7 @@ import {
 } from "./flags.ts";
 import { DeviceInfo } from "./types/DeviceInfo.ts";
 
+// C like lambdas
 export const HIWORD = (x: number) => x & 0xffff0000;
 export const LOWORD = (x: number) => x & 0x0000ffff;
 
@@ -23,3 +23,6 @@ export const CreatePointerX64 = (data: Uint8Array, offset: number) => {
     new BigUint64Array(data.subarray(offset, offset + 8).buffer)[0]
   ) as Deno.PointerObject;
 };
+
+// Error code lambdas
+export const ErrorCodeToString = (errorCode) => ERROR_MAP.get(errorCode);

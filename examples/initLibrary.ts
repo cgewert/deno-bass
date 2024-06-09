@@ -1,3 +1,9 @@
+/*
+ *  This example shows how to initialize the library.
+ *  Some library functions can be called without initializing,
+ *  but BASS_Init has to be called before playing any audio.
+ */
+
 import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
 import { BASS_Free, BASS_Init } from "../mod.ts";
 
