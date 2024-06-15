@@ -1,5 +1,4 @@
-import { BASS_GetDeviceInfo } from "../bindings.ts";
-import { CreatePointerX64 } from "../../mod.ts";
+import { CreatePointerX64, BASS_GetDeviceInfo } from "../../mod.ts";
 
 export class DeviceInfo {
   private _infostruct: Uint8Array;

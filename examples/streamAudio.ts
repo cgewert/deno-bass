@@ -3,14 +3,17 @@
  *
  */
 
-import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
-import { BASS_CONFIG_UNICODE } from "../lib/options.ts";
 import {
+  BASS_SetConfig,
+  BASS_CONFIG_UNICODE,
   BASS_Init,
+  BASS_DEVICE_STEREO,
+  DeviceInfo,
   BASS_GetDeviceInfo,
   BASS_StreamCreateFile,
   BASS_SAMPLE_FLOAT,
   BASS_ErrorGetCode,
+  ErrorCodeToString,
   BASS_SetVolume,
   BASS_ChannelPlay,
   BASS_GetCPU,
@@ -18,10 +21,7 @@ import {
   BASS_ChannelFree,
   BASS_Free,
   library,
-  BASS_SetConfig,
 } from "../mod.ts";
-import { ErrorCodeToString } from "../lib/utilities.ts";
-import { DeviceInfo } from "../lib/types/DeviceInfo.ts";
 
 BASS_SetConfig(BASS_CONFIG_UNICODE, 1);
 let initialization = BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);

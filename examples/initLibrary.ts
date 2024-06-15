@@ -4,8 +4,7 @@
  *  but BASS_Init has to be called before playing any audio.
  */
 
-import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
-import { BASS_Free, BASS_Init } from "../mod.ts";
+import { BASS_DEVICE_STEREO, BASS_Free, BASS_Init } from "../mod.ts";
 
 /*
  *   Use BASS_Init to initialize the audio library.

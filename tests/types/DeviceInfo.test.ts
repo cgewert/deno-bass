@@ -1,6 +1,6 @@
 import * as assertions from "std/assert/mod.ts";
 import { describe, it } from "std/testing/bdd.ts";
-import { DeviceInfo } from "../../lib/types/DeviceInfo.ts";
+import { DeviceInfo } from "../../mod.ts";
 
 describe("DeviceInfo", () => {
   it("should return 1 as DeviceFlags value for the NoSound Device", () => {
