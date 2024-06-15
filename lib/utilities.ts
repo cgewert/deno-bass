@@ -25,4 +25,5 @@ export const CreatePointerX64 = (data: Uint8Array, offset: number) => {
 };
 
 // Error code lambdas
-export const ErrorCodeToString = (errorCode) => ERROR_MAP.get(errorCode);
+export const ErrorCodeToString = (errorCode: number) =>
+  ERROR_MAP.get(errorCode);
