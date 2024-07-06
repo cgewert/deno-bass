@@ -24,6 +24,7 @@ export const library = Deno.dlopen(".\\binaries\\win64\\bass.dll", {
   BASS_StreamCreateFile: {
     parameters: [c_bool, "buffer", c_int_64, c_int_64, c_int_32],
     result: c_int_64,
+    nonblocking: true,
   },
   BASS_Free: { parameters: [], result: c_bool },
   BASS_ChannelPlay: { parameters: [QWORD, c_bool], result: c_bool },
