@@ -3,3 +3,4 @@
   ☐ Update stream Audio example and maybe find the bug inside it @started(24-06-09 21:27)
   ☐ Examine how to retrieve a list of symbols inside the bass dll, or from the source code
   ☐ Research Observable Properties to observe changes to the struct fields (e.g. Infostruct in DeviceInfo)
+  ☐ Introduce MODULE_ROOT constant

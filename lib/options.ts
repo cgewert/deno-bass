@@ -1,4 +1,4 @@
-// BASS_SetConfig options
+// BASS Config options
 export const BASS_CONFIG_BUFFER = 0;
 export const BASS_CONFIG_UPDATEPERIOD = 1;
 export const BASS_CONFIG_GVOL_SAMPLE = 4;

@@ -1,6 +1,8 @@
 // BASS Channel flags
 export const BASS_SAMPLE_FLOAT = 256; // 32 bit floating-point
 export const BASS_SAMPLE_LOOP = 4; // looped
+export const BASS_STREAM_PRESCAN = 0x20000; // scan file for accurate seeking and length
+export const BASS_STREAM_AUTOFREE = 0x40000; // automatically free the stream when it stops/ends
 
 // BASS_Init flags
 export const BASS_DEVICE_8BITS = 1; // unused
