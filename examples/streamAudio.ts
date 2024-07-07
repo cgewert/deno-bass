@@ -8,27 +8,20 @@ import {
   BASS_CONFIG_UNICODE,
   BASS_Init,
   BASS_DEVICE_STEREO,
-  DeviceInfo,
-  BASS_GetDeviceInfo,
   BASS_StreamCreateFile,
-  BASS_SAMPLE_FLOAT,
   BASS_ErrorGetCode,
   ErrorCodeToString,
-  BASS_SetVolume,
   BASS_ChannelPlay,
-  BASS_GetCPU,
-  BASS_ChannelGetLevel,
   BASS_ChannelFree,
   BASS_Free,
-  BASS_STREAM_AUTOFREE,
   library,
   BASS_OK,
   BASS_ChannelStop,
-  BASS_GetVolume,
   BASS_CONFIG_HANDLES,
   BASS_GetConfig,
   BASS_ChannelSetAttribute,
   BASS_ATTRIB_VOL,
+  ToCString,
 } from "../mod.ts";
 
 BASS_SetConfig(BASS_CONFIG_UNICODE, 1);
@@ -46,18 +39,13 @@ console.log("Initialized BASS...");
   console.log("Audio Device found: ", deviceInfo.Name);
 }*/
 
-const fileNameBuffer = new TextEncoder().encode(
-  "E:\\Programmieren\\deno-tutorial\\ffi\\001-c\\track.mp3"
+const fileNameBuffer = ToCString(
+  // Insert a valid path to your mp3 file here
+  "E:/Programmieren/deno-tutorial/ffi/001-c/track.mp3"
 );
 
-BASS_StreamCreateFile(
-  false,
-  fileNameBuffer,
-  0,
-  0,
-  BASS_SAMPLE_FLOAT | BASS_STREAM_AUTOFREE
-).then(
-  (handle) => {
+BASS_StreamCreateFile(false, fileNameBuffer, 0, 0, 0).then(
+  (handle: number) => {
     let bassError = BASS_ErrorGetCode();
 
     if (bassError != BASS_OK) {
@@ -66,7 +54,7 @@ BASS_StreamCreateFile(
       console.log("Handle: ", handle);
     } else {
       console.log("Opened Stream File!");
-      console.log("Stream Handle: ", handle);
+      console.log("Stream Handle: ", handle.toString(16));
       play(handle);
     }
   },
@@ -77,7 +65,7 @@ BASS_StreamCreateFile(
 
 function play(streamHandle: number) {
   // Set volume for the playing channel stream
-  if (!BASS_ChannelSetAttribute(streamHandle, BASS_ATTRIB_VOL, 0.05)) {
+  if (!BASS_ChannelSetAttribute(streamHandle, BASS_ATTRIB_VOL, 0.5)) {
     console.error("Could not set the channels volume!");
   }
   let retval = BASS_GetConfig(BASS_CONFIG_HANDLES);
@@ -90,6 +78,8 @@ function play(streamHandle: number) {
       ErrorCodeToString(BASS_ErrorGetCode())
     );
   }
+  console.log("Press <Ctrl+C> to exit!");
+
   while (true) {}
   BASS_ChannelStop(streamHandle);
   BASS_ChannelFree(streamHandle);

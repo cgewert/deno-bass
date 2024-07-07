@@ -14,9 +14,14 @@ import {
 export const library = Deno.dlopen(".\\binaries\\win64\\bass.dll", {
   // Streams
   BASS_StreamCreateFile: {
-    parameters: [c_bool, "buffer", c_int_32, c_int_32, c_int_32],
+    parameters: [c_bool, "buffer", c_int_64, c_int_64, c_int_32],
     result: c_int_32,
     nonblocking: true,
+  },
+  BASS_StreamCreateURL: {
+    parameters: ["buffer", c_int_32, c_int_32, "buffer", "buffer"],
+    result: c_int_32,
+    nonblocking: false,
   },
 
   // Channels
@@ -57,6 +62,7 @@ export const library = Deno.dlopen(".\\binaries\\win64\\bass.dll", {
 export const BASS_Init = library.symbols.BASS_Init;
 export const BASS_Free = library.symbols.BASS_Free;
 export const BASS_StreamCreateFile = library.symbols.BASS_StreamCreateFile;
+export const BASS_StreamCreateURL = library.symbols.BASS_StreamCreateURL;
 export const BASS_ChannelPlay = library.symbols.BASS_ChannelPlay;
 export const BASS_ErrorGetCode = library.symbols.BASS_ErrorGetCode;
 export const BASS_SetVolume = library.symbols.BASS_SetVolume;

@@ -10,6 +10,8 @@ import { DeviceInfo } from "./types/DeviceInfo.ts";
 export const HIWORD = (x: number) => x & 0xffff0000;
 export const LOWORD = (x: number) => x & 0x0000ffff;
 
+export const ToCString = (x: string) => new TextEncoder().encode(x + "\0");
+
 // Lambdas for testing audio device flags
 export const IsMicrophone = (x: DeviceInfo) =>
   Boolean(x.Flags & BASS_DEVICE_TYPE_MICROPHONE);
