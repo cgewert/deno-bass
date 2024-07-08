@@ -30,13 +30,6 @@ if (error != BASS_OK) {
 }
 console.log("Initialized BASS...");
 
-// Enumerate all audio devices.
-//let deviceInfo = new DeviceInfo();
-/*for (let a = 0; BASS_GetDeviceInfo(a, deviceInfo.Infostruct); a++) {
-  deviceInfo.readValuesFromStruct();
-  console.log("Audio Device found: ", deviceInfo.Name);
-}*/
-
 const fileNameBuffer = ToCString(
   // Insert a valid path to your mp3 file here
   "E:/Programmieren/deno-tutorial/ffi/001-c/track.mp3"
