@@ -1,4 +1,4 @@
-# deno-bass
+# 🔊 deno-bass 🔊
 
 Autor: Christian Gewert <cgewert@gmail.com>
 
