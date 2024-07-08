@@ -1,4 +1,5 @@
-import { CreatePointerX64, BASS_GetDeviceInfo } from "../../mod.ts";
+import { BASS_GetDeviceInfo } from "../bindings.ts";
+import { Utilities } from "../mod.ts";
 
 export class DeviceInfo {
   private _infostruct: Uint8Array;
@@ -54,7 +55,7 @@ export class DeviceInfo {
   /* Call after Infostruct was set or updated to read the values stored in the structure. */
   public readValuesFromStruct() {
     // Reading name string from c pointer to struct.
-    const deviceNamePointer = CreatePointerX64(
+    const deviceNamePointer = Utilities.CreatePointerX64(
       this._infostruct,
       DeviceInfo.OFFSET_NAME
     );
@@ -66,7 +67,7 @@ export class DeviceInfo {
     }
     this.Name = name;
     // Reading device driver
-    const driverIdentificationPointer = CreatePointerX64(
+    const driverIdentificationPointer = Utilities.CreatePointerX64(
       this._infostruct,
       DeviceInfo.OFFSET_DRIVER
     );

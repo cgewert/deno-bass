@@ -4,25 +4,23 @@
  */
 
 import {
-  BASS_SetConfig,
-  BASS_CONFIG_UNICODE,
-  BASS_Init,
-  BASS_DEVICE_STEREO,
-  BASS_StreamCreateFile,
-  BASS_ErrorGetCode,
-  ErrorCodeToString,
-  BASS_ChannelPlay,
   BASS_ChannelFree,
-  BASS_Free,
-  library,
-  BASS_OK,
-  BASS_ChannelStop,
-  BASS_CONFIG_HANDLES,
-  BASS_GetConfig,
+  BASS_ChannelPlay,
   BASS_ChannelSetAttribute,
-  BASS_ATTRIB_VOL,
-  ToCString,
-} from "../mod.ts";
+  BASS_ChannelStop,
+  BASS_ErrorGetCode,
+  BASS_Free,
+  BASS_GetConfig,
+  BASS_Init,
+  BASS_SetConfig,
+  BASS_StreamCreateFile,
+  library,
+} from "../lib/bindings.ts";
+import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
+import { BASS_OK } from "../lib/errors.ts";
+import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
+import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
+import { ErrorCodeToString, ToCString } from "../lib/utilities.ts";
 
 BASS_SetConfig(BASS_CONFIG_UNICODE, 1);
 BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);
