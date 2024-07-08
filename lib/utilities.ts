@@ -1,3 +1,4 @@
+import { BASS_ErrorGetCode } from "./bindings.ts";
 import { Errors, Flags, Types } from "./mod.ts";
 
 // C like lambdas
@@ -5,6 +6,12 @@ export const HIWORD = (x: number) => x & 0xffff0000;
 export const LOWORD = (x: number) => x & 0x0000ffff;
 
 export const ToCString = (x: string) => new TextEncoder().encode(x + "\0");
+
+// Error handling
+export const GetBASSErrorCode = () => {
+  const error = BASS_ErrorGetCode();
+  return ErrorCodeToString(error);
+};
 
 // Lambdas for testing audio device flags
 export const IsMicrophone = (x: Types.DeviceInfo) =>

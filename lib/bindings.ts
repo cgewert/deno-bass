@@ -35,6 +35,7 @@ export const library = Deno.dlopen(".\\binaries\\win64\\bass.dll", {
     parameters: [DWORD, DWORD, c_float],
     result: c_bool,
   },
+  BASS_ChannelGetTags: { parameters: [DWORD, DWORD], result: "buffer" },
 
   // Initialization, etc...
   BASS_Init: {
@@ -80,3 +81,4 @@ export const BASS_ChannelStart = library.symbols.BASS_ChannelStart;
 export const BASS_GetVolume = library.symbols.BASS_GetVolume;
 export const BASS_ChannelSetAttribute =
   library.symbols.BASS_ChannelSetAttribute;
+export const BASS_ChannelGetTags = library.symbols.BASS_ChannelGetTags;
