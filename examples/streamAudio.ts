@@ -5,7 +5,6 @@
 
 import {
   BASS_ChannelFree,
-  BASS_ChannelGetTags,
   BASS_ChannelPlay,
   BASS_ChannelSetAttribute,
   BASS_ChannelStop,
@@ -18,17 +17,11 @@ import {
   library,
 } from "../lib/bindings.ts";
 import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
-import { BASS_OK, ERROR_MAP } from "../lib/errors.ts";
+import { BASS_OK } from "../lib/errors.ts";
 import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
 import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
-import { BASS_TAG_ID3, BASS_TAG_ID3V2, BASS_TAG_ID3V2_2 } from "../lib/tags.ts";
-import { ID3v1Struct } from "../lib/types/ID3v1Struct.ts";
-import {
-  CreatePointerX64,
-  ErrorCodeToString,
-  GetBASSErrorCode,
-  ToCString,
-} from "../lib/utilities.ts";
+import { ID3v1Tag } from "../lib/types/ID3v1Tag.ts";
+import { ErrorCodeToString, ToCString } from "../lib/utilities.ts";
 
 BASS_SetConfig(BASS_CONFIG_UNICODE, 1);
 BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);
@@ -78,22 +71,16 @@ function play(streamHandle: number) {
     );
   }
   console.log("Press <Ctrl+C> to exit!");
-  let id3v1Pointer: Deno.UnsafePointer = BASS_ChannelGetTags(
-    streamHandle,
-    BASS_TAG_ID3
-  );
-  const tagError = GetBASSErrorCode();
-  if (tagError != ERROR_MAP.get(BASS_OK)) {
-    console.log("Error while reading tag: ", tagError);
-  } else {
-    console.log("Read id3 tag from mp3 file!");
-    const metaData = new ID3v1Struct(id3v1Pointer);
-    console.log("Album: ", metaData.Album);
-    console.log("Artist: ", metaData.Artist);
-    console.log("Title: ", metaData.Title);
-    console.log("Year: ", metaData.Year);
-    console.log("Comment: ", metaData.Comment);
-  }
+
+  console.log("Reading ID3v1 tag from MP3 file!");
+  const metaData = new ID3v1Tag(streamHandle);
+  console.log("Album: ", metaData.Album);
+  console.log("Artist: ", metaData.Artist);
+  console.log("Title: ", metaData.Title);
+  console.log("Year: ", metaData.Year);
+  console.log("Comment: ", metaData.Comment);
+  console.log("Genre ID: ", metaData.GenreId);
+  console.log("Genre: ", metaData.Genre);
 
   while (true) {}
   BASS_ChannelStop(streamHandle);
