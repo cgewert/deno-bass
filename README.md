@@ -35,7 +35,7 @@ $ deno test --allow-ffi --unstable-ffi
 |Nr|Name|Done|
 |-|-|-|
 |1|BASS_Apply3D|❌|
-|2|BASS_ChannelBytes2Seconds|❌|
+|2|BASS_ChannelBytes2Seconds|✅|
 |3|BASS_ChannelFlags|❌|
 |4|BASS_ChannelFree|✅|
 |5|BASS_ChannelGet3DAttributes|❌|
@@ -45,10 +45,10 @@ $ deno test --allow-ffi --unstable-ffi
 |9|BASS_ChannelGetData|❌|
 |10|BASS_ChannelGetDevice|❌|
 |11|BASS_ChannelGetInfo|❌|
-|12|BASS_ChannelGetLength|❌|
+|12|BASS_ChannelGetLength|✅|
 |13|BASS_ChannelGetLevel|✅|
 |14|BASS_ChannelGetLevelEx|❌|
-|15|BASS_ChannelGetPosition|❌|
+|15|BASS_ChannelGetPosition|✅|
 |16|BASS_ChannelGetTags|✅|
 |17|BASS_ChannelIsActive|❌|
 |18|BASS_ChannelIsSliding|❌|

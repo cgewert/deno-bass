@@ -4,7 +4,10 @@
  */
 
 import {
+  BASS_ChannelBytes2Seconds,
   BASS_ChannelFree,
+  BASS_ChannelGetLength,
+  BASS_ChannelGetPosition,
   BASS_ChannelPlay,
   BASS_ChannelSetAttribute,
   BASS_ChannelStop,
@@ -19,6 +22,7 @@ import {
 import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
 import { BASS_OK } from "../lib/errors.ts";
 import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
+import { BASS_POS_BYTE } from "../lib/modes.ts";
 import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
 import { ID3v1Tag } from "../lib/types/ID3v1Tag.ts";
 import { ErrorCodeToString, ToCString } from "../lib/utilities.ts";
@@ -57,7 +61,7 @@ BASS_StreamCreateFile(false, fileNameBuffer, 0, 0, 0).then(
 
 function play(streamHandle: number) {
   // Set volume for the playing channel stream
-  if (!BASS_ChannelSetAttribute(streamHandle, BASS_ATTRIB_VOL, 0.5)) {
+  if (!BASS_ChannelSetAttribute(streamHandle, BASS_ATTRIB_VOL, 0.02)) {
     console.error("Could not set the channels volume!");
   }
   let retval = BASS_GetConfig(BASS_CONFIG_HANDLES);
@@ -81,8 +85,32 @@ function play(streamHandle: number) {
   console.log("Comment: ", metaData.Comment);
   console.log("Genre ID: ", metaData.GenreId);
   console.log("Genre: ", metaData.Genre);
-
-  while (true) {}
+  let playBackLength = BASS_ChannelGetLength(streamHandle, BASS_POS_BYTE);
+  if (playBackLength == -1) {
+    console.error(
+      "Error while retrieving channels playback position: ",
+      ErrorCodeToString(BASS_ErrorGetCode())
+    );
+    Deno.exit(-1);
+  }
+  playBackLength = BASS_ChannelBytes2Seconds(streamHandle, playBackLength);
+  while (true) {
+    let position = BASS_ChannelGetPosition(streamHandle, BASS_POS_BYTE);
+    if (position == -1) {
+      console.error(
+        "Error while retrieving channels playback position: ",
+        ErrorCodeToString(BASS_ErrorGetCode())
+      );
+    } else {
+      let seconds = BASS_ChannelBytes2Seconds(streamHandle, position);
+      console.log(
+        "Position: ",
+        seconds.toFixed(2),
+        " / ",
+        playBackLength.toFixed(2)
+      );
+    }
+  }
   BASS_ChannelStop(streamHandle);
   BASS_ChannelFree(streamHandle);
   BASS_Free();
