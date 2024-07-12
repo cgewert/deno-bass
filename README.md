@@ -36,7 +36,7 @@ $ deno test --allow-ffi --unstable-ffi
 |-|-|-|
 |1|BASS_Apply3D|❌|
 |2|BASS_ChannelBytes2Seconds|✅|
-|3|BASS_ChannelFlags|❌|
+|3|BASS_ChannelFlags|✅|
 |4|BASS_ChannelFree|✅|
 |5|BASS_ChannelGet3DAttributes|❌|
 |6|BASS_ChannelGet3DPosition|❌|

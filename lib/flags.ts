@@ -3,6 +3,35 @@ export const BASS_SAMPLE_FLOAT = 256; // 32 bit floating-point
 export const BASS_SAMPLE_LOOP = 4; // looped
 export const BASS_STREAM_PRESCAN = 0x20000; // scan file for accurate seeking and length
 export const BASS_STREAM_AUTOFREE = 0x40000; // automatically free the stream when it stops/ends
+export const BASS_SAMPLE_MUTEMAX = 32; // mute at max distance (3D only)
+export const BASS_STREAM_RESTRATE = 0x80000; // restrict the download rate of internet file stream
+export const BASS_MUSIC_NONINTER = 0x10000; // non-interpolated sample mixing
+export const BASS_MUSIC_SINCINTER = 0x800000; // sinc interpolated sample mixing
+export const BASS_MUSIC_POSRESET = 0x8000; // stop all notes when moving position
+export const BASS_MUSIC_POSRESETEX = 0x400000; // stop all notes and reset bmp/etc when moving position
+export const BASS_MUSIC_STOPBACK = 0x80000; // stop the music on a backwards jump effect
+export const BASS_MUSIC_RAMP = 0x200; // normal ramping
+export const BASS_MUSIC_RAMPS = 0x400; // sensitive ramping
+export const BASS_MUSIC_SURROUND = 0x800; // surround sound
+export const BASS_MUSIC_SURROUND2 = 0x1000; // surround sound (mode 2)
+export const BASS_MUSIC_FT2MOD = 0x2000; // play .MOD as FastTracker 2 does
+export const BASS_MUSIC_PT1MOD = 0x4000; // play .MOD as ProTracker 1 does
+
+// Speaker assignment flags
+export const BASS_SPEAKER_LEFT = 0x10000000; // modifier: left
+export const BASS_SPEAKER_RIGHT = 0x20000000; // modifier: right
+export const BASS_SPEAKER_FRONT = 0x1000000; // front speakers
+export const BASS_SPEAKER_REAR = 0x2000000; // rear speakers
+export const BASS_SPEAKER_CENLFE = 0x3000000; // center & LFE speakers (5.1)
+export const BASS_SPEAKER_SIDE = 0x4000000; // side speakers (7.1)
+export const BASS_SPEAKER_FRONTLEFT = BASS_SPEAKER_FRONT | BASS_SPEAKER_LEFT;
+export const BASS_SPEAKER_FRONTRIGHT = BASS_SPEAKER_FRONT | BASS_SPEAKER_RIGHT;
+export const BASS_SPEAKER_REARLEFT = BASS_SPEAKER_REAR | BASS_SPEAKER_LEFT;
+export const BASS_SPEAKER_REARRIGHT = BASS_SPEAKER_REAR | BASS_SPEAKER_RIGHT;
+export const BASS_SPEAKER_CENTER = BASS_SPEAKER_CENLFE | BASS_SPEAKER_LEFT;
+export const BASS_SPEAKER_LFE = BASS_SPEAKER_CENLFE | BASS_SPEAKER_RIGHT;
+export const BASS_SPEAKER_SIDELEFT = BASS_SPEAKER_SIDE | BASS_SPEAKER_LEFT;
+export const BASS_SPEAKER_SIDERIGHT = BASS_SPEAKER_SIDE | BASS_SPEAKER_RIGHT;
 
 // BASS_Init flags
 export const BASS_DEVICE_8BITS = 1; // unused

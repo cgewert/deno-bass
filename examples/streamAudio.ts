@@ -5,6 +5,7 @@
 
 import {
   BASS_ChannelBytes2Seconds,
+  BASS_ChannelFlags,
   BASS_ChannelFree,
   BASS_ChannelGetLength,
   BASS_ChannelGetPosition,
@@ -21,7 +22,12 @@ import {
 } from "../lib/bindings.ts";
 import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
 import { BASS_OK } from "../lib/errors.ts";
-import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
+import {
+  BASS_DEVICE_STEREO,
+  BASS_SAMPLE_LOOP,
+  BASS_SPEAKER_LEFT,
+  BASS_SPEAKER_RIGHT,
+} from "../lib/flags.ts";
 import { BASS_POS_BYTE } from "../lib/modes.ts";
 import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
 import { ID3v1Tag } from "../lib/types/ID3v1Tag.ts";
@@ -61,7 +67,7 @@ BASS_StreamCreateFile(false, fileNameBuffer, 0, 0, 0).then(
 
 function play(streamHandle: number) {
   // Set volume for the playing channel stream
-  if (!BASS_ChannelSetAttribute(streamHandle, BASS_ATTRIB_VOL, 0.02)) {
+  if (!BASS_ChannelSetAttribute(streamHandle, BASS_ATTRIB_VOL, 0.4)) {
     console.error("Could not set the channels volume!");
   }
   let retval = BASS_GetConfig(BASS_CONFIG_HANDLES);
@@ -94,6 +100,7 @@ function play(streamHandle: number) {
     Deno.exit(-1);
   }
   playBackLength = BASS_ChannelBytes2Seconds(streamHandle, playBackLength);
+  let step = true;
   while (true) {
     let position = BASS_ChannelGetPosition(streamHandle, BASS_POS_BYTE);
     if (position == -1) {
@@ -109,7 +116,19 @@ function play(streamHandle: number) {
         " / ",
         playBackLength.toFixed(2)
       );
+      // After 5 seconds try to activate the loop channel flag
+      if (seconds > 5.0 && step) {
+        const flags = BASS_ChannelFlags(
+          streamHandle,
+          BASS_SAMPLE_LOOP,
+          BASS_SAMPLE_LOOP
+        );
+        console.log("WAS LOOP SET: ", Boolean(flags & BASS_SAMPLE_LOOP));
+        step = false;
+      }
     }
+    const end = Date.now() + 1_000;
+    while (Date.now() < end);
   }
   BASS_ChannelStop(streamHandle);
   BASS_ChannelFree(streamHandle);
