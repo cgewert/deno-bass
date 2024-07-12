@@ -1,6 +1,8 @@
   ✔ Implement GetVersion function @started(24-06-01 22:28) @done(24-06-01 22:59) @lasted(31m43s)
   ✔ Add Value Offsets to DeviceInfo Class @done(24-06-05 21:18)
-  ☐ Update stream Audio example and maybe find the bug inside it @started(24-06-09 21:27)
-  ☐ Examine how to retrieve a list of symbols inside the bass dll, or from the source code
+  ✔ Update stream Audio example and maybe find the bug inside it @started(24-06-09 21:27) @done(24-07-12 22:45) @lasted(4w5d1h18m28s)
+  ✔ Examine how to retrieve a list of symbols inside the bass dll, or from the source code @done(24-07-12 22:45)
   ☐ Research Observable Properties to observe changes to the struct fields (e.g. Infostruct in DeviceInfo)
   ☐ Introduce MODULE_ROOT constant
+  ☐ Implement Example with GUI
+  ☐ Add more unit tests

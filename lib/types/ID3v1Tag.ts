@@ -199,8 +199,8 @@ export const ID3_GENRE_MAP: Map<number, string> = new Map([
 ]);
 
 export class ID3v1Tag {
-  private _pointerView: Deno.UnsafePointerView;
-  private _pointer: Deno.UnsafePointer;
+  private _pointerView: Deno.UnsafePointerView | null = null;
+  private _pointer: Deno.PointerObject | null = null;
   private _streamHandle: number;
 
   private _id: string; // ID3v1 tag identifier... "TAG".
@@ -284,6 +284,7 @@ export class ID3v1Tag {
   public static OFFSET_YEAR = 93;
   public static OFFSET_COMMENT = 97;
   public static OFFSET_GENRE = 127;
+  public static SIZE = 128;
 
   constructor(streamHandle: number) {
     this._id = "";
@@ -305,9 +306,10 @@ export class ID3v1Tag {
       if (tagError != ERROR_MAP.get(BASS_OK)) {
         console.log("Error while reading ID3v1 tag: ", tagError);
       }
-
-      this._pointerView = new Deno.UnsafePointerView(this._pointer);
-      this.readValuesFromStruct();
+      if (this._pointer != null) {
+        this._pointerView = new Deno.UnsafePointerView(this._pointer);
+        this.readValuesFromStruct();
+      }
     } catch (error: any) {
       console.log("Unexpected error happened while reading ID3v1 Tag: ", error);
     }
@@ -324,6 +326,8 @@ export class ID3v1Tag {
   }
 
   private readCInt32FromPointer(offset: number): number {
+    if (this._pointerView == null) return 0;
+
     let readNumber = 0;
 
     try {
@@ -336,6 +340,8 @@ export class ID3v1Tag {
   }
 
   private readCStringFromPointer(offset: number): string {
+    if (this._pointerView == null) return "";
+
     let readString = "";
 
     try {
