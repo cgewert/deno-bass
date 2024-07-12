@@ -20,18 +20,21 @@ import {
   BASS_StreamCreateFile,
   library,
 } from "../lib/bindings.ts";
-import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
-import { BASS_OK } from "../lib/errors.ts";
 import {
-  BASS_DEVICE_STEREO,
-  BASS_SAMPLE_LOOP,
-  BASS_SPEAKER_LEFT,
-  BASS_SPEAKER_RIGHT,
-} from "../lib/flags.ts";
+  BASS_ATTRIB_BITRATE,
+  BASS_ATTRIB_FREQ,
+  BASS_ATTRIB_VOL,
+} from "../lib/channelAttributes.ts";
+import { BASS_OK } from "../lib/errors.ts";
+import { BASS_DEVICE_STEREO, BASS_SAMPLE_LOOP } from "../lib/flags.ts";
 import { BASS_POS_BYTE } from "../lib/modes.ts";
 import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
 import { ID3v1Tag } from "../lib/types/ID3v1Tag.ts";
-import { ErrorCodeToString, ToCString } from "../lib/utilities.ts";
+import {
+  ErrorCodeToString,
+  QueryChannelAttributeValue,
+  ToCString,
+} from "../lib/utilities.ts";
 
 BASS_SetConfig(BASS_CONFIG_UNICODE, 1);
 BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);
@@ -101,6 +104,9 @@ function play(streamHandle: number) {
   }
   playBackLength = BASS_ChannelBytes2Seconds(streamHandle, playBackLength);
   let step = true;
+  let bitrate = QueryChannelAttributeValue(streamHandle, BASS_ATTRIB_BITRATE);
+  let frequency = QueryChannelAttributeValue(streamHandle, BASS_ATTRIB_FREQ);
+  console.log("Stream Bitrate: ", bitrate, " Frequency: ", frequency);
   while (true) {
     let position = BASS_ChannelGetPosition(streamHandle, BASS_POS_BYTE);
     if (position == -1) {

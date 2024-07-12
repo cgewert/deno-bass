@@ -1,4 +1,4 @@
-import { BASS_ErrorGetCode } from "./bindings.ts";
+import { BASS_ChannelGetAttribute, BASS_ErrorGetCode } from "./bindings.ts";
 import { Errors, Flags, Types } from "./mod.ts";
 
 // C like lambdas
@@ -25,6 +25,19 @@ export const CreatePointerX64 = (data: Uint8Array, offset: number) => {
   return Deno.UnsafePointer.create(
     new BigUint64Array(data.subarray(offset, offset + 8).buffer)[0]
   ) as Deno.PointerObject;
+};
+
+// Query Channel Flag
+export const QueryChannelAttributeValue = (
+  streamHandle: number,
+  attrib: number
+) => {
+  let retval = 0.0;
+  let out = new Uint8Array(8);
+  if (BASS_ChannelGetAttribute(streamHandle, attrib, out)) {
+    retval = new DataView(out.buffer).getFloat32(0, true);
+  }
+  return retval.toFixed(2);
 };
 
 // Error code lambdas

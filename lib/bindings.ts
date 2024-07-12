@@ -2,6 +2,7 @@ import {
   DWORD,
   HWND,
   QWORD,
+  buffer,
   c_bool,
   c_double,
   c_float,
@@ -30,6 +31,10 @@ export const library = Deno.dlopen(".\\binaries\\win64\\bass.dll", {
   // Translates a byte position into time (seconds), based on a channel's format.
   BASS_ChannelBytes2Seconds: { parameters: [DWORD, QWORD], result: c_double },
   BASS_ChannelFlags: { parameters: [DWORD, DWORD, DWORD], result: DWORD },
+  BASS_ChannelGetAttribute: {
+    parameters: [DWORD, DWORD, buffer],
+    result: c_bool,
+  },
   BASS_ChannelGetLength: { parameters: [DWORD, DWORD], result: QWORD },
   BASS_ChannelGetPosition: { parameters: [DWORD, DWORD], result: QWORD },
   BASS_ChannelPlay: { parameters: [QWORD, c_bool], result: c_bool },
@@ -94,3 +99,5 @@ export const BASS_ChannelBytes2Seconds =
 export const BASS_ChannelGetPosition = library.symbols.BASS_ChannelGetPosition;
 export const BASS_ChannelGetLength = library.symbols.BASS_ChannelGetLength;
 export const BASS_ChannelFlags = library.symbols.BASS_ChannelFlags;
+export const BASS_ChannelGetAttribute =
+  library.symbols.BASS_ChannelGetAttribute;
