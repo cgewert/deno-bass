@@ -40,7 +40,7 @@ $ deno test --allow-ffi --unstable-ffi
 |4|BASS_ChannelFree|✅|
 |5|BASS_ChannelGet3DAttributes|❌|
 |6|BASS_ChannelGet3DPosition|❌|
-|7|BASS_ChannelGetAttribute|❌|
+|7|BASS_ChannelGetAttribute|✅|
 |8|BASS_ChannelGetAttributeEx|❌|
 |9|BASS_ChannelGetData|❌|
 |10|BASS_ChannelGetDevice|❌|
