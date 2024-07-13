@@ -7,10 +7,12 @@ import {
   BASS_ChannelBytes2Seconds,
   BASS_ChannelFlags,
   BASS_ChannelFree,
+  BASS_ChannelGetAttributeEx,
   BASS_ChannelGetLength,
   BASS_ChannelGetPosition,
   BASS_ChannelPlay,
   BASS_ChannelSetAttribute,
+  BASS_ChannelSetAttributeEx,
   BASS_ChannelStop,
   BASS_ErrorGetCode,
   BASS_Free,
@@ -23,6 +25,7 @@ import {
 import {
   BASS_ATTRIB_BITRATE,
   BASS_ATTRIB_FREQ,
+  BASS_ATTRIB_USER,
   BASS_ATTRIB_VOL,
 } from "../lib/channelAttributes.ts";
 import { BASS_OK } from "../lib/errors.ts";
@@ -34,6 +37,7 @@ import {
   ErrorCodeToString,
   QueryChannelAttributeValue,
   ToCString,
+  UInt8BufferToString,
 } from "../lib/utilities.ts";
 
 BASS_SetConfig(BASS_CONFIG_UNICODE, 1);
@@ -84,6 +88,25 @@ function play(streamHandle: number) {
     );
   }
   console.log("Press <Ctrl+C> to exit!");
+
+  // Try to write user data to a channel
+  const userDataWritten = ToCString("FOOBAR");
+  let userDataRead = new Uint8Array(userDataWritten.length);
+  writeUserDataToChannel(streamHandle, userDataWritten);
+
+  // Try to read user data from a channel
+  const returnedDataSize = readUserDataFromChannel(
+    streamHandle,
+    userDataRead,
+    userDataWritten.length
+  );
+  console.log(
+    "Written bytes of user data to channel: ",
+    userDataWritten.length
+  );
+  console.log("Read user data bytes from channel: ", returnedDataSize);
+  const userDataString = UInt8BufferToString(userDataRead);
+  console.log("Read user data from channel: ", userDataString);
 
   console.log("Reading ID3v1 tag from MP3 file!");
   const metaData = new ID3v1Tag(streamHandle);
@@ -140,4 +163,36 @@ function play(streamHandle: number) {
   BASS_ChannelFree(streamHandle);
   BASS_Free();
   library.close();
+}
+
+function writeUserDataToChannel(streamHandle: number, data: Uint8Array) {
+  console.log("Writing user bytes to channel...");
+
+  if (
+    !BASS_ChannelSetAttributeEx(
+      streamHandle,
+      BASS_ATTRIB_USER,
+      data,
+      data.length
+    )
+  ) {
+    console.error("Error while writing user data to the channel.");
+  }
+}
+
+function readUserDataFromChannel(
+  streamHandle: number,
+  out: Uint8Array,
+  size: number
+) {
+  console.log("Reading user bytes from channel...");
+  let dataSize = BASS_ChannelGetAttributeEx(
+    streamHandle,
+    BASS_ATTRIB_USER,
+    out,
+    size
+  );
+  if (dataSize == 0)
+    console.error("Error while reading user data from the channel.");
+  return dataSize;
 }

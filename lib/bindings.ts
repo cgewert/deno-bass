@@ -35,6 +35,20 @@ export const library = Deno.dlopen(".\\binaries\\win64\\bass.dll", {
     parameters: [DWORD, DWORD, buffer],
     result: c_bool,
   },
+  // Retrieves the value of a channel's attribute.
+  BASS_ChannelGetAttributeEx: {
+    parameters: [DWORD, DWORD, buffer, DWORD],
+    result: DWORD,
+  },
+  BASS_ChannelSetAttribute: {
+    parameters: [DWORD, DWORD, c_float],
+    result: c_bool,
+  },
+  // Sets the value of a channel's attribute.
+  BASS_ChannelSetAttributeEx: {
+    parameters: [DWORD, DWORD, buffer, DWORD],
+    result: c_bool,
+  },
   BASS_ChannelGetLength: { parameters: [DWORD, DWORD], result: QWORD },
   BASS_ChannelGetPosition: { parameters: [DWORD, DWORD], result: QWORD },
   BASS_ChannelPlay: { parameters: [QWORD, c_bool], result: c_bool },
@@ -43,10 +57,7 @@ export const library = Deno.dlopen(".\\binaries\\win64\\bass.dll", {
   BASS_ChannelStart: { parameters: [QWORD], result: c_bool },
   BASS_ChannelFree: { parameters: [QWORD], result: c_bool },
   BASS_ChannelGetLevel: { parameters: ["i64"], result: DWORD },
-  BASS_ChannelSetAttribute: {
-    parameters: [DWORD, DWORD, c_float],
-    result: c_bool,
-  },
+
   BASS_ChannelGetTags: { parameters: [DWORD, DWORD], result: "buffer" },
 
   // Initialization, etc...
@@ -101,3 +112,7 @@ export const BASS_ChannelGetLength = library.symbols.BASS_ChannelGetLength;
 export const BASS_ChannelFlags = library.symbols.BASS_ChannelFlags;
 export const BASS_ChannelGetAttribute =
   library.symbols.BASS_ChannelGetAttribute;
+export const BASS_ChannelGetAttributeEx =
+  library.symbols.BASS_ChannelGetAttributeEx;
+export const BASS_ChannelSetAttributeEx =
+  library.symbols.BASS_ChannelSetAttributeEx;

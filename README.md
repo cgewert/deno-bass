@@ -41,7 +41,7 @@ $ deno test --allow-ffi --unstable-ffi
 |5|BASS_ChannelGet3DAttributes|❌|
 |6|BASS_ChannelGet3DPosition|❌|
 |7|BASS_ChannelGetAttribute|✅|
-|8|BASS_ChannelGetAttributeEx|❌|
+|8|BASS_ChannelGetAttributeEx|✅|
 |9|BASS_ChannelGetData|❌|
 |10|BASS_ChannelGetDevice|❌|
 |11|BASS_ChannelGetInfo|❌|
@@ -63,7 +63,7 @@ $ deno test --allow-ffi --unstable-ffi
 |27|BASS_ChannelSet3DAttributes|❌|
 |28|BASS_ChannelSet3DPosition|❌|
 |29|BASS_ChannelSetAttribute|✅|
-|30|BASS_ChannelSetAttributeEx|❌|
+|30|BASS_ChannelSetAttributeEx|✅|
 |31|BASS_ChannelSetDSP|❌|
 |32|BASS_ChannelSetDevice|❌|
 |33|BASS_ChannelSetFX|❌|
