@@ -10,6 +10,22 @@ A wrapper providing the BASS C API in Deno.
 
 Bass Audio is made by [un4seen developments](https://www.un4seen.com/)
 
+## Usage
+
+👷 WARNING THIS LIBRARY IS UNDER HEAVY CONSTRUCTION  
+AND IS SUBJECT TO CHANGE  
+HAVE THIS IN MIND BEFORE USING IT 🚧
+
+There is no release yet!
+
+1. One can import the module easily directly from Github:
+
+```sh
+import { BASS, Types, Options } from "https://raw.githubusercontent.com/cgewert/deno-bass/master/lib/mod.ts";
+```
+2. Put a shared library of bass, specific to your platform into your working directory (e.g. the root folder of your main script).   
+**NOTE: Currently only Windows OS and therefore bass.dll are supported!**
+
 ### Important notes
 
 WIP: This lib is under heavy construction, use on your own risk!
