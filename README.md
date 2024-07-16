@@ -93,10 +93,10 @@ $ deno test --allow-ffi --unstable-ffi
 |57|BASS_GetVersion|✅|
 |58|BASS_GetVolume|✅|
 |59|BASS_Init|✅|
-|60|BASS_IsStarted|❌|
+|60|BASS_IsStarted|✅|
 |61|BASS_MusicFree|❌|
 |62|BASS_MusicLoad|❌|
-|63|BASS_Pause|❌|
+|63|BASS_Pause|✅|
 |64|BASS_PluginEnable|❌|
 |65|BASS_PluginFree|❌|
 |66|BASS_PluginGetInfo|❌|
@@ -128,8 +128,8 @@ $ deno test --allow-ffi --unstable-ffi
 |93|BASS_SetDevice|❌|
 |94|BASS_SetEAXParameters|❌|
 |95|BASS_SetVolume|✅|
-|96|BASS_Start|❌|
-|97|BASS_Stop|❌|
+|96|BASS_Start|✅|
+|97|BASS_Stop|✅|
 |98|BASS_StreamCreate|❌|
 |99|BASS_StreamCreateFile|✅|
 |100|BASS_StreamCreateFileUser|❌|

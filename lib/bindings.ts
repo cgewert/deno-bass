@@ -61,13 +61,8 @@ export const library = Deno.dlopen(".\\bass.dll", {
   BASS_ChannelGetTags: { parameters: [DWORD, DWORD], result: "buffer" },
 
   // Initialization, etc...
-  BASS_Init: {
-    parameters: [c_int_64, DWORD, DWORD, HWND, c_ptr],
-    result: c_bool,
-  },
   BASS_ErrorGetCode: { parameters: [], result: c_int_32 },
   BASS_Free: { parameters: [], result: c_bool },
-  BASS_SetVolume: { parameters: ["f32"], result: c_bool },
   BASS_GetVolume: { parameters: [], result: c_float },
   BASS_GetVersion: { parameters: [], result: DWORD },
   BASS_GetDevice: { parameters: [], result: c_int_32 },
@@ -76,6 +71,16 @@ export const library = Deno.dlopen(".\\bass.dll", {
     result: c_bool,
   },
   BASS_GetCPU: { parameters: [], result: c_float },
+  BASS_Init: {
+    parameters: [c_int_64, DWORD, DWORD, HWND, c_ptr],
+    result: c_bool,
+  },
+  // Checks if the output has been started and is active.
+  BASS_IsStarted: { parameters: [], result: DWORD },
+  BASS_Pause: { parameters: [], result: c_bool },
+  BASS_SetVolume: { parameters: ["f32"], result: c_bool },
+  BASS_Start: { parameters: [], result: c_bool },
+  BASS_Stop: { parameters: [], result: c_bool },
 
   // Config
   BASS_SetConfig: { parameters: [DWORD, DWORD], result: c_bool },
@@ -116,3 +121,7 @@ export const BASS_ChannelGetAttributeEx =
   library.symbols.BASS_ChannelGetAttributeEx;
 export const BASS_ChannelSetAttributeEx =
   library.symbols.BASS_ChannelSetAttributeEx;
+export const BASS_Start = library.symbols.BASS_Start;
+export const BASS_IsStarted = library.symbols.BASS_IsStarted;
+export const BASS_Stop = library.symbols.BASS_Stop;
+export const BASS_Pause = library.symbols.BASS_Pause;

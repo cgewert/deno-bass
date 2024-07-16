@@ -18,7 +18,11 @@ import {
   BASS_Free,
   BASS_GetConfig,
   BASS_Init,
+  BASS_IsStarted,
+  BASS_Pause,
   BASS_SetConfig,
+  BASS_Start,
+  BASS_Stop,
   BASS_StreamCreateFile,
   library,
 } from "../lib/bindings.ts";
@@ -35,18 +39,29 @@ import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
 import { ID3v1Tag } from "../lib/types/ID3v1Tag.ts";
 import {
   ErrorCodeToString,
+  GetBASSErrorCode,
   QueryChannelAttributeValue,
   ToCString,
   UInt8BufferToString,
 } from "../lib/utilities.ts";
 
 BASS_SetConfig(BASS_CONFIG_UNICODE, 1);
+let isOutputStartedYet = BASS_Start();
+if (!isOutputStartedYet)
+  console.log("Output not yet started: ", GetBASSErrorCode());
+else console.log("Output started successfully: ", GetBASSErrorCode());
+if (BASS_IsStarted() == 0) console.log("Device not started yet...");
+else console.log("Device was mysteriously started already!????");
+
 BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);
-let error = BASS_ErrorGetCode();
-if (error != BASS_OK) {
-  console.log("Can't initialize BASS! ", ErrorCodeToString(error));
-}
-console.log("Initialized BASS...");
+console.log("Initialized BASS... ", GetBASSErrorCode());
+if (BASS_IsStarted() == 0) console.log("Device not started yet...");
+else console.log("Device was successfully started.");
+
+isOutputStartedYet = BASS_Start();
+if (!isOutputStartedYet)
+  console.log("Output not yet started: ", GetBASSErrorCode());
+else console.log("Output started successfully: ", GetBASSErrorCode());
 
 const fileNameBuffer = ToCString(
   // Insert a valid path to your mp3 file here
@@ -126,7 +141,9 @@ function play(streamHandle: number) {
     Deno.exit(-1);
   }
   playBackLength = BASS_ChannelBytes2Seconds(streamHandle, playBackLength);
-  let step = true;
+  let step = true,
+    step2 = true;
+  let pauseTimer = 0;
   let bitrate = QueryChannelAttributeValue(streamHandle, BASS_ATTRIB_BITRATE);
   let frequency = QueryChannelAttributeValue(streamHandle, BASS_ATTRIB_FREQ);
   console.log("Stream Bitrate: ", bitrate, " Frequency: ", frequency);
@@ -154,6 +171,13 @@ function play(streamHandle: number) {
         );
         console.log("WAS LOOP SET: ", Boolean(flags & BASS_SAMPLE_LOOP));
         step = false;
+        // Pause device playback after 5 seconds of playback.
+        BASS_Pause();
+        pauseTimer = Date.now();
+      }
+      if (Date.now() > pauseTimer + 3_000 && step2) {
+        // Resume device playback after 8 seconds.
+        BASS_Start();
       }
     }
     const end = Date.now() + 1_000;
