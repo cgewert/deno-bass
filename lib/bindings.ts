@@ -40,6 +40,11 @@ export const library = Deno.dlopen(".\\bass.dll", {
     parameters: [DWORD, DWORD, buffer, DWORD],
     result: DWORD,
   },
+  // Retrieves information on a channel.
+  BASS_ChannelGetInfo: {
+    parameters: [DWORD, buffer], // BASS_CHANNELINFO pointer
+    result: c_bool,
+  },
   BASS_ChannelSetAttribute: {
     parameters: [DWORD, DWORD, c_float],
     result: c_bool,
@@ -125,3 +130,4 @@ export const BASS_Start = library.symbols.BASS_Start;
 export const BASS_IsStarted = library.symbols.BASS_IsStarted;
 export const BASS_Stop = library.symbols.BASS_Stop;
 export const BASS_Pause = library.symbols.BASS_Pause;
+export const BASS_ChannelGetInfo = library.symbols.BASS_ChannelGetInfo;

@@ -36,6 +36,7 @@ import { BASS_OK } from "../lib/errors.ts";
 import { BASS_DEVICE_STEREO, BASS_SAMPLE_LOOP } from "../lib/flags.ts";
 import { BASS_POS_BYTE } from "../lib/modes.ts";
 import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
+import { ChannelInfo } from "../lib/types/ChannelInfo.ts";
 import { ID3v1Tag } from "../lib/types/ID3v1Tag.ts";
 import {
   ErrorCodeToString,
@@ -176,8 +177,22 @@ function play(streamHandle: number) {
         pauseTimer = Date.now();
       }
       if (Date.now() > pauseTimer + 3_000 && step2) {
+        step2 = false;
         // Resume device playback after 8 seconds.
         BASS_Start();
+        const channelInfo = new ChannelInfo(streamHandle);
+        console.log("Channel Info Frequency: ", channelInfo.Frequency);
+        console.log(
+          "Channel Info ChannelType: ",
+          channelInfo.ChannelType.toString(16)
+        );
+        console.log("Channel Info File: ", channelInfo.Filename);
+        console.log("Channel Info Flags: ", channelInfo.Flags.toString(16));
+        console.log("Channel Info Audio Channels: ", channelInfo.Channels);
+        console.log(
+          "Channel Info Original Resolution: ",
+          channelInfo.OriginalResolution
+        );
       }
     }
     const end = Date.now() + 1_000;
