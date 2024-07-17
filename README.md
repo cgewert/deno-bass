@@ -60,7 +60,7 @@ $ deno test --allow-ffi --unstable-ffi
 |8|BASS_ChannelGetAttributeEx|✅|
 |9|BASS_ChannelGetData|❌|
 |10|BASS_ChannelGetDevice|❌|
-|11|BASS_ChannelGetInfo|❌|
+|11|BASS_ChannelGetInfo|✅|
 |12|BASS_ChannelGetLength|✅|
 |13|BASS_ChannelGetLevel|✅|
 |14|BASS_ChannelGetLevelEx|❌|
