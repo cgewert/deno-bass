@@ -8,7 +8,10 @@ import {
   BASS_ChannelFlags,
   BASS_ChannelFree,
   BASS_ChannelGetAttributeEx,
+  BASS_ChannelGetData,
+  BASS_ChannelGetDevice,
   BASS_ChannelGetLength,
+  BASS_ChannelGetLevelEx,
   BASS_ChannelGetPosition,
   BASS_ChannelPlay,
   BASS_ChannelSetAttribute,
@@ -33,7 +36,15 @@ import {
   BASS_ATTRIB_VOL,
 } from "../lib/channelAttributes.ts";
 import { BASS_OK } from "../lib/errors.ts";
-import { BASS_DEVICE_STEREO, BASS_SAMPLE_LOOP } from "../lib/flags.ts";
+import {
+  BASS_DATA_FFT2048,
+  BASS_DATA_FFT256,
+  BASS_DATA_FLOAT,
+  BASS_DEVICE_STEREO,
+  BASS_LEVEL_STEREO,
+  BASS_SAMPLE_FLOAT,
+  BASS_SAMPLE_LOOP,
+} from "../lib/flags.ts";
 import { BASS_POS_BYTE } from "../lib/modes.ts";
 import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
 import { ChannelInfo } from "../lib/types/ChannelInfo.ts";
@@ -69,7 +80,7 @@ const fileNameBuffer = ToCString(
   "E:/Programmieren/deno-tutorial/ffi/001-c/track.mp3"
 );
 
-BASS_StreamCreateFile(false, fileNameBuffer, 0, 0, 0).then(
+BASS_StreamCreateFile(false, fileNameBuffer, 0, 0, BASS_SAMPLE_FLOAT).then(
   (handle: number) => {
     let bassError = BASS_ErrorGetCode();
 
@@ -148,6 +159,8 @@ function play(streamHandle: number) {
   let bitrate = QueryChannelAttributeValue(streamHandle, BASS_ATTRIB_BITRATE);
   let frequency = QueryChannelAttributeValue(streamHandle, BASS_ATTRIB_FREQ);
   console.log("Stream Bitrate: ", bitrate, " Frequency: ", frequency);
+  // Define an array for BASS_DATA_FFT256 float values
+  let FFT_Data = new Uint8Array(128 * 4);
   while (true) {
     let position = BASS_ChannelGetPosition(streamHandle, BASS_POS_BYTE);
     if (position == -1) {
@@ -176,7 +189,7 @@ function play(streamHandle: number) {
         BASS_Pause();
         pauseTimer = Date.now();
       }
-      if (Date.now() > pauseTimer + 3_000 && step2) {
+      if (Date.now() > pauseTimer + 3_000 && step2 && !step) {
         step2 = false;
         // Resume device playback after 8 seconds.
         BASS_Start();
@@ -197,6 +210,34 @@ function play(streamHandle: number) {
     }
     const end = Date.now() + 1_000;
     while (Date.now() < end);
+
+    // Query channels FFT data
+    BASS_ChannelGetData(streamHandle, FFT_Data, BASS_DATA_FFT256);
+    console.log("FFT Data: ", FFT_Data);
+
+    // Check which device is being used by playback channel
+    let device_idx = -1;
+    if ((device_idx = BASS_ChannelGetDevice(streamHandle)) == -1) {
+      console.error("Querying channels device was not successful.");
+    } else {
+      console.log("Device number used by playback channel: ", device_idx);
+    }
+
+    // Test BASS_ChannelGetLevelEx
+    const levelBuffer = new Uint8Array(2);
+    if (
+      BASS_ChannelGetLevelEx(streamHandle, levelBuffer, 1.0, BASS_LEVEL_STEREO)
+    ) {
+      console.log(
+        "Volume levels: LEFT[",
+        levelBuffer[0],
+        "] RIGHT[",
+        levelBuffer[1],
+        "]"
+      );
+    } else {
+      console.error("Buuuuh");
+    }
   }
   BASS_ChannelStop(streamHandle);
   BASS_ChannelFree(streamHandle);

@@ -58,12 +58,12 @@ $ deno test --allow-ffi --unstable-ffi
 |6|BASS_ChannelGet3DPosition|❌|
 |7|BASS_ChannelGetAttribute|✅|
 |8|BASS_ChannelGetAttributeEx|✅|
-|9|BASS_ChannelGetData|❌|
-|10|BASS_ChannelGetDevice|❌|
+|9|BASS_ChannelGetData|✅|
+|10|BASS_ChannelGetDevice|✅|
 |11|BASS_ChannelGetInfo|✅|
 |12|BASS_ChannelGetLength|✅|
 |13|BASS_ChannelGetLevel|✅|
-|14|BASS_ChannelGetLevelEx|❌|
+|14|BASS_ChannelGetLevelEx|✅|
 |15|BASS_ChannelGetPosition|✅|
 |16|BASS_ChannelGetTags|✅|
 |17|BASS_ChannelIsActive|❌|

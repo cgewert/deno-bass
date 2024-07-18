@@ -17,6 +17,32 @@ export const BASS_MUSIC_SURROUND2 = 0x1000; // surround sound (mode 2)
 export const BASS_MUSIC_FT2MOD = 0x2000; // play .MOD as FastTracker 2 does
 export const BASS_MUSIC_PT1MOD = 0x4000; // play .MOD as ProTracker 1 does
 
+// BASS_ChannelGetData flags
+export const BASS_DATA_AVAILABLE = 0; // query how much data is buffered
+export const BASS_DATA_NOREMOVE = 0x10000000; // flag: don't remove data from recording buffer
+export const BASS_DATA_FIXED = 0x20000000; // unused
+export const BASS_DATA_FLOAT = 0x40000000; // flag: return floating-point sample data
+export const BASS_DATA_FFT256 = 0x80000000; // 256 sample FFT
+export const BASS_DATA_FFT512 = 0x80000001; // 512 FFT
+export const BASS_DATA_FFT1024 = 0x80000002; // 1024 FFT
+export const BASS_DATA_FFT2048 = 0x80000003; // 2048 FFT
+export const BASS_DATA_FFT4096 = 0x80000004; // 4096 FFT
+export const BASS_DATA_FFT8192 = 0x80000005; // 8192 FFT
+export const BASS_DATA_FFT16384 = 0x80000006; // 16384 FFT
+export const BASS_DATA_FFT32768 = 0x80000007; // 32768 FFT
+export const BASS_DATA_FFT_INDIVIDUAL = 0x10; // FFT flag: FFT for each channel, else all combined
+export const BASS_DATA_FFT_NOWINDOW = 0x20; // FFT flag: no Hanning window
+export const BASS_DATA_FFT_REMOVEDC = 0x40; // FFT flag: pre-remove DC bias
+export const BASS_DATA_FFT_COMPLEX = 0x80; // FFT flag: return complex data
+export const BASS_DATA_FFT_NYQUIST = 0x100; // FFT flag: return extra Nyquist value
+
+// BASS_ChannelGetLevelEx flags
+export const BASS_LEVEL_MONO = 1; // get mono level
+export const BASS_LEVEL_STEREO = 2; // get stereo level
+export const BASS_LEVEL_RMS = 4; // get RMS levels
+export const BASS_LEVEL_VOLPAN = 8; // apply VOL/PAN attributes to the levels
+export const BASS_LEVEL_NOREMOVE = 16; // don't remove data from recording buffer
+
 // Speaker assignment flags
 export const BASS_SPEAKER_LEFT = 0x10000000; // modifier: left
 export const BASS_SPEAKER_RIGHT = 0x20000000; // modifier: right

@@ -6,3 +6,4 @@
   ☐ Introduce MODULE_ROOT constant
   ☐ Implement Example with GUI
   ☐ Add more unit tests
+  ☐ Check all return values for correctness, from c into fields, inside ChannelInfo class

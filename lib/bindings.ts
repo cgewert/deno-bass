@@ -40,9 +40,24 @@ export const library = Deno.dlopen(".\\bass.dll", {
     parameters: [DWORD, DWORD, buffer, DWORD],
     result: DWORD,
   },
+  // Retrieves the immediate sample data (or an FFT representation of it) of a sample channel, stream, MOD music, or recording channel.
+  BASS_ChannelGetData: {
+    parameters: [DWORD, buffer, QWORD],
+    result: DWORD,
+  },
+  // Retrieves the device that a channel is using.
+  BASS_ChannelGetDevice: {
+    parameters: [DWORD],
+    result: DWORD,
+  },
   // Retrieves information on a channel.
   BASS_ChannelGetInfo: {
     parameters: [DWORD, buffer], // BASS_CHANNELINFO pointer
+    result: c_bool,
+  },
+  // Retrieves the level of a sample, stream, MOD music, or recording channel.
+  BASS_ChannelGetLevelEx: {
+    parameters: [DWORD, buffer, c_float, DWORD],
     result: c_bool,
   },
   BASS_ChannelSetAttribute: {
@@ -131,3 +146,6 @@ export const BASS_IsStarted = library.symbols.BASS_IsStarted;
 export const BASS_Stop = library.symbols.BASS_Stop;
 export const BASS_Pause = library.symbols.BASS_Pause;
 export const BASS_ChannelGetInfo = library.symbols.BASS_ChannelGetInfo;
+export const BASS_ChannelGetData = library.symbols.BASS_ChannelGetData;
+export const BASS_ChannelGetDevice = library.symbols.BASS_ChannelGetDevice;
+export const BASS_ChannelGetLevelEx = library.symbols.BASS_ChannelGetLevelEx;
