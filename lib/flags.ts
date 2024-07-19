@@ -111,3 +111,6 @@ export const BASS_DEVICE_TYPE_NETWORK = 0x01000000;
 export const BASS_DEVICE_TYPE_SPDIF = 0x09000000;
 // A set of speakers.
 export const BASS_DEVICE_TYPE_SPEAKERS = 0x02000000;
+
+// BASS_ChannelSlideAttribute flags
+export const BASS_SLIDE_LOG = 0x1000000;

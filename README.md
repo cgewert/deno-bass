@@ -66,9 +66,9 @@ $ deno test --allow-ffi --unstable-ffi
 |14|BASS_ChannelGetLevelEx|✅|
 |15|BASS_ChannelGetPosition|✅|
 |16|BASS_ChannelGetTags|✅|
-|17|BASS_ChannelIsActive|❌|
-|18|BASS_ChannelIsSliding|❌|
-|19|BASS_ChannelLock|❌|
+|17|BASS_ChannelIsActive|✅|
+|18|BASS_ChannelIsSliding|✅|
+|19|BASS_ChannelLock|✅|
 |20|BASS_ChannelPause|✅|
 |21|BASS_ChannelPlay|✅|
 |22|BASS_ChannelRemoveDSP|❌|
@@ -86,7 +86,7 @@ $ deno test --allow-ffi --unstable-ffi
 |34|BASS_ChannelSetLink|❌|
 |35|BASS_ChannelSetPosition|❌|
 |36|BASS_ChannelSetSync|❌|
-|37|BASS_ChannelSlideAttribute|❌|
+|37|BASS_ChannelSlideAttribute|✅|
 |38|BASS_ChannelStart|✅|
 |39|BASS_ChannelStop|✅|
 |40|BASS_ChannelUpdate|❌|

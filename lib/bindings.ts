@@ -60,8 +60,23 @@ export const library = Deno.dlopen(".\\bass.dll", {
     parameters: [DWORD, buffer, c_float, DWORD],
     result: c_bool,
   },
+  //Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress.
+  BASS_ChannelIsActive: {
+    parameters: [DWORD],
+    result: DWORD,
+  },
+  // Checks if an attribute (or any attribute) of a sample, stream, or MOD music is sliding.
+  BASS_ChannelIsSliding: {
+    parameters: [DWORD, DWORD],
+    result: c_bool,
+  },
   BASS_ChannelSetAttribute: {
     parameters: [DWORD, DWORD, c_float],
+    result: c_bool,
+  },
+  // Slides a channel's attribute from its current value to a new value.
+  BASS_ChannelSlideAttribute: {
+    parameters: [DWORD, DWORD, c_float, DWORD],
     result: c_bool,
   },
   // Sets the value of a channel's attribute.
@@ -77,7 +92,8 @@ export const library = Deno.dlopen(".\\bass.dll", {
   BASS_ChannelStart: { parameters: [QWORD], result: c_bool },
   BASS_ChannelFree: { parameters: [QWORD], result: c_bool },
   BASS_ChannelGetLevel: { parameters: ["i64"], result: DWORD },
-
+  // Locks a stream, MOD music or recording channel to the current thread.
+  BASS_ChannelLock: { parameters: [DWORD, c_bool], result: c_bool },
   BASS_ChannelGetTags: { parameters: [DWORD, DWORD], result: "buffer" },
 
   // Initialization, etc...
@@ -149,3 +165,8 @@ export const BASS_ChannelGetInfo = library.symbols.BASS_ChannelGetInfo;
 export const BASS_ChannelGetData = library.symbols.BASS_ChannelGetData;
 export const BASS_ChannelGetDevice = library.symbols.BASS_ChannelGetDevice;
 export const BASS_ChannelGetLevelEx = library.symbols.BASS_ChannelGetLevelEx;
+export const BASS_ChannelIsActive = library.symbols.BASS_ChannelIsActive;
+export const BASS_ChannelIsSliding = library.symbols.BASS_ChannelIsSliding;
+export const BASS_ChannelSlideAttribute =
+  library.symbols.BASS_ChannelSlideAttribute;
+export const BASS_ChannelLock = library.symbols.BASS_ChannelLock;

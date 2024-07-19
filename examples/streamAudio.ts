@@ -13,9 +13,13 @@ import {
   BASS_ChannelGetLength,
   BASS_ChannelGetLevelEx,
   BASS_ChannelGetPosition,
+  BASS_ChannelIsActive,
+  BASS_ChannelIsSliding,
+  BASS_ChannelLock,
   BASS_ChannelPlay,
   BASS_ChannelSetAttribute,
   BASS_ChannelSetAttributeEx,
+  BASS_ChannelSlideAttribute,
   BASS_ChannelStop,
   BASS_ErrorGetCode,
   BASS_Free,
@@ -47,6 +51,12 @@ import {
 } from "../lib/flags.ts";
 import { BASS_POS_BYTE } from "../lib/modes.ts";
 import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
+import {
+  BASS_ACTIVE_PAUSED,
+  BASS_ACTIVE_PAUSED_DEVICE,
+  BASS_ACTIVE_PLAYING,
+  BASS_ACTIVE_STOPPED,
+} from "../lib/retvals.ts";
 import { ChannelInfo } from "../lib/types/ChannelInfo.ts";
 import { ID3v1Tag } from "../lib/types/ID3v1Tag.ts";
 import {
@@ -161,6 +171,9 @@ function play(streamHandle: number) {
   console.log("Stream Bitrate: ", bitrate, " Frequency: ", frequency);
   // Define an array for BASS_DATA_FFT256 float values
   let FFT_Data = new Uint8Array(128 * 4);
+  if (!BASS_ChannelLock(streamHandle, true))
+    console.error("Could not create lock for streamhandle");
+
   while (true) {
     let position = BASS_ChannelGetPosition(streamHandle, BASS_POS_BYTE);
     if (position == -1) {
@@ -193,6 +206,13 @@ function play(streamHandle: number) {
         step2 = false;
         // Resume device playback after 8 seconds.
         BASS_Start();
+        // Interpolate channels volume to a low level.
+        BASS_ChannelSlideAttribute(
+          streamHandle,
+          BASS_ATTRIB_VOL,
+          0.01,
+          5 * 1000
+        );
         const channelInfo = new ChannelInfo(streamHandle);
         console.log("Channel Info Frequency: ", channelInfo.Frequency);
         console.log(
@@ -213,7 +233,30 @@ function play(streamHandle: number) {
 
     // Query channels FFT data
     BASS_ChannelGetData(streamHandle, FFT_Data, BASS_DATA_FFT256);
-    console.log("FFT Data: ", FFT_Data);
+    //console.log("FFT Data: ", FFT_Data);
+
+    // Check channels active state
+    const isActive = BASS_ChannelIsActive(streamHandle);
+    switch (isActive) {
+      case BASS_ACTIVE_PLAYING:
+        console.log("PLAYING");
+        break;
+      case BASS_ACTIVE_PAUSED:
+        console.log("CHANNEL PAUSED");
+        break;
+      case BASS_ACTIVE_PAUSED_DEVICE:
+        console.log("DEVICE PAUSED");
+        break;
+      case BASS_ACTIVE_STOPPED:
+        console.log("STOPPED");
+        break;
+      default:
+        break;
+    }
+
+    // Check for sliding attribs
+    const isSliding = BASS_ChannelIsSliding(streamHandle, BASS_ATTRIB_VOL);
+    console.log("Volume is sliding? ", isSliding);
 
     // Check which device is being used by playback channel
     let device_idx = -1;
@@ -236,7 +279,7 @@ function play(streamHandle: number) {
         "]"
       );
     } else {
-      console.error("Buuuuh");
+      console.error("No volume");
     }
   }
   BASS_ChannelStop(streamHandle);
