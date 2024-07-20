@@ -72,7 +72,7 @@ $ deno test --allow-ffi --unstable-ffi
 |20|BASS_ChannelPause|✅|
 |21|BASS_ChannelPlay|✅|
 |22|BASS_ChannelRemoveDSP|❌|
-|23|BASS_ChannelRemoveFX|❌|
+|23|BASS_ChannelRemoveFX|✅|
 |24|BASS_ChannelRemoveLink|❌|
 |25|BASS_ChannelRemoveSync|❌|
 |26|BASS_ChannelSeconds2Bytes|❌|
@@ -81,15 +81,15 @@ $ deno test --allow-ffi --unstable-ffi
 |29|BASS_ChannelSetAttribute|✅|
 |30|BASS_ChannelSetAttributeEx|✅|
 |31|BASS_ChannelSetDSP|❌|
-|32|BASS_ChannelSetDevice|❌|
-|33|BASS_ChannelSetFX|❌|
+|32|BASS_ChannelSetDevice|✅|
+|33|BASS_ChannelSetFX|✅|
 |34|BASS_ChannelSetLink|❌|
 |35|BASS_ChannelSetPosition|❌|
 |36|BASS_ChannelSetSync|❌|
 |37|BASS_ChannelSlideAttribute|✅|
 |38|BASS_ChannelStart|✅|
 |39|BASS_ChannelStop|✅|
-|40|BASS_ChannelUpdate|❌|
+|40|BASS_ChannelUpdate|✅|
 |41|BASS_ErrorGetCode|✅|
 |42|BASS_FXGetParameters|❌|
 |43|BASS_FXReset|❌|
@@ -154,4 +154,4 @@ $ deno test --allow-ffi --unstable-ffi
 |103|BASS_StreamGetFilePosition|❌|
 |104|BASS_StreamPutData|❌|
 |105|BASS_StreamPutFileData|❌|
-|106|BASS_Update|❌|
+|106|BASS_Update|✅|

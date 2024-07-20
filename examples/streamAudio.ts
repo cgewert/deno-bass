@@ -17,10 +17,14 @@ import {
   BASS_ChannelIsSliding,
   BASS_ChannelLock,
   BASS_ChannelPlay,
+  BASS_ChannelRemoveFX,
   BASS_ChannelSetAttribute,
   BASS_ChannelSetAttributeEx,
+  BASS_ChannelSetDevice,
+  BASS_ChannelSetFX,
   BASS_ChannelSlideAttribute,
   BASS_ChannelStop,
+  BASS_ChannelUpdate,
   BASS_ErrorGetCode,
   BASS_Free,
   BASS_GetConfig,
@@ -31,6 +35,7 @@ import {
   BASS_Start,
   BASS_Stop,
   BASS_StreamCreateFile,
+  BASS_Update,
   library,
 } from "../lib/bindings.ts";
 import {
@@ -49,6 +54,12 @@ import {
   BASS_SAMPLE_FLOAT,
   BASS_SAMPLE_LOOP,
 } from "../lib/flags.ts";
+import {
+  BASS_FX_DX8_CHORUS,
+  BASS_FX_DX8_COMPRESSOR,
+  BASS_FX_DX8_ECHO,
+  BASS_FX_DX8_GARGLE,
+} from "../lib/fx.ts";
 import { BASS_POS_BYTE } from "../lib/modes.ts";
 import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
 import {
@@ -76,6 +87,7 @@ if (BASS_IsStarted() == 0) console.log("Device not started yet...");
 else console.log("Device was mysteriously started already!????");
 
 BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);
+//BASS_Init(2, 44100, BASS_DEVICE_STEREO, 0, null);
 console.log("Initialized BASS... ", GetBASSErrorCode());
 if (BASS_IsStarted() == 0) console.log("Device not started yet...");
 else console.log("Device was successfully started.");
@@ -171,9 +183,13 @@ function play(streamHandle: number) {
   console.log("Stream Bitrate: ", bitrate, " Frequency: ", frequency);
   // Define an array for BASS_DATA_FFT256 float values
   let FFT_Data = new Uint8Array(128 * 4);
-  if (!BASS_ChannelLock(streamHandle, true))
-    console.error("Could not create lock for streamhandle");
+  // if (!BASS_ChannelLock(streamHandle, true))
+  //   console.error("Could not create lock for streamhandle");
+  // else {
+  //   console.log("Created a lock for stream!");
+  // }
 
+  let handleFX = null;
   while (true) {
     let position = BASS_ChannelGetPosition(streamHandle, BASS_POS_BYTE);
     if (position == -1) {
@@ -191,6 +207,16 @@ function play(streamHandle: number) {
       );
       // After 5 seconds try to activate the loop channel flag
       if (seconds > 5.0 && step) {
+        // if (!BASS_ChannelSetDevice(streamHandle, 6))
+        //   console.error("Can't switch device: ", GetBASSErrorCode());
+        handleFX = BASS_ChannelSetFX(streamHandle, BASS_FX_DX8_ECHO, 1);
+
+        if (BASS_Update(200)) {
+          console.log("Channels playback buffer was updated!");
+        } else {
+          console.error("Error updating playback buffer.");
+          console.error(GetBASSErrorCode());
+        }
         const flags = BASS_ChannelFlags(
           streamHandle,
           BASS_SAMPLE_LOOP,
@@ -199,18 +225,21 @@ function play(streamHandle: number) {
         console.log("WAS LOOP SET: ", Boolean(flags & BASS_SAMPLE_LOOP));
         step = false;
         // Pause device playback after 5 seconds of playback.
-        BASS_Pause();
+        // BASS_Pause();
         pauseTimer = Date.now();
       }
       if (Date.now() > pauseTimer + 3_000 && step2 && !step) {
         step2 = false;
+        //BASS_ChannelSetDevice(streamHandle, 1);
+        BASS_ChannelRemoveFX(streamHandle, handleFX);
+        BASS_FX_DX8_GARGLE;
         // Resume device playback after 8 seconds.
         BASS_Start();
         // Interpolate channels volume to a low level.
         BASS_ChannelSlideAttribute(
           streamHandle,
           BASS_ATTRIB_VOL,
-          0.01,
+          0.3,
           5 * 1000
         );
         const channelInfo = new ChannelInfo(streamHandle);

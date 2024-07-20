@@ -70,9 +70,24 @@ export const library = Deno.dlopen(".\\bass.dll", {
     parameters: [DWORD, DWORD],
     result: c_bool,
   },
+  // Removes an effect on a stream, MOD music, or recording channel.
+  BASS_ChannelRemoveFX: {
+    parameters: [DWORD, DWORD],
+    result: c_bool,
+  },
   BASS_ChannelSetAttribute: {
     parameters: [DWORD, DWORD, c_float],
     result: c_bool,
+  },
+  // Changes the device that a stream, MOD music or sample is using.
+  BASS_ChannelSetDevice: {
+    parameters: [DWORD, DWORD],
+    result: c_bool,
+  },
+  // Sets an effect on a stream, MOD music, or recording channel.
+  BASS_ChannelSetFX: {
+    parameters: [DWORD, DWORD, c_int_32],
+    result: DWORD,
   },
   // Slides a channel's attribute from its current value to a new value.
   BASS_ChannelSlideAttribute: {
@@ -82,6 +97,11 @@ export const library = Deno.dlopen(".\\bass.dll", {
   // Sets the value of a channel's attribute.
   BASS_ChannelSetAttributeEx: {
     parameters: [DWORD, DWORD, buffer, DWORD],
+    result: c_bool,
+  },
+  // Updates the playback buffer of a stream or MOD music.
+  BASS_ChannelUpdate: {
+    parameters: [DWORD, DWORD],
     result: c_bool,
   },
   BASS_ChannelGetLength: { parameters: [DWORD, DWORD], result: QWORD },
@@ -117,6 +137,8 @@ export const library = Deno.dlopen(".\\bass.dll", {
   BASS_SetVolume: { parameters: ["f32"], result: c_bool },
   BASS_Start: { parameters: [], result: c_bool },
   BASS_Stop: { parameters: [], result: c_bool },
+  // Updates the HSTREAM and HMUSIC channel playback buffers.
+  BASS_Update: { parameters: [DWORD], result: c_bool },
 
   // Config
   BASS_SetConfig: { parameters: [DWORD, DWORD], result: c_bool },
@@ -170,3 +192,8 @@ export const BASS_ChannelIsSliding = library.symbols.BASS_ChannelIsSliding;
 export const BASS_ChannelSlideAttribute =
   library.symbols.BASS_ChannelSlideAttribute;
 export const BASS_ChannelLock = library.symbols.BASS_ChannelLock;
+export const BASS_ChannelUpdate = library.symbols.BASS_ChannelUpdate;
+export const BASS_Update = library.symbols.BASS_Update;
+export const BASS_ChannelSetDevice = library.symbols.BASS_ChannelSetDevice;
+export const BASS_ChannelSetFX = library.symbols.BASS_ChannelSetFX;
+export const BASS_ChannelRemoveFX = library.symbols.BASS_ChannelRemoveFX;
