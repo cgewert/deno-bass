@@ -10,10 +10,28 @@ import {
   c_int_64,
   c_ptr,
 } from "./ctypes.ts";
+import { SEPARATOR } from "std/path/mod.ts";
 
-// TODO: resolve module root directory before opening binary
-// Do not use relative path here
-export const library = Deno.dlopen(".\\bass.dll", {
+// Platform specific initialization
+let osSpecificLibPath = "";
+switch(Deno.build.os){
+  case "windows":
+    osSpecificLibPath = `.${SEPARATOR}bass.dll`;
+    break;
+  case "linux":
+    osSpecificLibPath = `.${SEPARATOR}libbass.so`;
+    break;
+  default:
+    break;
+};
+if(osSpecificLibPath == "")
+{
+  console.error("Error detecting OS specific shared library.");
+  Deno.exit(-1);
+}
+  
+
+export const library = Deno.dlopen(osSpecificLibPath, {
   // Streams
   BASS_StreamCreateFile: {
     parameters: [c_bool, "buffer", c_int_64, c_int_64, c_int_32],
