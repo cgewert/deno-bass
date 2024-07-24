@@ -99,7 +99,7 @@ else console.log("Output started successfully: ", GetBASSErrorCode());
 
 const fileNameBuffer = ToCString(
   // Insert a valid path to your mp3 file here
-  "E:/Programmieren/deno-tutorial/ffi/001-c/track.mp3"
+  "./examples/01.mp3"
 );
 
 BASS_StreamCreateFile(false, fileNameBuffer, 0, 0, BASS_SAMPLE_FLOAT).then(

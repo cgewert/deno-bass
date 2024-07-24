@@ -13,7 +13,8 @@ import {
 
 // TODO: resolve module root directory before opening binary
 // Do not use relative path here
-export const library = Deno.dlopen(".\\bass.dll", {
+//export const library = Deno.dlopen(".\\bass.dll", {
+export const library = Deno.dlopen("./libbass.so", {
   // Streams
   BASS_StreamCreateFile: {
     parameters: [c_bool, "buffer", c_int_64, c_int_64, c_int_32],
