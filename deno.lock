@@ -2,7 +2,8 @@
   "version": "3",
   "packages": {
     "specifiers": {
-      "npm:@jest/globals@latest": "npm:@jest/globals@29.7.0"
+      "npm:@jest/globals@latest": "npm:@jest/globals@29.7.0",
+      "npm:rxjs@7.8.1": "npm:rxjs@7.8.1"
     },
     "npm": {
       "@ampproject/remapping@2.3.0": {
@@ -978,6 +979,12 @@
         "integrity": "sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==",
         "dependencies": {}
       },
+      "rxjs@7.8.1": {
+        "integrity": "sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==",
+        "dependencies": {
+          "tslib": "tslib@2.6.3"
+        }
+      },
       "semver@6.3.1": {
         "integrity": "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==",
         "dependencies": {}
@@ -1043,6 +1050,10 @@
         "dependencies": {
           "is-number": "is-number@7.0.0"
         }
+      },
+      "tslib@2.6.3": {
+        "integrity": "sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==",
+        "dependencies": {}
       },
       "type-detect@4.0.8": {
         "integrity": "sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==",
