@@ -1,4 +1,20 @@
-type HFX = number; // effect handle
+export type HFX = number; // effect handle
+export type BASS_INFO = {
+  flags: number;
+  hwsize: number;
+  hwfree: number;
+  freesam: number;
+  free3d: number;
+  minrate: number;
+  maxrate: number;
+  eax: boolean;
+  minbuf: number;
+  dsver: number;
+  latency: number;
+  initflags: number;
+  speakers: number;
+  freq: number;
+};
 // type DWORD HMUSIC;		// MOD music handle
 // type DWORD HSAMPLE;		// sample handle
 // type DWORD HCHANNEL;		// sample playback handle

@@ -132,19 +132,24 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   BASS_ChannelGetLevel: { parameters: ["i64"], result: DWORD },
   // Locks a stream, MOD music or recording channel to the current thread.
   BASS_ChannelLock: { parameters: [DWORD, c_bool], result: c_bool },
-  BASS_ChannelGetTags: { parameters: [DWORD, DWORD], result: "buffer" },
+  BASS_ChannelGetTags: { parameters: [DWORD, DWORD], result: buffer },
 
   // Initialization, etc...
   BASS_ErrorGetCode: { parameters: [], result: c_int_32 },
   BASS_Free: { parameters: [], result: c_bool },
-  BASS_GetVolume: { parameters: [], result: c_float },
-  BASS_GetVersion: { parameters: [], result: DWORD },
+  BASS_GetCPU: { parameters: [], result: c_float },
   BASS_GetDevice: { parameters: [], result: c_int_32 },
   BASS_GetDeviceInfo: {
-    parameters: [DWORD, "buffer"],
+    parameters: [DWORD, buffer],
     result: c_bool,
   },
-  BASS_GetCPU: { parameters: [], result: c_float },
+  // Retrieves information on the device being used.
+  BASS_GetInfo: {
+    parameters: [buffer],
+    result: c_bool,
+  },
+  BASS_GetVersion: { parameters: [], result: DWORD },
+  BASS_GetVolume: { parameters: [], result: c_float },
   BASS_Init: {
     parameters: [c_int_64, DWORD, DWORD, HWND, c_ptr],
     result: c_bool,
@@ -152,6 +157,8 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   // Checks if the output has been started and is active.
   BASS_IsStarted: { parameters: [], result: DWORD },
   BASS_Pause: { parameters: [], result: c_bool },
+  // Sets the device to use for subsequent calls in the current thread.
+  BASS_SetDevice: { parameters: [DWORD], result: c_bool },
   BASS_SetVolume: { parameters: ["f32"], result: c_bool },
   BASS_Start: { parameters: [], result: c_bool },
   BASS_Stop: { parameters: [], result: c_bool },
@@ -215,3 +222,5 @@ export const BASS_Update = library.symbols.BASS_Update;
 export const BASS_ChannelSetDevice = library.symbols.BASS_ChannelSetDevice;
 export const BASS_ChannelSetFX = library.symbols.BASS_ChannelSetFX;
 export const BASS_ChannelRemoveFX = library.symbols.BASS_ChannelRemoveFX;
+export const BASS_GetInfo = library.symbols.BASS_GetInfo;
+export const BASS_SetDevice = library.symbols.BASS_SetDevice;

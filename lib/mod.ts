@@ -7,3 +7,4 @@ export * as Utilities from "./utilities.ts";
 export * as Attributes from "./channelAttributes.ts";
 export * as Tags from "./tags.ts";
 export * as RetVals from "./retvals.ts";
+export * as BASS_TYPES from "./bassTypes.ts";

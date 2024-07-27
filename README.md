@@ -105,7 +105,7 @@ $ deno test --allow-ffi --unstable-ffi
 |53|BASS_GetDevice|✅|
 |54|BASS_GetDeviceInfo|✅|
 |55|ASS_GetEAXParameters|❌|
-|56|BASS_GetInfo|❌|
+|56|BASS_GetInfo|✅|
 |57|BASS_GetVersion|✅|
 |58|BASS_GetVolume|✅|
 |59|BASS_Init|✅|
@@ -141,7 +141,7 @@ $ deno test --allow-ffi --unstable-ffi
 |90|BASS_Set3DPosition|❌|
 |91|BASS_SetConfig|✅|
 |92|BASS_SetConfigPtr|❌|
-|93|BASS_SetDevice|❌|
+|93|BASS_SetDevice|✅|
 |94|BASS_SetEAXParameters|❌|
 |95|BASS_SetVolume|✅|
 |96|BASS_Start|✅|
