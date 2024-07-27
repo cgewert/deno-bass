@@ -28,6 +28,7 @@ import {
   BASS_ErrorGetCode,
   BASS_Free,
   BASS_GetConfig,
+  BASS_GetInfo,
   BASS_Init,
   BASS_IsStarted,
   BASS_Pause,
@@ -68,6 +69,7 @@ import {
   BASS_ACTIVE_PLAYING,
   BASS_ACTIVE_STOPPED,
 } from "../lib/retvals.ts";
+import { BASSInfo } from "../lib/types/BASSInfo.ts";
 import { ChannelInfo } from "../lib/types/ChannelInfo.ts";
 import { ID3v1Tag } from "../lib/types/ID3v1Tag.ts";
 import {
@@ -123,7 +125,7 @@ BASS_StreamCreateFile(false, fileNameBuffer, 0, 0, BASS_SAMPLE_FLOAT).then(
 
 function play(streamHandle: number) {
   // Set volume for the playing channel stream
-  if (!BASS_ChannelSetAttribute(streamHandle, BASS_ATTRIB_VOL, 0.4)) {
+  if (!BASS_ChannelSetAttribute(streamHandle, BASS_ATTRIB_VOL, 0.04)) {
     console.error("Could not set the channels volume!");
   }
   let retval = BASS_GetConfig(BASS_CONFIG_HANDLES);
@@ -210,6 +212,8 @@ function play(streamHandle: number) {
         // if (!BASS_ChannelSetDevice(streamHandle, 6))
         //   console.error("Can't switch device: ", GetBASSErrorCode());
         handleFX = BASS_ChannelSetFX(streamHandle, BASS_FX_DX8_ECHO, 1);
+        const deviceInfo = new BASSInfo();
+        console.log("DeviceInfo: ", deviceInfo.toString());
 
         if (BASS_Update(200)) {
           console.log("Channels playback buffer was updated!");

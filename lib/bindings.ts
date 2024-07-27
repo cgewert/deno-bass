@@ -1,5 +1,8 @@
 import {
   DWORD,
+  HDSP,
+  HFX,
+  HSYNC,
   HWND,
   QWORD,
   buffer,
@@ -14,7 +17,7 @@ import { SEPARATOR } from "std/path/mod.ts";
 
 // Platform specific initialization
 let osSpecificLibPath = "";
-switch(Deno.build.os){
+switch (Deno.build.os) {
   case "windows":
     osSpecificLibPath = `.${SEPARATOR}bass.dll`;
     break;
@@ -23,19 +26,17 @@ switch(Deno.build.os){
     break;
   default:
     break;
-};
-if(osSpecificLibPath == "")
-{
+}
+if (osSpecificLibPath == "") {
   console.error("Error detecting OS specific shared library.");
   Deno.exit(-1);
 }
-  
 
 export const library = Deno.dlopen(osSpecificLibPath, {
   // Streams
   BASS_StreamCreateFile: {
     parameters: [c_bool, "buffer", c_int_64, c_int_64, c_int_32],
-    result: c_int_32,
+    result: DWORD,
     nonblocking: true,
   },
   BASS_StreamCreateURL: {
@@ -49,6 +50,17 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   // Translates a byte position into time (seconds), based on a channel's format.
   BASS_ChannelBytes2Seconds: { parameters: [DWORD, QWORD], result: c_double },
   BASS_ChannelFlags: { parameters: [DWORD, DWORD, DWORD], result: DWORD },
+  BASS_ChannelFree: { parameters: [DWORD], result: c_bool },
+  // Retrieves the 3D attributes of a sample, stream, or MOD music channel with 3D functionality.
+  BASS_ChannelGet3DAttributes: {
+    parameters: [DWORD, DWORD, buffer, buffer, buffer, buffer, buffer],
+    result: c_bool,
+  },
+  // Retrieves the 3D position of a sample, stream, or MOD music channel with 3D functionality.
+  BASS_ChannelGet3DPosition: {
+    parameters: [DWORD, buffer, buffer, buffer],
+    result: c_bool,
+  },
   BASS_ChannelGetAttribute: {
     parameters: [DWORD, DWORD, buffer],
     result: c_bool,
@@ -73,11 +85,18 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     parameters: [DWORD, buffer], // BASS_CHANNELINFO pointer
     result: c_bool,
   },
+  BASS_ChannelGetLength: { parameters: [DWORD, DWORD], result: QWORD },
+  // Retrieves the level (peak amplitude) of a sample, stream, MOD music, or recording channel.
+  BASS_ChannelGetLevel: { parameters: ["i64"], result: DWORD },
   // Retrieves the level of a sample, stream, MOD music, or recording channel.
   BASS_ChannelGetLevelEx: {
     parameters: [DWORD, buffer, c_float, DWORD],
     result: c_bool,
   },
+  // Retrieves the current position of a channel.
+  BASS_ChannelGetPosition: { parameters: [DWORD, DWORD], result: QWORD },
+  // Retrieves tags/headers from a channel.
+  BASS_ChannelGetTags: { parameters: [DWORD, DWORD], result: buffer },
   //Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress.
   BASS_ChannelIsActive: {
     parameters: [DWORD],
@@ -88,28 +107,58 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     parameters: [DWORD, DWORD],
     result: c_bool,
   },
+  // Locks a stream, MOD music or recording channel to the current thread.
+  BASS_ChannelLock: { parameters: [DWORD, c_bool], result: c_bool },
+  // Pauses a sample, stream, MOD music, or recording.
+  BASS_ChannelPause: { parameters: [QWORD], result: c_bool },
+  // Starts/resumes playback of a sample, stream, MOD music, or a recording.
+  BASS_ChannelPlay: { parameters: [QWORD, c_bool], result: c_bool },
+  // Removes a DSP function from a stream, MOD music, or recording channel.
+  BASS_ChannelRemoveDSP: {
+    parameters: [HDSP, buffer],
+    result: c_bool,
+  },
   // Removes an effect on a stream, MOD music, or recording channel.
   BASS_ChannelRemoveFX: {
     parameters: [DWORD, DWORD],
     result: c_bool,
   },
-  BASS_ChannelSetAttribute: {
-    parameters: [DWORD, DWORD, c_float],
-    result: c_bool,
-  },
-  // Changes the device that a stream, MOD music or sample is using.
-  BASS_ChannelSetDevice: {
+  // Removes a links between two MOD music or stream channels.
+  BASS_ChannelRemoveLink: {
     parameters: [DWORD, DWORD],
     result: c_bool,
   },
-  // Sets an effect on a stream, MOD music, or recording channel.
-  BASS_ChannelSetFX: {
-    parameters: [DWORD, DWORD, c_int_32],
-    result: DWORD,
+  // Removes a synchronizer from a MOD music, stream or recording channel.
+  BASS_ChannelRemoveSync: {
+    parameters: [DWORD, HSYNC],
+    result: c_bool,
   },
-  // Slides a channel's attribute from its current value to a new value.
-  BASS_ChannelSlideAttribute: {
-    parameters: [DWORD, DWORD, c_float, DWORD],
+  // Translates a time (seconds) position into bytes, based on a channel's format.
+  BASS_ChannelSeconds2Bytes: {
+    parameters: [DWORD, c_double],
+    result: QWORD,
+  },
+  // Sets the 3D attributes of a sample, stream, or MOD music channel with 3D functionality.
+  BASS_ChannelSet3DAttributes: {
+    parameters: [
+      DWORD,
+      c_int_32,
+      c_float,
+      c_float,
+      c_int_32,
+      c_int_32,
+      c_float,
+    ],
+    result: c_bool,
+  },
+  // Sets the 3D position of a sample, stream, or MOD music channel with 3D functionality.
+  BASS_ChannelSet3DPosition: {
+    parameters: [DWORD, buffer, buffer, buffer],
+    result: c_bool,
+  },
+  // Sets the value of a channel's attribute.
+  BASS_ChannelSetAttribute: {
+    parameters: [DWORD, DWORD, c_float],
     result: c_bool,
   },
   // Sets the value of a channel's attribute.
@@ -117,22 +166,50 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     parameters: [DWORD, DWORD, buffer, DWORD],
     result: c_bool,
   },
+  // Changes the device that a stream, MOD music or sample is using.
+  BASS_ChannelSetDevice: {
+    parameters: [DWORD, DWORD],
+    result: c_bool,
+  },
+  // Sets up a user DSP function on a stream, MOD music, or recording channel.
+  BASS_ChannelSetDSP: {
+    parameters: [DWORD, buffer, buffer, c_int_32],
+    result: HDSP,
+  },
+  // Sets an effect on a stream, MOD music, or recording channel.
+  BASS_ChannelSetFX: {
+    parameters: [DWORD, DWORD, c_int_32],
+    result: HFX,
+  },
+  // Links two MOD music or stream channels together.
+  BASS_ChannelSetLink: {
+    parameters: [DWORD, DWORD],
+    result: c_bool,
+  },
+  // Sets the current position of a channel.
+  BASS_ChannelSetPosition: {
+    parameters: [DWORD, QWORD, DWORD],
+    result: c_bool,
+  },
+  // Sets up a synchronizer on a MOD music, stream or recording channel.
+  BASS_ChannelSetSync: {
+    parameters: [DWORD, DWORD, QWORD, buffer, buffer],
+    result: HSYNC,
+  },
+  // Slides a channel's attribute from its current value to a new value.
+  BASS_ChannelSlideAttribute: {
+    parameters: [DWORD, DWORD, c_float, DWORD],
+    result: c_bool,
+  },
+  // Starts/resumes playback of a sample, stream, MOD music, or a recording.
+  BASS_ChannelStart: { parameters: [QWORD], result: c_bool },
+  // Stops a sample, stream, MOD music, or recording.
+  BASS_ChannelStop: { parameters: [QWORD], result: c_bool },
   // Updates the playback buffer of a stream or MOD music.
   BASS_ChannelUpdate: {
     parameters: [DWORD, DWORD],
     result: c_bool,
   },
-  BASS_ChannelGetLength: { parameters: [DWORD, DWORD], result: QWORD },
-  BASS_ChannelGetPosition: { parameters: [DWORD, DWORD], result: QWORD },
-  BASS_ChannelPlay: { parameters: [QWORD, c_bool], result: c_bool },
-  BASS_ChannelStop: { parameters: [QWORD], result: c_bool },
-  BASS_ChannelPause: { parameters: [QWORD], result: c_bool },
-  BASS_ChannelStart: { parameters: [QWORD], result: c_bool },
-  BASS_ChannelFree: { parameters: [QWORD], result: c_bool },
-  BASS_ChannelGetLevel: { parameters: ["i64"], result: DWORD },
-  // Locks a stream, MOD music or recording channel to the current thread.
-  BASS_ChannelLock: { parameters: [DWORD, c_bool], result: c_bool },
-  BASS_ChannelGetTags: { parameters: [DWORD, DWORD], result: buffer },
 
   // Initialization, etc...
   BASS_ErrorGetCode: { parameters: [], result: c_int_32 },
@@ -224,3 +301,20 @@ export const BASS_ChannelSetFX = library.symbols.BASS_ChannelSetFX;
 export const BASS_ChannelRemoveFX = library.symbols.BASS_ChannelRemoveFX;
 export const BASS_GetInfo = library.symbols.BASS_GetInfo;
 export const BASS_SetDevice = library.symbols.BASS_SetDevice;
+export const BASS_ChannelSetPosition = library.symbols.BASS_ChannelSetPosition;
+export const BASS_ChannelGet3DAttributes =
+  library.symbols.BASS_ChannelGet3DAttributes;
+export const BASS_ChannelGet3DPosition =
+  library.symbols.BASS_ChannelGet3DPosition;
+export const BASS_ChannelRemoveDSP = library.symbols.BASS_ChannelRemoveDSP;
+export const BASS_ChannelRemoveLink = library.symbols.BASS_ChannelRemoveLink;
+export const BASS_ChannelRemoveSync = library.symbols.BASS_ChannelRemoveSync;
+export const BASS_ChannelSeconds2Bytes =
+  library.symbols.BASS_ChannelSeconds2Bytes;
+export const BASS_ChannelSet3DAttributes =
+  library.symbols.BASS_ChannelSet3DAttributes;
+export const BASS_ChannelSet3DPosition =
+  library.symbols.BASS_ChannelSet3DPosition;
+export const BASS_ChannelSetDSP = library.symbols.BASS_ChannelSetDSP;
+export const BASS_ChannelSetLink = library.symbols.BASS_ChannelSetLink;
+export const BASS_ChannelSetSync = library.symbols.BASS_ChannelSetSync;
