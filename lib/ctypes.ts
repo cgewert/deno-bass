@@ -1,5 +1,5 @@
-export const DWORD = "u32";
-export const QWORD = "u64";
+export const DWORD = "i32";
+export const QWORD = "i64";
 export const c_int_32 = "i32";
 export const c_int_64 = "i64";
 export const c_float = "f32";
