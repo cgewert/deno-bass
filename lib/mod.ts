@@ -8,3 +8,6 @@ export * as Attributes from "./channelAttributes.ts";
 export * as Tags from "./tags.ts";
 export * as RetVals from "./retvals.ts";
 export * as BASS_TYPES from "./bassTypes.ts";
+export * as FX from "./fx.ts";
+export * as ChannelTypes from "./channelTypes.ts";
+export * as ChannelModes from "./modes.ts";

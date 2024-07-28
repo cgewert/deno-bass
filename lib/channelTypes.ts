@@ -26,3 +26,13 @@ export const BASS_CTYPE_MUSIC_S3M = 0x20002;
 export const BASS_CTYPE_MUSIC_XM = 0x20003;
 export const BASS_CTYPE_MUSIC_IT = 0x20004;
 export const BASS_CTYPE_MUSIC_MO3 = 0x00100; // MO3 flag
+
+// Hashmap, mapping channel types to string representations
+export const CHANNELTYPE_MAP: Map<number, string> = new Map([
+  [BASS_CTYPE_STREAM_VORBIS, "OGG VORBIS"],
+  [BASS_CTYPE_STREAM_MP1, "MPEG Layer 1"],
+  [BASS_CTYPE_STREAM_MP2, "MPEG Layer 2"],
+  [BASS_CTYPE_STREAM_MP3, "MPEG Layer 3"],
+  [BASS_CTYPE_STREAM_AIFF, "Audio Interchange File Format"],
+  [BASS_CTYPE_STREAM_WAV, "RIFF Wave / PCM RAW"],
+]);

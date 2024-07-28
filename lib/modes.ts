@@ -1,4 +1,4 @@
-// BASS_ChannelGetLength/GetPosition/SetPosition modes
+// BASS_ChannelGetLength / GetPosition / SetPosition modes
 export const BASS_POS_BYTE = 0; // byte position
 export const BASS_POS_MUSIC_ORDER = 1; // order.row position, MAKELONG(order,row)
 export const BASS_POS_OGG = 3; // OGG bitstream number
