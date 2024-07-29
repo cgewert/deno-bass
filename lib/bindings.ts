@@ -243,8 +243,15 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   BASS_Update: { parameters: [DWORD], result: c_bool },
 
   // Config
-  BASS_SetConfig: { parameters: [DWORD, DWORD], result: c_bool },
+
+  // Retrieves the value of a config option.
   BASS_GetConfig: { parameters: [DWORD], result: DWORD },
+  // Retrieves the value of a pointer config option.
+  BASS_GetConfigPtr: { parameters: [DWORD], result: buffer },
+  // Sets the value of a config option.
+  BASS_SetConfig: { parameters: [DWORD, DWORD], result: c_bool },
+  // Sets the value of a pointer config option.
+  BASS_SetConfigPtr: { parameters: [DWORD, buffer], result: c_bool },
 } as const);
 
 // Classic C Style API
@@ -318,3 +325,5 @@ export const BASS_ChannelSet3DPosition =
 export const BASS_ChannelSetDSP = library.symbols.BASS_ChannelSetDSP;
 export const BASS_ChannelSetLink = library.symbols.BASS_ChannelSetLink;
 export const BASS_ChannelSetSync = library.symbols.BASS_ChannelSetSync;
+export const BASS_GetConfigPtr = library.symbols.BASS_GetConfigPtr;
+export const BASS_SetConfigPtr = library.symbols.BASS_SetConfigPtr;

@@ -54,3 +54,11 @@ export const BASS_CONFIG_NET_META = 71;
 export const BASS_CONFIG_NET_RESTRATE = 72;
 export const BASS_CONFIG_REC_DEFAULT = 73;
 export const BASS_CONFIG_NORAMP = 74;
+
+// BASS_SetConfigPtr options
+export const BASS_CONFIG_NET_AGENT = 16;
+export const BASS_CONFIG_NET_PROXY = 17;
+export const BASS_CONFIG_IOS_NOTIFY = 46;
+export const BASS_CONFIG_ANDROID_JAVAVM = 63;
+export const BASS_CONFIG_LIBSSL = 64;
+export const BASS_CONFIG_FILENAME = 75;
