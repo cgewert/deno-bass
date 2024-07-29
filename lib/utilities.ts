@@ -8,6 +8,8 @@ export const LOWORD = (x: number) => x & 0x0000ffff;
 export const ToCString = (x: string) => new TextEncoder().encode(x + "\0");
 export const UInt8BufferToString = (x: Uint8Array) =>
   Deno.UnsafePointerView.getCString(Deno.UnsafePointer.of(x));
+export const PointerToString = (x: Deno.UnsafePointer) =>
+  Deno.UnsafePointerView.getCString(x);
 
 // Error handling
 export const GetBASSErrorCode = () => {
