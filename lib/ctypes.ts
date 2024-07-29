@@ -8,6 +8,7 @@ export const HWND = "u64";
 export const HFX = DWORD;
 export const HDSP = DWORD;
 export const HSYNC = DWORD;
+export const HPLUGIN = "u32";
 export const c_void = "void";
 export const c_ptr = "pointer";
 export const buffer = "buffer";

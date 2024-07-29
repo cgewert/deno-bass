@@ -100,7 +100,7 @@ $ deno test --allow-ffi --unstable-ffi
 |48|BASS_Get3DPosition|❌|
 |49|BASS_GetCPU|✅|
 |50|BASS_GetConfig|✅|
-|51|BASS_GetConfigPtr|❌|
+|51|BASS_GetConfigPtr|✅|
 |52|BASS_GetDSoundObject|❌|
 |53|BASS_GetDevice|✅|
 |54|BASS_GetDeviceInfo|✅|
@@ -113,10 +113,10 @@ $ deno test --allow-ffi --unstable-ffi
 |61|BASS_MusicFree|❌|
 |62|BASS_MusicLoad|❌|
 |63|BASS_Pause|✅|
-|64|BASS_PluginEnable|❌|
-|65|BASS_PluginFree|❌|
-|66|BASS_PluginGetInfo|❌|
-|67|BASS_PluginLoad|❌|
+|64|BASS_PluginEnable|✅|
+|65|BASS_PluginFree|✅|
+|66|BASS_PluginGetInfo|✅|
+|67|BASS_PluginLoad|✅|
 |68|BASS_RecordFree|❌|
 |69|BASS_RecordGetDevice|❌|
 |70|BASS_RecordGetDeviceInfo|❌|
@@ -140,7 +140,7 @@ $ deno test --allow-ffi --unstable-ffi
 |88|BASS_Set3DFactors|❌|
 |90|BASS_Set3DPosition|❌|
 |91|BASS_SetConfig|✅|
-|92|BASS_SetConfigPtr|❌|
+|92|BASS_SetConfigPtr|✅|
 |93|BASS_SetDevice|✅|
 |94|BASS_SetEAXParameters|❌|
 |95|BASS_SetVolume|✅|

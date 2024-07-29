@@ -2,6 +2,7 @@ import {
   DWORD,
   HDSP,
   HFX,
+  HPLUGIN,
   HSYNC,
   HWND,
   QWORD,
@@ -252,6 +253,17 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   BASS_SetConfig: { parameters: [DWORD, DWORD], result: c_bool },
   // Sets the value of a pointer config option.
   BASS_SetConfigPtr: { parameters: [DWORD, buffer], result: c_bool },
+
+  // Plugins
+
+  // Enables or disables an add-on.
+  BASS_PluginEnable: { parameters: [HPLUGIN, c_bool], result: c_bool },
+  // Unplugs an add-on.
+  BASS_PluginFree: { parameters: [HPLUGIN], result: c_bool },
+  // Retrieves information on a plugin.
+  BASS_PluginGetInfo: { parameters: [HPLUGIN], result: buffer },
+  // Enables or disables an add-on.
+  BASS_PluginLoad: { parameters: [buffer, DWORD], result: HPLUGIN },
 } as const);
 
 // Classic C Style API
@@ -327,3 +339,7 @@ export const BASS_ChannelSetLink = library.symbols.BASS_ChannelSetLink;
 export const BASS_ChannelSetSync = library.symbols.BASS_ChannelSetSync;
 export const BASS_GetConfigPtr = library.symbols.BASS_GetConfigPtr;
 export const BASS_SetConfigPtr = library.symbols.BASS_SetConfigPtr;
+export const BASS_PluginEnable = library.symbols.BASS_PluginEnable;
+export const BASS_PluginFree = library.symbols.BASS_PluginFree;
+export const BASS_PluginGetInfo = library.symbols.BASS_PluginGetInfo;
+export const BASS_PluginLoad = library.symbols.BASS_PluginLoad;
