@@ -15,6 +15,11 @@ export type BASS_INFO = {
   speakers: number;
   freq: number;
 };
+export type BASS_3DVECTOR = {
+  x: number;
+  y: number;
+  z: number;
+};
 // type DWORD HMUSIC;		// MOD music handle
 // type DWORD HSAMPLE;		// sample handle
 // type DWORD HCHANNEL;		// sample playback handle
