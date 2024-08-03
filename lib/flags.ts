@@ -1,10 +1,21 @@
 // BASS Channel flags
+export const BASS_SAMPLE_8BITS = 1; // 8 bits
 export const BASS_SAMPLE_FLOAT = 256; // 32 bit floating-point
+export const BASS_SAMPLE_MONO = 2; // mono
 export const BASS_SAMPLE_LOOP = 4; // looped
+export const BASS_SAMPLE_3D = 8; // 3D functionality
+export const BASS_SAMPLE_SOFTWARE = 16; // unused
+export const BASS_SAMPLE_MUTEMAX = 32; // mute at max distance (3D only)
+export const BASS_SAMPLE_VAM = 64; // unused
+export const BASS_SAMPLE_FX = 128; // unused
+export const BASS_SAMPLE_OVER_VOL = 0x10000; // override lowest volume
+export const BASS_SAMPLE_OVER_POS = 0x20000; // override longest playing
+export const BASS_SAMPLE_OVER_DIST = 0x30000; // override furthest from listener (3D only)
+
 export const BASS_STREAM_PRESCAN = 0x20000; // scan file for accurate seeking and length
 export const BASS_STREAM_AUTOFREE = 0x40000; // automatically free the stream when it stops/ends
-export const BASS_SAMPLE_MUTEMAX = 32; // mute at max distance (3D only)
 export const BASS_STREAM_RESTRATE = 0x80000; // restrict the download rate of internet file stream
+
 export const BASS_MUSIC_NONINTER = 0x10000; // non-interpolated sample mixing
 export const BASS_MUSIC_SINCINTER = 0x800000; // sinc interpolated sample mixing
 export const BASS_MUSIC_POSRESET = 0x8000; // stop all notes when moving position
