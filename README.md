@@ -50,7 +50,7 @@ $ deno test --allow-ffi --unstable-ffi
 
 |Nr|Name|Done|
 |-|-|-|
-|1|BASS_Apply3D|❌|
+|1|BASS_Apply3D|✅|
 |2|BASS_ChannelBytes2Seconds|✅|
 |3|BASS_ChannelFlags|✅|
 |4|BASS_ChannelFree|✅|
@@ -96,8 +96,8 @@ $ deno test --allow-ffi --unstable-ffi
 |44|BASS_FXSetParameters|❌|
 |45|BASS_FXSetPriority|❌|
 |46|BASS_Free|✅|
-|47|BASS_Get3DFactors|❌|
-|48|BASS_Get3DPosition|❌|
+|47|BASS_Get3DFactors|✅|
+|48|BASS_Get3DPosition|✅|
 |49|BASS_GetCPU|✅|
 |50|BASS_GetConfig|✅|
 |51|BASS_GetConfigPtr|✅|
@@ -137,8 +137,8 @@ $ deno test --allow-ffi --unstable-ffi
 |85|BASS_SampleSetData|❌|
 |86|BASS_SampleSetInfo|❌|
 |87|BASS_SampleStop|❌|
-|88|BASS_Set3DFactors|❌|
-|90|BASS_Set3DPosition|❌|
+|88|BASS_Set3DFactors|✅|
+|90|BASS_Set3DPosition|✅|
 |91|BASS_SetConfig|✅|
 |92|BASS_SetConfigPtr|✅|
 |93|BASS_SetDevice|✅|

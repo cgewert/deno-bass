@@ -13,6 +13,7 @@ import {
   c_int_32,
   c_int_64,
   c_ptr,
+  c_void,
 } from "./ctypes.ts";
 import { SEPARATOR } from "std/path/mod.ts";
 
@@ -44,6 +45,28 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     parameters: ["buffer", c_int_32, c_int_32, "buffer", "buffer"],
     result: c_int_32,
     nonblocking: false,
+  },
+
+  // 3D
+
+  // Applies changes made to the 3D system.
+  BASS_Apply3D: { parameters: [], result: c_void },
+  // Retrieves the factors that affect the calculations of 3D sound.
+  BASS_Get3DFactors: { parameters: [buffer, buffer, buffer], result: c_bool },
+  // Retrieves the position, velocity, and orientation of the listener.
+  BASS_Get3DPosition: {
+    parameters: [buffer, buffer, buffer, buffer],
+    result: c_bool,
+  },
+  // Sets the factors that affect the calculations of 3D sound.
+  BASS_Set3DFactors: {
+    parameters: [c_float, c_float, c_float],
+    result: c_bool,
+  },
+  // Sets the position, velocity, and orientation of the listener (ie. the player).
+  BASS_Set3DPosition: {
+    parameters: [buffer, buffer, buffer, buffer],
+    result: c_bool,
   },
 
   // Channel Functions
@@ -343,3 +366,8 @@ export const BASS_PluginEnable = library.symbols.BASS_PluginEnable;
 export const BASS_PluginFree = library.symbols.BASS_PluginFree;
 export const BASS_PluginGetInfo = library.symbols.BASS_PluginGetInfo;
 export const BASS_PluginLoad = library.symbols.BASS_PluginLoad;
+export const BASS_Apply3D = library.symbols.BASS_Apply3D;
+export const BASS_Get3DFactors = library.symbols.BASS_Get3DFactors;
+export const BASS_Get3DPosition = library.symbols.BASS_Get3DPosition;
+export const BASS_Set3DFactors = library.symbols.BASS_Set3DFactors;
+export const BASS_Set3DPosition = library.symbols.BASS_Set3DPosition;

@@ -63,16 +63,16 @@ BASS_StreamCreateFile(
 );
 
 function play(streamHandle: number) {
-  // Units are metric
-  // doppler factor and rolloff factor are real world factors.
-  BASS_Set3DFactors(1.0, 1.0, 1.0);
+  // Set metric units, roll off factor and doppler factor
+  BASS_Set3DFactors(1.0, 0.5, 1.0);
   BASS_Apply3D();
 
   // Setting streams volume level
   BASS_ChannelSetAttribute(streamHandle, BASS_ATTRIB_VOL, VOLUME);
   BASS_ChannelPlay(streamHandle, true);
 
-  const vector = new BASS3DVector(0, 0, 0);
+  // Sound emmitter is starting at the right side and is moving to the left side
+  const vector = new BASS3DVector(-25, 0, 0);
   //const velocity = new BASS3DVector(100, 0, 0);
   while (true) {
     if (!BASS_Set3DPosition(vector.DataStruct, null, null, null)) {
@@ -84,7 +84,7 @@ function play(streamHandle: number) {
     console.log("Sleeping 1 sec...");
     const end = Date.now() + 1_000;
     while (Date.now() < end);
-    //vector.X += INCREMENT;
+    vector.X += INCREMENT;
     vector.Y += INCREMENT;
     console.log("New position: ", vector.Y);
   }
