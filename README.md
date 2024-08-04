@@ -91,10 +91,10 @@ $ deno test --allow-ffi --unstable-ffi
 |39|BASS_ChannelStop|✅|
 |40|BASS_ChannelUpdate|✅|
 |41|BASS_ErrorGetCode|✅|
-|42|BASS_FXGetParameters|❌|
-|43|BASS_FXReset|❌|
-|44|BASS_FXSetParameters|❌|
-|45|BASS_FXSetPriority|❌|
+|42|BASS_FXGetParameters|✅|
+|43|BASS_FXReset|✅|
+|44|BASS_FXSetParameters|✅|
+|45|BASS_FXSetPriority|✅|
 |46|BASS_Free|✅|
 |47|BASS_Get3DFactors|✅|
 |48|BASS_Get3DPosition|✅|
