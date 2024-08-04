@@ -287,6 +287,17 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   BASS_PluginGetInfo: { parameters: [HPLUGIN], result: buffer },
   // Enables or disables an add-on.
   BASS_PluginLoad: { parameters: [buffer, DWORD], result: HPLUGIN },
+
+  // Effects
+
+  // Retrieves the parameters of an effect.
+  BASS_FXGetParameters: { parameters: [HFX, buffer], result: c_bool },
+  // Resets the state of an effect or all effects on a channel.
+  BASS_FXReset: { parameters: [DWORD], result: c_bool },
+  // Sets the parameters of an effect.
+  BASS_FXSetParameters: { parameters: [HFX, buffer], result: c_bool },
+  // Sets the priority of an effect or DSP function, which determines its position in the DSP chain.
+  BASS_FXSetPriority: { parameters: [DWORD, c_int_32], result: c_bool },
 } as const);
 
 // Classic C Style API
@@ -371,3 +382,7 @@ export const BASS_Get3DFactors = library.symbols.BASS_Get3DFactors;
 export const BASS_Get3DPosition = library.symbols.BASS_Get3DPosition;
 export const BASS_Set3DFactors = library.symbols.BASS_Set3DFactors;
 export const BASS_Set3DPosition = library.symbols.BASS_Set3DPosition;
+export const BASS_FXGetParameters = library.symbols.BASS_FXGetParameters;
+export const BASS_FXReset = library.symbols.BASS_FXReset;
+export const BASS_FXSetParameters = library.symbols.BASS_FXSetParameters;
+export const BASS_FXSetPriority = library.symbols.BASS_FXSetPriority;

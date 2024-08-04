@@ -15,26 +15,18 @@ import {
   BASS_ChannelGetPosition,
   BASS_ChannelIsActive,
   BASS_ChannelIsSliding,
-  BASS_ChannelLock,
   BASS_ChannelPlay,
-  BASS_ChannelRemoveFX,
   BASS_ChannelSetAttribute,
   BASS_ChannelSetAttributeEx,
-  BASS_ChannelSetDevice,
-  BASS_ChannelSetFX,
   BASS_ChannelSlideAttribute,
   BASS_ChannelStop,
-  BASS_ChannelUpdate,
   BASS_ErrorGetCode,
   BASS_Free,
   BASS_GetConfig,
-  BASS_GetInfo,
   BASS_Init,
   BASS_IsStarted,
-  BASS_Pause,
   BASS_SetConfig,
   BASS_Start,
-  BASS_Stop,
   BASS_StreamCreateFile,
   BASS_Update,
   library,
@@ -47,20 +39,12 @@ import {
 } from "../lib/channelAttributes.ts";
 import { BASS_OK } from "../lib/errors.ts";
 import {
-  BASS_DATA_FFT2048,
   BASS_DATA_FFT256,
-  BASS_DATA_FLOAT,
   BASS_DEVICE_STEREO,
   BASS_LEVEL_STEREO,
   BASS_SAMPLE_FLOAT,
   BASS_SAMPLE_LOOP,
 } from "../lib/flags.ts";
-import {
-  BASS_FX_DX8_CHORUS,
-  BASS_FX_DX8_COMPRESSOR,
-  BASS_FX_DX8_ECHO,
-  BASS_FX_DX8_GARGLE,
-} from "../lib/fx.ts";
 import { BASS_POS_BYTE } from "../lib/modes.ts";
 import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
 import {
@@ -191,7 +175,6 @@ function play(streamHandle: number) {
   //   console.log("Created a lock for stream!");
   // }
 
-  let handleFX = null;
   while (true) {
     let position = BASS_ChannelGetPosition(streamHandle, BASS_POS_BYTE);
     if (position == -1) {
@@ -211,7 +194,6 @@ function play(streamHandle: number) {
       if (seconds > 5.0 && step) {
         // if (!BASS_ChannelSetDevice(streamHandle, 6))
         //   console.error("Can't switch device: ", GetBASSErrorCode());
-        handleFX = BASS_ChannelSetFX(streamHandle, BASS_FX_DX8_ECHO, 1);
         const deviceInfo = new BASSInfo();
         console.log("DeviceInfo: ", deviceInfo.toString());
 
@@ -235,8 +217,6 @@ function play(streamHandle: number) {
       if (Date.now() > pauseTimer + 3_000 && step2 && !step) {
         step2 = false;
         //BASS_ChannelSetDevice(streamHandle, 1);
-        BASS_ChannelRemoveFX(streamHandle, handleFX);
-        BASS_FX_DX8_GARGLE;
         // Resume device playback after 8 seconds.
         BASS_Start();
         // Interpolate channels volume to a low level.

@@ -27,3 +27,11 @@ Shows how to playback an audio stream from an internet source.
 ## configuration.ts
 
 Shows how to read or set a configuration value for the bass library.
+
+## 3dPosition.ts
+
+Shows how to make use of bass 3D audio functionality.
+
+## audioEffects.ts
+
+Demonstrates the usage of audio effects on playback channels.
