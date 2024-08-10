@@ -58,7 +58,9 @@ export class BASS3DVector {
 
   /* Call after datastruct was set or updated to read the values stored in the structure. */
   public readValuesFromStruct() {
-    const pointer: Deno.PointerObject = Deno.UnsafePointer.of(this._datastruct);
+    const pointer = Deno.UnsafePointer.of(
+      this._datastruct
+    ) as Deno.PointerObject;
     const dataView: Deno.UnsafePointerView = new Deno.UnsafePointerView(
       pointer
     );

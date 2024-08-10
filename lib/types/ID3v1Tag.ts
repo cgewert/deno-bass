@@ -299,7 +299,7 @@ export class ID3v1Tag {
     this.loadTag();
   }
 
-  private async loadTag() {
+  private loadTag() {
     try {
       this._pointer = BASS_ChannelGetTags(this._streamHandle, BASS_TAG_ID3);
       const tagError = GetBASSErrorCode();
@@ -310,7 +310,7 @@ export class ID3v1Tag {
         this._pointerView = new Deno.UnsafePointerView(this._pointer);
         this.readValuesFromStruct();
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log("Unexpected error happened while reading ID3v1 Tag: ", error);
     }
   }

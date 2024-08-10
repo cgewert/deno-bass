@@ -1,12 +1,12 @@
 import { BASS_ChannelGetInfo } from "../bindings.ts";
 import { BASS_CTYPE_STREAM_MP3 } from "../channelTypes.ts";
-import { CreatePointerX64, GetBASSErrorCode } from "../utilities.ts";
+import { GetBASSErrorCode } from "../utilities.ts";
 
 export class ChannelInfo {
   private _datastruct: Uint8Array;
 
   // Default sample rate.
-  private _frequency: number;
+  private _frequency = 0;
   public get Frequency(): number {
     return this._frequency;
   }
@@ -15,7 +15,7 @@ export class ChannelInfo {
   }
 
   // Number of channels... 1=mono, 2=stereo, etc.
-  private _channels: number;
+  private _channels = 0;
   public get Channels(): number {
     return this._channels;
   }
@@ -24,7 +24,7 @@ export class ChannelInfo {
   }
 
   // A combination of flags
-  private _flags: number;
+  private _flags = 0;
   public get Flags(): number {
     return this._flags;
   }
@@ -33,7 +33,7 @@ export class ChannelInfo {
   }
 
   // The type of channel it is (see channelTypes.ts).
-  private _channelType: number;
+  private _channelType = 0;
   public get ChannelType(): number {
     return this._channelType;
   }
@@ -46,7 +46,7 @@ export class ChannelInfo {
         then the BASS_ORIGRES_FLOAT flag will be set and the number 
         of bits will be in the LOWORD. 
     */
-  private _originalResolution: number;
+  private _originalResolution = 0;
   public get OriginalResolution(): number {
     return this._originalResolution;
   }
@@ -63,7 +63,7 @@ export class ChannelInfo {
         add-on functions. Information on the plugin can be retrieved 
         via BASS_PluginGetInfo. 
     */
-  private _plugin: number;
+  private _plugin = 0;
   public get Plugin(): number {
     return this._plugin;
   }
@@ -76,7 +76,7 @@ export class ChannelInfo {
         Only applicable when ctype is BASS_CTYPE_SAMPLE or 
         BASS_CTYPE_STREAM_SAMPLE. 
     */
-  private _sample: number;
+  private _sample = 0;
   public get Sample(): number {
     return this._sample;
   }
@@ -85,7 +85,7 @@ export class ChannelInfo {
   }
 
   // The filename associated with the channel. (HSTREAM only)
-  private _filename: string;
+  private _filename = "";
   public get Filename(): string {
     return this._filename;
   }
@@ -125,7 +125,9 @@ export class ChannelInfo {
 
   /* Call after Infostruct was set or updated to read the values stored in the structure. */
   public readValuesFromStruct() {
-    const pointer = Deno.UnsafePointer.of(this._datastruct);
+    const pointer = Deno.UnsafePointer.of(
+      this._datastruct
+    ) as Deno.PointerObject;
     const dataView = new Deno.UnsafePointerView(pointer);
 
     this.Frequency = dataView.getInt32(ChannelInfo.OFFSET_FREQUENCY);
@@ -144,7 +146,7 @@ export class ChannelInfo {
             ChannelInfo.OFFSET_FILENAME,
             ChannelInfo.OFFSET_FILENAME + 4
           )
-        )
+        ) as Deno.PointerObject
       );
     } catch (error) {
       console.error("Error while reading filename: ", error);

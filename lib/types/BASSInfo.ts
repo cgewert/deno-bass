@@ -62,7 +62,9 @@ export class BASSInfo {
 
   /* Call after datastruct was set or updated to read the values stored in the structure. */
   public readValuesFromStruct() {
-    const pointer = Deno.UnsafePointer.of(this._datastruct);
+    const pointer = Deno.UnsafePointer.of(
+      this._datastruct
+    ) as Deno.PointerObject;
     const dataView = new Deno.UnsafePointerView(pointer);
 
     this.bassInfo.flags = dataView.getInt32(BASSInfo.OFFSET_FLAGS);
@@ -72,7 +74,7 @@ export class BASSInfo {
     this.bassInfo.free3d = dataView.getInt32(BASSInfo.OFFSET_FREE3D);
     this.bassInfo.minrate = dataView.getInt32(BASSInfo.OFFSET_MINRATE);
     this.bassInfo.maxrate = dataView.getInt32(BASSInfo.OFFSET_MAXRATE);
-    this.bassInfo.eax = dataView.getInt32(BASSInfo.OFFSET_EAX);
+    this.bassInfo.eax = dataView.getBool(BASSInfo.OFFSET_EAX);
     this.bassInfo.minbuf = dataView.getInt32(BASSInfo.OFFSET_MINBUF);
     this.bassInfo.dsver = dataView.getInt32(BASSInfo.OFFSET_DSVER);
     this.bassInfo.latency = dataView.getInt32(BASSInfo.OFFSET_LATENCY);
