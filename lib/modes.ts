@@ -11,3 +11,23 @@ export const BASS_POS_INEXACT = 0x8000000; // flag: allow seeking to inexact pos
 export const BASS_POS_DECODE = 0x10000000; // flag: get the decoding (not playing) position
 export const BASS_POS_DECODETO = 0x20000000; // flag: decode to the position instead of seeking
 export const BASS_POS_SCAN = 0x40000000; // flag: scan to the position
+
+// BASS_StreamGetFilePosition modes
+export const BASS_FILEPOS_CURRENT = 0;
+export const BASS_FILEPOS_DECODE = BASS_FILEPOS_CURRENT;
+export const BASS_FILEPOS_DOWNLOAD = 1;
+export const BASS_FILEPOS_END = 2;
+export const BASS_FILEPOS_START = 3;
+export const BASS_FILEPOS_CONNECTED = 4;
+export const BASS_FILEPOS_BUFFER = 5;
+export const BASS_FILEPOS_SOCKET = 6;
+export const BASS_FILEPOS_ASYNCBUF = 7;
+export const BASS_FILEPOS_SIZE = 8;
+export const BASS_FILEPOS_BUFFERING = 9;
+export const BASS_FILEPOS_AVAILABLE = 10;
+
+export enum StreamConnectionStatus {
+  NOT_CONNECTED = 0,
+  CONNECTED = 1,
+  RECONNECTING = 2,
+}

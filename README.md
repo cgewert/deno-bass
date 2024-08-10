@@ -104,7 +104,7 @@ $ deno test --allow-ffi --unstable-ffi
 |52|BASS_GetDSoundObject|❌|
 |53|BASS_GetDevice|✅|
 |54|BASS_GetDeviceInfo|✅|
-|55|ASS_GetEAXParameters|❌|
+|55|BASS_GetEAXParameters|❌|
 |56|BASS_GetInfo|✅|
 |57|BASS_GetVersion|✅|
 |58|BASS_GetVolume|✅|
@@ -150,8 +150,8 @@ $ deno test --allow-ffi --unstable-ffi
 |99|BASS_StreamCreateFile|✅|
 |100|BASS_StreamCreateFileUser|❌|
 |101|BASS_StreamCreateURL|✅|
-|102|BASS_StreamFree|❌|
-|103|BASS_StreamGetFilePosition|❌|
+|102|BASS_StreamFree|✅|
+|103|BASS_StreamGetFilePosition|✅|
 |104|BASS_StreamPutData|❌|
 |105|BASS_StreamPutFileData|❌|
 |106|BASS_Update|✅|

@@ -3,6 +3,7 @@ import {
   HDSP,
   HFX,
   HPLUGIN,
+  HSTREAM,
   HSYNC,
   HWND,
   QWORD,
@@ -43,8 +44,18 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   },
   BASS_StreamCreateURL: {
     parameters: ["buffer", c_int_32, c_int_32, "buffer", "buffer"],
-    result: c_int_32,
+    result: HSTREAM,
     nonblocking: false,
+  },
+  // Frees a sample stream's resources, including any sync/DSP/FX it has.
+  BASS_StreamFree: {
+    parameters: [HSTREAM], // handle
+    result: c_bool,
+  },
+  // Retrieves the file position/status of a stream.
+  BASS_StreamGetFilePosition: {
+    parameters: [HSTREAM, DWORD], // handle, mode
+    result: QWORD,
   },
 
   // 3D
@@ -121,7 +132,7 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   BASS_ChannelGetPosition: { parameters: [DWORD, DWORD], result: QWORD },
   // Retrieves tags/headers from a channel.
   BASS_ChannelGetTags: { parameters: [DWORD, DWORD], result: buffer },
-  //Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress.
+  // Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress.
   BASS_ChannelIsActive: {
     parameters: [DWORD],
     result: DWORD,
@@ -386,3 +397,6 @@ export const BASS_FXGetParameters = library.symbols.BASS_FXGetParameters;
 export const BASS_FXReset = library.symbols.BASS_FXReset;
 export const BASS_FXSetParameters = library.symbols.BASS_FXSetParameters;
 export const BASS_FXSetPriority = library.symbols.BASS_FXSetPriority;
+export const BASS_StreamGetFilePosition =
+  library.symbols.BASS_StreamGetFilePosition;
+export const BASS_StreamFree = library.symbols.BASS_StreamFree;

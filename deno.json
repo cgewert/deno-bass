@@ -3,7 +3,7 @@
     "std/": "https://deno.land/std@0.224.0/"
   },
   "tasks": {
-    "quality": "deno lint --json && deno test --allow-ffi --unstable-ffi"
+    "quality": "deno lint --json && deno test --allow-ffi --unstable-ffi --allow-read"
   },
   "lint": {
     "include": ["lib/"],
