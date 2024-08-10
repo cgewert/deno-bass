@@ -3,38 +3,35 @@ import { BASS_3DVECTOR } from "../bassTypes.ts";
 export class BASS3DVector {
   private _datastruct: Uint8Array;
   private _dataView: DataView;
-  private _x: number;
-  private _y: number;
-  private _z: number;
 
   public get X(): number {
-    return this._x;
+    return this._vector.x;
   }
 
   public set X(value: number) {
-    this._x = value;
+    this._vector.x = value;
     this._dataView.setFloat32(BASS3DVector.OFFSET_X, value, true);
   }
 
   public get Y(): number {
-    return this._y;
+    return this._vector.y;
   }
 
   public set Y(value: number) {
-    this._y = value;
+    this._vector.y = value;
     this._dataView.setFloat32(BASS3DVector.OFFSET_Y, value, true);
   }
 
   public get Z(): number {
-    return this._z;
+    return this._vector.z;
   }
 
   public set Z(value: number) {
-    this._z = value;
+    this._vector.z = value;
     this._dataView.setFloat32(BASS3DVector.OFFSET_Z, value);
   }
 
-  public vector: BASS_3DVECTOR = {
+  private _vector: BASS_3DVECTOR = {
     x: 0,
     y: 0,
     z: 0,
@@ -61,20 +58,22 @@ export class BASS3DVector {
 
   /* Call after datastruct was set or updated to read the values stored in the structure. */
   public readValuesFromStruct() {
-    const pointer = Deno.UnsafePointer.of(this._datastruct);
-    const dataView = new Deno.UnsafePointerView(pointer);
+    const pointer: Deno.PointerObject = Deno.UnsafePointer.of(this._datastruct);
+    const dataView: Deno.UnsafePointerView = new Deno.UnsafePointerView(
+      pointer
+    );
 
-    this.vector.x = dataView.getFloat32(BASS3DVector.OFFSET_X);
-    this.vector.y = dataView.getFloat32(BASS3DVector.OFFSET_Y);
-    this.vector.z = dataView.getFloat32(BASS3DVector.OFFSET_Z);
+    this._vector.x = dataView.getFloat32(BASS3DVector.OFFSET_X);
+    this._vector.y = dataView.getFloat32(BASS3DVector.OFFSET_Y);
+    this._vector.z = dataView.getFloat32(BASS3DVector.OFFSET_Z);
   }
 
   public toString() {
     return `
       <BASS3DVector>:{
-        ${this.vector.x},
-        ${this.vector.y},
-        ${this.vector.z}
+        ${this._vector.x},
+        ${this._vector.y},
+        ${this._vector.z}
       }
     `;
   }
