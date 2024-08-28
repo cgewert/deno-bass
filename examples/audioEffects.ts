@@ -11,7 +11,12 @@ import {
 } from "../lib/bindings.ts";
 import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
 import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
-import { AudioEffect, AudioEffectEcho } from "../lib/fx.ts";
+import {
+  AudioEffect,
+  AudioEffectChorus,
+  AudioEffectEcho,
+  AudioEffectGargle,
+} from "../lib/fx.ts";
 import { ToCString } from "../lib/utilities.ts";
 
 const VOLUME = 0.03;
@@ -34,13 +39,13 @@ function play(handle: number) {
   while (true) {
     if (Date.now() > start + 5_000 && step == 0) {
       console.log("Activating ECHO after 5 seconds.");
-      hfx = activateFX(handle, AudioEffect.FX_DX8_ECHO);
-      const echoParams = new AudioEffectEcho();
-      BASS_FXGetParameters(hfx, echoParams.DataStruct);
-      echoParams.readValuesFromStruct();
-      console.log("Wet Dry mix set to: ", echoParams.WetDryMix);
-      console.log("EchoParams: ", echoParams);
-
+      // We activate an echo effect on the channel here.
+      hfx = activateFX(handle, AudioEffect.FX_DX8_GARGLE);
+      const gargleParams = new AudioEffectGargle();
+      // We read the params of an existing channel effect here.
+      BASS_FXGetParameters(hfx, gargleParams.DataStruct);
+      gargleParams.readValuesFromStruct();
+      console.log("GargleParams: ", gargleParams);
       step++;
     }
     if (Date.now() > start + 10_000 && step == 1) {
