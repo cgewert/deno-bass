@@ -21,7 +21,6 @@ const streamHandle = BASS_StreamCreateURL(url, 0, 0, null, null);
 if (streamHandle == 0) {
   console.log("An error occured while loading the stream! Exiting.");
   console.log("BASS Error Code: ", ErrorCodeToString(BASS_ErrorGetCode()));
-  Deno.exit(-1);
 }
 BASS_ChannelPlay(streamHandle, false);
 console.log("Press <Ctrl+C> to quit!");
