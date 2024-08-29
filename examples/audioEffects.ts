@@ -14,6 +14,7 @@ import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
 import {
   AudioEffect,
   AudioEffectChorus,
+  AudioEffectCompressor,
   AudioEffectEcho,
   AudioEffectGargle,
 } from "../lib/fx.ts";
@@ -39,13 +40,13 @@ function play(handle: number) {
   while (true) {
     if (Date.now() > start + 5_000 && step == 0) {
       console.log("Activating ECHO after 5 seconds.");
-      // We activate an echo effect on the channel here.
-      hfx = activateFX(handle, AudioEffect.FX_DX8_GARGLE);
-      const gargleParams = new AudioEffectGargle();
+      // We activate an audio effect on the channel here.
+      hfx = activateFX(handle, AudioEffect.FX_DX8_COMPRESSOR);
+      const effectParams = new AudioEffectCompressor();
       // We read the params of an existing channel effect here.
-      BASS_FXGetParameters(hfx, gargleParams.DataStruct);
-      gargleParams.readValuesFromStruct();
-      console.log("GargleParams: ", gargleParams);
+      BASS_FXGetParameters(hfx, effectParams.DataStruct);
+      effectParams.readValuesFromStruct();
+      console.log("Effect Params: ", effectParams);
       step++;
     }
     if (Date.now() > start + 10_000 && step == 1) {

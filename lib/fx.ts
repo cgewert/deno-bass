@@ -36,9 +36,27 @@ export enum AudioEffect {
   FX_VOLUME = BASS_FX_VOLUME,
 }
 
-export class AudioEffectEcho {
-  private _datastruct: Uint8Array;
+export abstract class BaseAudioEffect {
+  protected _datastruct: Uint8Array;
 
+  public abstract SIZE;
+
+  public get DataStruct() {
+    return this._datastruct;
+  }
+
+  public get DataView() {
+    const pointer = Deno.UnsafePointer.of(
+      this._datastruct
+    ) as Deno.PointerObject;
+    return new Deno.UnsafePointerView(pointer);
+  }
+
+  public abstract readValuesFromStruct();
+  public abstract toString();
+}
+
+export class AudioEffectEcho extends BaseAudioEffect {
   // Ratio of wet (processed) signal to dry (unprocessed) signal. Must be in the range from 0 through 100 (all wet). The default value is 50.
   private _wetDryMix: number;
   // Percentage of output fed back into input, in the range from 0 through 100. The default value is 50.
@@ -50,8 +68,7 @@ export class AudioEffectEcho {
   // Value that specifies whether to swap left and right delays with each successive echo. The default value is FALSE, meaning no swap.
   private _panDelay: boolean;
 
-  public static SIZE = 20;
-
+  public SIZE = 20;
   public static OFFSET_WETDRYMIX = 0;
   public static OFFSET_FEEDBACK = 4;
   public static OFFSET_LEFTDELAY = 8;
@@ -75,7 +92,8 @@ export class AudioEffectEcho {
   }
 
   constructor() {
-    this._datastruct = new Uint8Array(AudioEffectEcho.SIZE);
+    super();
+    this._datastruct = new Uint8Array(this.SIZE);
     this._wetDryMix = 0.0;
     this._feedback = 0.0;
     this._leftDelay = 0.0;
@@ -83,17 +101,9 @@ export class AudioEffectEcho {
     this._panDelay = false;
   }
 
-  public get DataStruct() {
-    return this._datastruct;
-  }
-
   /* Call after datastruct was set or updated to read the values stored in the structure. */
   public readValuesFromStruct() {
-    const pointer = Deno.UnsafePointer.of(
-      this._datastruct
-    ) as Deno.PointerObject;
-    const dataView = new Deno.UnsafePointerView(pointer);
-
+    const dataView = this.DataView;
     this._wetDryMix = dataView.getFloat32(AudioEffectEcho.OFFSET_WETDRYMIX);
     this._feedback = dataView.getFloat32(AudioEffectEcho.OFFSET_FEEDBACK);
     this._leftDelay = dataView.getFloat32(AudioEffectEcho.OFFSET_LEFTDELAY);
@@ -114,8 +124,7 @@ export class AudioEffectEcho {
   }
 }
 
-export class AudioEffectChorus {
-  private _datastruct: Uint8Array;
+export class AudioEffectChorus extends BaseAudioEffect {
   // Ratio of wet (processed) signal to dry (unprocessed) signal. Must be in the range from 0 through 100 (all wet). The default value is 50.
   private _wetDryMix: number;
   // Percentage by which the delay time is modulated by the low-frequency oscillator (LFO). Must be in the range from 0 through 100. The default value is 10.
@@ -131,7 +140,7 @@ export class AudioEffectChorus {
   // Phase differential between left and right LFOs, one of BASS_DX8_PHASE_NEG_180, BASS_DX8_PHASE_NEG_90, BASS_DX8_PHASE_ZERO, BASS_DX8_PHASE_90 and BASS_DX8_PHASE_180. The default value is BASS_DX8_PHASE_90
   private _phase: number;
 
-  public static SIZE = 28;
+  public SIZE = 28;
 
   public static OFFSET_WETDRYMIX = 0;
   public static OFFSET_DEPTH = 4;
@@ -164,7 +173,8 @@ export class AudioEffectChorus {
   }
 
   constructor() {
-    this._datastruct = new Uint8Array(AudioEffectChorus.SIZE);
+    super();
+    this._datastruct = new Uint8Array(this.SIZE);
     this._wetDryMix = 0.0;
     this._feedback = 0.0;
     this._depth = 0.0;
@@ -180,11 +190,7 @@ export class AudioEffectChorus {
 
   /* Call after datastruct was set or updated to read the values stored in the structure. */
   public readValuesFromStruct() {
-    const pointer = Deno.UnsafePointer.of(
-      this._datastruct
-    ) as Deno.PointerObject;
-    const dataView = new Deno.UnsafePointerView(pointer);
-
+    const dataView = this.DataView;
     this._wetDryMix = dataView.getFloat32(AudioEffectChorus.OFFSET_WETDRYMIX);
     this._feedback = dataView.getFloat32(AudioEffectChorus.OFFSET_FEEDBACK);
     this._depth = dataView.getFloat32(AudioEffectChorus.OFFSET_DEPTH);
@@ -209,15 +215,70 @@ export class AudioEffectChorus {
   }
 }
 
-/* COMPRESSOR */
-// typedef struct {
-//   float fGain;
-//   float fAttack;
-//   float fRelease;
-//   float fThreshold;
-//   float fRatio;
-//   float fPredelay;
-// } BASS_DX8_COMPRESSOR;
+export class AudioEffectCompressor extends BaseAudioEffect {
+  // Output gain of signal after compression, in the range from -60 to 60. The default value is 0 dB.
+  public _gain: number;
+  // Time before compression reaches its full value, in the range from 0.01 to 500. The default value is 10 ms.
+  public _attack: number;
+  // Speed at which compression is stopped after input drops below fThreshold, in the range from 50 to 3000. The default value is 200 ms.
+  public _release: number;
+  // Point at which compression begins, in decibels, in the range from -60 to 0. The default value is -20 dB.
+  public _threshold: number;
+  // Compression ratio, in the range from 1 to 100. The default value is 3, which means 3:1 compression.
+  public _ratio: number;
+  // Time after fThreshold is reached before attack phase is started, in milliseconds, in the range from 0 to 4. The default value is 4 ms.
+  public _predelay: number;
+
+  public SIZE = 24;
+
+  public static OFFSET_GAIN = 0;
+  public static OFFSET_ATTACK = 4;
+  public static OFFSET_RELEASE = 8;
+  public static OFFSET_THRESHOLD = 12;
+  public static OFFSET_RATIO = 16;
+  public static OFFSET_PREDELAY = 20;
+
+  constructor() {
+    super();
+    this._datastruct = new Uint8Array(this.SIZE);
+    this._gain = 0.0;
+    this._attack = 0.0;
+    this._release = 0.0;
+    this._threshold = 0.0;
+    this._ratio = 0.0;
+    this._predelay = 0.0;
+  }
+
+  public get DataStruct() {
+    return this._datastruct;
+  }
+
+  /* Call after datastruct was set or updated to read the values stored in the structure. */
+  public readValuesFromStruct() {
+    const dataView = this.DataView;
+    this._gain = dataView.getFloat32(AudioEffectCompressor.OFFSET_GAIN);
+    this._attack = dataView.getFloat32(AudioEffectCompressor.OFFSET_ATTACK);
+    this._release = dataView.getFloat32(AudioEffectCompressor.OFFSET_RELEASE);
+    this._threshold = dataView.getFloat32(
+      AudioEffectCompressor.OFFSET_THRESHOLD
+    );
+    this._ratio = dataView.getFloat32(AudioEffectCompressor.OFFSET_RATIO);
+    this._predelay = dataView.getFloat32(AudioEffectCompressor.OFFSET_PREDELAY);
+  }
+
+  public toString() {
+    return `
+      <AudioEffectCompressor>:{
+        ${this._gain},
+        ${this._attack},
+        ${this._release},
+        ${this._threshold},
+        ${this._ratio},
+        ${this._predelay},
+      }
+    `;
+  }
+}
 
 /* DISTORTION */
 // typedef struct {
@@ -238,15 +299,13 @@ export class AudioEffectChorus {
 //   DWORD lPhase;
 // } BASS_DX8_FLANGER;
 
-export class AudioEffectGargle {
-  private _datastruct: Uint8Array;
-
+export class AudioEffectGargle extends BaseAudioEffect {
   // Rate of modulation, in Hertz. Must be in the range from 1 through 1000. The default value is 20.
   private _rateHz: number;
   // Shape of the modulation waveform... 0 = triangle, 1 = square. By default, the waveform is triangle.
   private _waveShape: number;
 
-  public static SIZE = 8;
+  public SIZE = 8;
 
   public static OFFSET_RATE_HZ = 0;
   public static OFFSET_WAVE_SHAPE = 4;
@@ -259,7 +318,8 @@ export class AudioEffectGargle {
   }
 
   constructor() {
-    this._datastruct = new Uint8Array(AudioEffectGargle.SIZE);
+    super();
+    this._datastruct = new Uint8Array(this.SIZE);
     this._rateHz = 0;
     this._waveShape = 0;
   }
@@ -270,11 +330,7 @@ export class AudioEffectGargle {
 
   /* Call after datastruct was set or updated to read the values stored in the structure. */
   public readValuesFromStruct() {
-    const pointer = Deno.UnsafePointer.of(
-      this._datastruct
-    ) as Deno.PointerObject;
-    const dataView = new Deno.UnsafePointerView(pointer);
-
+    const dataView = this.DataView;
     this._rateHz = dataView.getInt32(AudioEffectGargle.OFFSET_RATE_HZ);
     this._waveShape = dataView.getInt32(AudioEffectGargle.OFFSET_WAVE_SHAPE);
   }
