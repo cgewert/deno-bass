@@ -13,10 +13,8 @@ import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
 import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
 import {
   AudioEffect,
-  AudioEffectChorus,
   AudioEffectCompressor,
-  AudioEffectEcho,
-  AudioEffectGargle,
+  AudioEffectDistortion,
 } from "../lib/fx.ts";
 import { ToCString } from "../lib/utilities.ts";
 
@@ -41,8 +39,8 @@ function play(handle: number) {
     if (Date.now() > start + 5_000 && step == 0) {
       console.log("Activating ECHO after 5 seconds.");
       // We activate an audio effect on the channel here.
-      hfx = activateFX(handle, AudioEffect.FX_DX8_COMPRESSOR);
-      const effectParams = new AudioEffectCompressor();
+      hfx = activateFX(handle, AudioEffect.FX_DX8_DISTORTION);
+      const effectParams = new AudioEffectDistortion();
       // We read the params of an existing channel effect here.
       BASS_FXGetParameters(hfx, effectParams.DataStruct);
       effectParams.readValuesFromStruct();

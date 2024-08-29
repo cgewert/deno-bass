@@ -249,10 +249,6 @@ export class AudioEffectCompressor extends BaseAudioEffect {
     this._predelay = 0.0;
   }
 
-  public get DataStruct() {
-    return this._datastruct;
-  }
-
   /* Call after datastruct was set or updated to read the values stored in the structure. */
   public readValuesFromStruct() {
     const dataView = this.DataView;
@@ -280,14 +276,58 @@ export class AudioEffectCompressor extends BaseAudioEffect {
   }
 }
 
-/* DISTORTION */
-// typedef struct {
-//   float fGain;
-//   float fEdge;
-//   float fPostEQCenterFrequency;
-//   float fPostEQBandwidth;
-//   float fPreLowpassCutoff;
-// } BASS_DX8_DISTORTION;
+export class AudioEffectDistortion extends BaseAudioEffect {
+  // Amount of signal change after distortion, in the range from -60 through 0. The default value is -18 dB.
+  public _gain = 0.0;
+  // Percentage of distortion intensity, in the range in the range from 0 through 100. The default value is 15 percent.
+  public _edge = 0.0;
+  // Center frequency of harmonic content addition, in the range from 100 through 8000. The default value is 2400 Hz.
+  public _postEQCenterFrequency = 0.0;
+  // Width of frequency band that determines range of harmonic content addition, in the range from 100 through 8000. The default value is 2400 Hz.
+  public _postEQBandwidth = 0.0;
+  // Filter cutoff for high-frequency harmonics attenuation, in the range from 100 through 8000. The default value is 8000 Hz.
+  public _preLowpassCutoff = 0.0;
+
+  public constructor() {
+    super();
+    this._datastruct = new Uint8Array(this.SIZE);
+  }
+
+  public SIZE = 20;
+
+  public static OFFSET_GAIN = 0;
+  public static OFFSET_EDGE = 4;
+  public static OFFSET_POSTEQCENTERFREQUENCY = 8;
+  public static OFFSET_POSTEQBANDWIDTH = 12;
+  public static OFFSET_PRELOWPASSCUTOFF = 16;
+
+  public readValuesFromStruct() {
+    const dataView = this.DataView;
+    this._gain = dataView.getFloat32(AudioEffectDistortion.OFFSET_GAIN);
+    this._edge = dataView.getFloat32(AudioEffectDistortion.OFFSET_EDGE);
+    this._postEQCenterFrequency = dataView.getFloat32(
+      AudioEffectDistortion.OFFSET_POSTEQCENTERFREQUENCY
+    );
+    this._postEQBandwidth = dataView.getFloat32(
+      AudioEffectDistortion.OFFSET_POSTEQBANDWIDTH
+    );
+    this._preLowpassCutoff = dataView.getFloat32(
+      AudioEffectDistortion.OFFSET_PRELOWPASSCUTOFF
+    );
+  }
+
+  public toString() {
+    return `
+    <AudioEffectDistortion>:{
+      ${this._gain},
+      ${this._edge},
+      ${this._postEQCenterFrequency},
+      ${this._postEQBandwidth},
+      ${this._preLowpassCutoff},
+    }
+  `;
+  }
+}
 
 // typedef struct {
 //   float fWetDryMix;
