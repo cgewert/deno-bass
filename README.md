@@ -152,6 +152,6 @@ $ deno test --allow-ffi --unstable-ffi
 |101|BASS_StreamCreateURL|✅|
 |102|BASS_StreamFree|✅|
 |103|BASS_StreamGetFilePosition|✅|
-|104|BASS_StreamPutData|❌|
-|105|BASS_StreamPutFileData|❌|
+|104|BASS_StreamPutData|✅|
+|105|BASS_StreamPutFileData|✅|
 |106|BASS_Update|✅|

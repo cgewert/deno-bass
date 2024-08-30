@@ -11,13 +11,7 @@ import {
 } from "../lib/bindings.ts";
 import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
 import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
-import {
-  AudioEffect,
-  AudioEffectCompressor,
-  AudioEffectDistortion,
-  AudioEffectFlanger,
-  AudioEffectReverb,
-} from "../lib/fx.ts";
+import { AudioEffect, AudioEffectDistortion } from "../lib/fx.ts";
 import { ToCString } from "../lib/utilities.ts";
 
 const VOLUME = 0.03;

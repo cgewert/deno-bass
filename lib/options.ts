@@ -63,3 +63,6 @@ export const BASS_CONFIG_REC_DEFAULT = 73;
 // BASS_SetConfigPtr options
 export const BASS_CONFIG_IOS_NOTIFY = 46;
 export const BASS_CONFIG_ANDROID_JAVAVM = 63;
+
+// BASS_StreamPutFileData options
+export const BASS_FILEDATA_END = 0; // end & close the file

@@ -43,7 +43,7 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     nonblocking: true,
   },
   BASS_StreamCreateURL: {
-    parameters: ["buffer", c_int_32, c_int_32, "buffer", "buffer"],
+    parameters: [buffer, c_int_32, c_int_32, buffer, buffer],
     result: HSTREAM,
     nonblocking: false,
   },
@@ -56,6 +56,16 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   BASS_StreamGetFilePosition: {
     parameters: [HSTREAM, DWORD], // handle, mode
     result: QWORD,
+  },
+  // Adds sample data to a "push" stream.
+  BASS_StreamPutData: {
+    parameters: [HSTREAM, buffer, DWORD], // handle, buffer, length
+    result: DWORD,
+  },
+  // Adds data to a "push buffered" user file stream's buffer.
+  BASS_StreamPutFileData: {
+    parameters: [HSTREAM, buffer, DWORD], // handle, buffer, length
+    result: DWORD,
   },
 
   // 3D
@@ -400,3 +410,5 @@ export const BASS_FXSetPriority = library.symbols.BASS_FXSetPriority;
 export const BASS_StreamGetFilePosition =
   library.symbols.BASS_StreamGetFilePosition;
 export const BASS_StreamFree = library.symbols.BASS_StreamFree;
+export const BASS_StreamPutData = library.symbols.BASS_StreamPutData;
+export const BASS_StreamPutFileData = library.symbols.BASS_StreamPutFileData;

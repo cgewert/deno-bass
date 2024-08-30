@@ -28,6 +28,8 @@ export const BASS_MUSIC_SURROUND2 = 0x1000; // surround sound (mode 2)
 export const BASS_MUSIC_FT2MOD = 0x2000; // play .MOD as FastTracker 2 does
 export const BASS_MUSIC_PT1MOD = 0x4000; // play .MOD as ProTracker 1 does
 
+export const BASS_STREAMPROC_END = 0x80000000; // end of user stream flag
+
 // BASS_ChannelGetData flags
 export const BASS_DATA_AVAILABLE = 0; // query how much data is buffered
 export const BASS_DATA_NOREMOVE = 0x10000000; // flag: don't remove data from recording buffer
