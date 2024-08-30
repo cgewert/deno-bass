@@ -15,6 +15,8 @@ import {
   AudioEffect,
   AudioEffectCompressor,
   AudioEffectDistortion,
+  AudioEffectFlanger,
+  AudioEffectReverb,
 } from "../lib/fx.ts";
 import { ToCString } from "../lib/utilities.ts";
 
@@ -37,7 +39,7 @@ function play(handle: number) {
   console.log("Hit CTRL-C to exit!");
   while (true) {
     if (Date.now() > start + 5_000 && step == 0) {
-      console.log("Activating ECHO after 5 seconds.");
+      console.log("Activating audio FX after 5 seconds.");
       // We activate an audio effect on the channel here.
       hfx = activateFX(handle, AudioEffect.FX_DX8_DISTORTION);
       const effectParams = new AudioEffectDistortion();

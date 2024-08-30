@@ -329,15 +329,62 @@ export class AudioEffectDistortion extends BaseAudioEffect {
   }
 }
 
-// typedef struct {
-//   float fWetDryMix;
-//   float fDepth;
-//   float fFeedback;
-//   float fFrequency;
-//   DWORD lWaveform;
-//   float fDelay;
-//   DWORD lPhase;
-// } BASS_DX8_FLANGER;
+export class AudioEffectFlanger extends BaseAudioEffect {
+  // Ratio of wet (processed) signal to dry (unprocessed) signal. Must be in the range from 0 through 100 (all wet). The default value is 50.
+  public _wetDryMix;
+  // Percentage by which the delay time is modulated by the low-frequency oscillator (LFO). Must be in the range from 0 through 100. The default value is 100.
+  public _depth;
+  // Percentage of output signal to feed back into the effect's input, in the range from -99 to 99. The default value is -50.
+  public _feedback;
+  // Frequency of the LFO, in the range from 0 to 10. The default value is 0.25.
+  public _frequency;
+  // Waveform of the LFO... 0 = triangle, 1 = sine. By default, the waveform is sine.
+  public _waveform;
+  // Number of milliseconds the input is delayed before it is played back, in the range from 0 to 4. The default value is 2 ms.
+  public _delay;
+  // Phase differential between left and right LFOs, one of BASS_DX8_PHASE_NEG_180, BASS_DX8_PHASE_NEG_90, BASS_DX8_PHASE_ZERO, BASS_DX8_PHASE_90 and BASS_DX8_PHASE_180. The default value is BASS_DX8_PHASE_ZERO.
+  public _phase;
+
+  public constructor() {
+    super();
+    this._datastruct = new Uint8Array(this.SIZE);
+  }
+
+  public SIZE = 28;
+
+  public static OFFSET_WETDRYMIX = 0;
+  public static OFFSET_DEPTH = 4;
+  public static OFFSET_FEEDBACK = 8;
+  public static OFFSET_FREQUENCY = 12;
+  public static OFFSET_WAVEFORM = 16;
+  public static OFFSET_DELAY = 20;
+  public static OFFSET_PHASE = 24;
+
+  public readValuesFromStruct() {
+    const dataView = this.DataView;
+    this._wetDryMix = dataView.getFloat32(AudioEffectFlanger.OFFSET_WETDRYMIX);
+    this._depth = dataView.getFloat32(AudioEffectFlanger.OFFSET_DEPTH);
+    this._feedback = dataView.getFloat32(AudioEffectFlanger.OFFSET_FEEDBACK);
+    this._frequency = dataView.getFloat32(AudioEffectFlanger.OFFSET_FREQUENCY);
+    this._waveform = dataView.getInt32(AudioEffectFlanger.OFFSET_WAVEFORM);
+    this._delay = dataView.getFloat32(AudioEffectFlanger.OFFSET_DELAY);
+    this._phase = dataView.getInt32(AudioEffectFlanger.OFFSET_PHASE);
+  }
+
+  public toString() {
+    return `
+    <AudioEffectFlanger>:{
+      ${this._wetDryMix},
+      ${this._depth},
+      ${this._feedback},
+      ${this._frequency},
+      ${this._waveform},
+      ${this._delay},
+      ${this._phase}
+    }
+  `;
+  }
+}
 
 export class AudioEffectGargle extends BaseAudioEffect {
   // Rate of modulation, in Hertz. Must be in the range from 1 through 1000. The default value is 20.
@@ -406,12 +453,54 @@ export class AudioEffectGargle extends BaseAudioEffect {
 //   float fGain;
 // } BASS_DX8_PARAMEQ;
 
-// typedef struct {
-//   float fInGain;
-//   float fReverbMix;
-//   float fReverbTime;
-//   float fHighFreqRTRatio;
-// } BASS_DX8_REVERB;
+export class AudioEffectReverb extends BaseAudioEffect {
+  // Input gain of signal, in decibels (dB), in the range from -96 through 0. The default value is 0 dB.
+  public _inGain = 0.0;
+  // Reverb mix, in dB, in the range from -96 through 0. The default value is 0 dB.
+  public _reverbMix = 0.0;
+  // Reverb time, in milliseconds, in the range from 0.001 through 3000. The default value is 1000.
+  public _reverbTime = 0.0;
+  // High-frequency reverb time ratio, in the range from 0.001 through 0.999. The default value is 0.001.
+  public _highFreqRTRatio = 0.0;
+
+  public SIZE = 16;
+
+  public static OFFSET_INGAIN = 0;
+  public static OFFSET_REVERBMIX = 4;
+  public static OFFSET_REVERBTIME = 8;
+  public static OFFSET_HIGHFREQRTRATIO = 12;
+
+  constructor() {
+    super();
+    this._datastruct = new Uint8Array(this.SIZE);
+  }
+
+  public get DataStruct() {
+    return this._datastruct;
+  }
+
+  /* Call after datastruct was set or updated to read the values stored in the structure. */
+  public readValuesFromStruct() {
+    const dataView = this.DataView;
+    this._inGain = dataView.getFloat32(AudioEffectReverb.OFFSET_INGAIN);
+    this._reverbMix = dataView.getFloat32(AudioEffectReverb.OFFSET_REVERBMIX);
+    this._reverbTime = dataView.getFloat32(AudioEffectReverb.OFFSET_REVERBTIME);
+    this._highFreqRTRatio = dataView.getFloat32(
+      AudioEffectReverb.OFFSET_HIGHFREQRTRATIO
+    );
+  }
+
+  public toString() {
+    return `
+      <AudioEffectReverb>:{
+        ${this._inGain},
+        ${this._reverbMix},
+        ${this._reverbTime},
+        ${this._highFreqRTRatio},
+      }
+    `;
+  }
+}
 
 // typedef struct {
 //   float fTarget;
