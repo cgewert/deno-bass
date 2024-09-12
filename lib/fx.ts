@@ -39,7 +39,7 @@ export enum AudioEffect {
 export abstract class BaseAudioEffect {
   protected _datastruct: Uint8Array;
 
-  public abstract SIZE;
+  public abstract readonly SIZE: number;
 
   public get DataStruct() {
     return this._datastruct;
@@ -432,20 +432,203 @@ export class AudioEffectGargle extends BaseAudioEffect {
   }
 }
 
-// typedef struct {
-//   int lRoom;
-//   int lRoomHF;
-//   float flRoomRolloffFactor;
-//   float flDecayTime;
-//   float flDecayHFRatio;
-//   int lReflections;
-//   float flReflectionsDelay;
-//   int lReverb;
-//   float flReverbDelay;
-//   float flDiffusion;
-//   float flDensity;
-//   float flHFReference;
-// } BASS_DX8_I3DL2REVERB;
+export class AudioEffectI3DL2Reverb extends BaseAudioEffect {
+  // Attenuation of the room effect, in millibels (mB), in the range from -10000 to 0. The default value is -1000 mB.
+  private _room: number;
+  public get room(): number {
+    return this._room;
+  }
+  public set room(value: number) {
+    this._room = value;
+  }
+
+  // Attenuation of the room high-frequency effect, in mB, in the range from -10000 to 0. The default value is -100 mB.
+  private _roomHf: number;
+  public get roomHf(): number {
+    return this._roomHf;
+  }
+  public set roomHf(value: number) {
+    this._roomHf = value;
+  }
+
+  // Rolloff factor for the reflected signals, in the range from 0 to 10. The default value is 0.0.
+  private _roomrolloffFactor: number;
+  public get roomrolloffFactor(): number {
+    return this._roomrolloffFactor;
+  }
+  public set roomrolloffFactor(value: number) {
+    this._roomrolloffFactor = value;
+  }
+
+  // Decay time, in seconds, in the range from 0.1 to 20. The default value is 1.49 seconds.
+  private _decaytime: number;
+  public get decaytime(): number {
+    return this._decaytime;
+  }
+  public set decaytime(value: number) {
+    this._decaytime = value;
+  }
+
+  // Ratio of the decay time at high frequencies to the decay time at low frequencies, in the range from 0.1 to 2. The default value is 0.83.
+  private _decayHfRatio: number;
+  public get decayHfRatio(): number {
+    return this._decayHfRatio;
+  }
+  public set decayHfRatio(value: number) {
+    this._decayHfRatio = value;
+  }
+
+  // Attenuation of early reflections relative to lRoom, in mB, in the range from -10000 to 1000. The default value is -2602 mB.
+  private _reflections: number;
+  public get reflections(): number {
+    return this._reflectionsDelay;
+  }
+  public set reflections(value: number) {
+    this._reflectionsDelay = value;
+  }
+
+  // Delay time of the first reflection relative to the direct path, in seconds, in the range from 0 to 0.3. The default value is 0.007 seconds.
+  private _reflectionsDelay: number;
+  public get reflectionsDelay(): number {
+    return this._reflectionsDelay;
+  }
+  public set reflectionsDelay(value: number) {
+    this._reflectionsDelay = value;
+  }
+
+  // Attenuation of late reverberation relative to lRoom, in mB, in the range from -10000 to 2000. The default value is 200 mB.
+  private _reverb: number;
+  public get reverb(): number {
+    return this._reverb;
+  }
+  public set reverb(value: number) {
+    this._reverb = value;
+  }
+
+  // Time limit between the early reflections and the late reverberation relative to the time of the first reflection, in seconds, in the range from 0 to 0.1. The default value is 0.011 seconds.
+  private _reverbDelay: number;
+  public get reverbDelay(): number {
+    return this._reverbDelay;
+  }
+  public set reverbDelay(value: number) {
+    this._reverbDelay = value;
+  }
+
+  // Echo density in the late reverberation decay, in percent, in the range from 0 to 100. The default value is 100.0 percent.
+  private _diffusion: number;
+  public get diffusion(): number {
+    return this._diffusion;
+  }
+  public set diffusion(value: number) {
+    this._diffusion = value;
+  }
+
+  // Modal density in the late reverberation decay, in percent, in the range from 0 to 100. The default value is 100.0 percent.
+  private _density: number;
+  public get density(): number {
+    return this._density;
+  }
+  public set density(value: number) {
+    this._density = value;
+  }
+
+  // Reference high frequency, in hertz, in the range from 20 to 20000. The default value is 5000.0 Hz.
+  private _hfReference: number;
+  public get hfReference(): number {
+    return this._hfReference;
+  }
+  public set hfReference(value: number) {
+    this._hfReference = value;
+  }
+
+  public SIZE = 48;
+
+  public static OFFSET_ROOM = 0;
+  public static OFFSET_ROOMHF = 4;
+  public static OFFSET_ROOMROLLOFFFACTOR = 8;
+  public static OFFSET_DECAYTIME = 12;
+  public static OFFSET_DECAYHFRATIO = 16;
+  public static OFFSET_REFLECTIONS = 20;
+  public static OFFSET_REFLECTIONSDELAY = 24;
+  public static OFFSET_REVERB = 28;
+  public static OFFSET_REVERBDELAY = 32;
+  public static OFFSET_DIFFUSION = 36;
+  public static OFFSET_DENSITY = 40;
+  public static OFFSET_HFREFERENCE = 44;
+
+  constructor() {
+    super();
+    this._datastruct = new Uint8Array(this.SIZE);
+    this._room = 0;
+    this._roomHf = 0;
+    this._roomrolloffFactor = 0;
+    this._decaytime = 0;
+    this._decayHfRatio = 0;
+    this._reflections = 0;
+    this._reflectionsDelay = 0;
+    this._reverb = 0;
+    this._reverbDelay = 0;
+    this._diffusion = 0;
+    this._density = 0;
+    this._hfReference = 0;
+  }
+
+  public get DataStruct() {
+    return this._datastruct;
+  }
+
+  /* Call after datastruct was set or updated to read the values stored in the structure. */
+  public readValuesFromStruct() {
+    const dataView = this.DataView;
+    this._room = dataView.getInt32(AudioEffectI3DL2Reverb.OFFSET_ROOM);
+    this._roomHf = dataView.getInt32(AudioEffectI3DL2Reverb.OFFSET_ROOMHF);
+    this._roomrolloffFactor = dataView.getFloat32(
+      AudioEffectI3DL2Reverb.OFFSET_ROOMROLLOFFFACTOR
+    );
+    this._decaytime = dataView.getFloat32(
+      AudioEffectI3DL2Reverb.OFFSET_DECAYTIME
+    );
+    this._decayHfRatio = dataView.getFloat32(
+      AudioEffectI3DL2Reverb.OFFSET_DECAYHFRATIO
+    );
+    this._reflections = dataView.getInt32(
+      AudioEffectI3DL2Reverb.OFFSET_REFLECTIONS
+    );
+    this._reflectionsDelay = dataView.getFloat32(
+      AudioEffectI3DL2Reverb.OFFSET_REFLECTIONSDELAY
+    );
+    this._reverb = dataView.getInt32(AudioEffectI3DL2Reverb.OFFSET_REVERB);
+    this._reverbDelay = dataView.getFloat32(
+      AudioEffectI3DL2Reverb.OFFSET_REVERBDELAY
+    );
+    this._diffusion = dataView.getFloat32(
+      AudioEffectI3DL2Reverb.OFFSET_DIFFUSION
+    );
+    this._density = dataView.getFloat32(AudioEffectI3DL2Reverb.OFFSET_DENSITY);
+    this._hfReference = dataView.getFloat32(
+      AudioEffectI3DL2Reverb.OFFSET_HFREFERENCE
+    );
+  }
+
+  public toString() {
+    return `
+      <AudioEffectI3DL2Reverb>:{
+        ${this._room},
+        ${this._roomHf},
+        ${this._roomrolloffFactor},
+        ${this._decaytime},
+        ${this._decayHfRatio},
+        ${this._reflections},
+        ${this._reflectionsDelay},
+        ${this._reverb},
+        ${this._reverbDelay},
+        ${this._diffusion},
+        ${this._density},
+        ${this._hfReference}
+      }
+    `;
+  }
+}
 
 // typedef struct {
 //   float fCenter;
