@@ -39,7 +39,7 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   // Streams
   BASS_StreamCreateFile: {
     parameters: [c_bool, "buffer", c_int_64, c_int_64, c_int_32],
-    result: DWORD,
+    result: HSTREAM,
     nonblocking: true,
   },
   BASS_StreamCreateURL: {
