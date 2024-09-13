@@ -203,7 +203,7 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   },
   // Sets the value of a channel's attribute.
   BASS_ChannelSetAttribute: {
-    parameters: [DWORD, DWORD, c_float],
+    parameters: ["u32", DWORD, c_float],
     result: c_bool,
   },
   // Sets the value of a channel's attribute.
