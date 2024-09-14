@@ -129,11 +129,11 @@ $ deno test --allow-ffi --unstable-ffi
 |77|BASS_RecordStart|❌|
 |78|BASS_SampleCreate|❌|
 |79|BASS_SampleFree|❌|
-|80|BASS_SampleGetChannel|❌|
+|80|BASS_SampleGetChannel|✅|
 |81|BASS_SampleGetChannels|❌|
 |82|BASS_SampleGetData|❌|
 |83|BASS_SampleGetInfo|❌|
-|84|BASS_SampleLoad|❌|
+|84|BASS_SampleLoad|✅|
 |85|BASS_SampleSetData|❌|
 |86|BASS_SampleSetInfo|❌|
 |87|BASS_SampleStop|❌|

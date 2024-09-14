@@ -4,6 +4,7 @@ import {
   HFX,
   HMUSIC,
   HPLUGIN,
+  HSAMPLE,
   HSTREAM,
   HSYNC,
   HWND,
@@ -337,6 +338,29 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   },
   // Frees a MOD music's resources, including any sync/DSP/FX it has.
   BASS_MusicFree: { parameters: [HMUSIC], result: c_bool },
+
+  // Samples
+
+  // Loads a WAV, AIFF, MP3, MP2, MP1, OGG or plugin supported sample.
+  BASS_SampleLoad: {
+    parameters: [
+      c_bool, // mem
+      buffer, // file
+      QWORD, // offset
+      DWORD, // length
+      DWORD, // max
+      DWORD, // flags
+    ],
+    result: HSAMPLE,
+  },
+  // Creates/initializes a playback channel for a sample.
+  BASS_SampleGetChannel: {
+    parameters: [
+      HSAMPLE, // sample handle
+      DWORD, // flags
+    ],
+    result: DWORD,
+  },
 } as const);
 
 // Classic C Style API
@@ -432,3 +456,5 @@ export const BASS_StreamPutData = library.symbols.BASS_StreamPutData;
 export const BASS_StreamPutFileData = library.symbols.BASS_StreamPutFileData;
 export const BASS_MusicLoad = library.symbols.BASS_MusicLoad;
 export const BASS_MusicFree = library.symbols.BASS_MusicFree;
+export const BASS_SampleLoad = library.symbols.BASS_SampleLoad;
+export const BASS_SampleGetChannel = library.symbols.BASS_SampleGetChannel;
