@@ -110,8 +110,8 @@ $ deno test --allow-ffi --unstable-ffi
 |58|BASS_GetVolume|✅|
 |59|BASS_Init|✅|
 |60|BASS_IsStarted|✅|
-|61|BASS_MusicFree|❌|
-|62|BASS_MusicLoad|❌|
+|61|BASS_MusicFree|✅|
+|62|BASS_MusicLoad|✅|
 |63|BASS_Pause|✅|
 |64|BASS_PluginEnable|✅|
 |65|BASS_PluginFree|✅|

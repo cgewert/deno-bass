@@ -6,7 +6,7 @@
   ☐ Introduce MODULE_ROOT constant
   ☐ Implement Example with GUI
   ☐ Add more unit tests
-  ☐ Complete FX classes
+  ✔ Complete FX classes @done(24-09-14 18:18)
   ☐ Add tsconfig to repo
   ☐ Configure deno lint
   ☐ Complete bindings @started(24-08-30 23:30)

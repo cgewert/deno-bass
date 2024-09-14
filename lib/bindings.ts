@@ -2,6 +2,7 @@ import {
   DWORD,
   HDSP,
   HFX,
+  HMUSIC,
   HPLUGIN,
   HSTREAM,
   HSYNC,
@@ -319,6 +320,23 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   BASS_FXSetParameters: { parameters: [HFX, buffer], result: c_bool },
   // Sets the priority of an effect or DSP function, which determines its position in the DSP chain.
   BASS_FXSetPriority: { parameters: [DWORD, c_int_32], result: c_bool },
+
+  // Music
+
+  // Loads a MOD music file.
+  BASS_MusicLoad: {
+    parameters: [
+      c_bool, // mem
+      buffer, // file
+      QWORD, // offset
+      DWORD, // length
+      DWORD, // flags
+      DWORD, // freq
+    ],
+    result: HMUSIC,
+  },
+  // Frees a MOD music's resources, including any sync/DSP/FX it has.
+  BASS_MusicFree: { parameters: [HMUSIC], result: c_bool },
 } as const);
 
 // Classic C Style API
@@ -412,3 +430,5 @@ export const BASS_StreamGetFilePosition =
 export const BASS_StreamFree = library.symbols.BASS_StreamFree;
 export const BASS_StreamPutData = library.symbols.BASS_StreamPutData;
 export const BASS_StreamPutFileData = library.symbols.BASS_StreamPutFileData;
+export const BASS_MusicLoad = library.symbols.BASS_MusicLoad;
+export const BASS_MusicFree = library.symbols.BASS_MusicFree;

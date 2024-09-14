@@ -16,6 +16,7 @@ export const BASS_STREAM_PRESCAN = 0x20000; // scan file for accurate seeking an
 export const BASS_STREAM_AUTOFREE = 0x40000; // automatically free the stream when it stops/ends
 export const BASS_STREAM_RESTRATE = 0x80000; // restrict the download rate of internet file stream
 
+export const BASS_MUSIC_AUTOFREE = BASS_STREAM_AUTOFREE; // Automatically free the music when playback ends. Note that some musics have infinite loops, so never actually end on their own.
 export const BASS_MUSIC_NONINTER = 0x10000; // non-interpolated sample mixing
 export const BASS_MUSIC_SINCINTER = 0x800000; // sinc interpolated sample mixing
 export const BASS_MUSIC_POSRESET = 0x8000; // stop all notes when moving position
