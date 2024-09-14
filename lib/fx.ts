@@ -630,11 +630,50 @@ export class AudioEffectI3DL2Reverb extends BaseAudioEffect {
   }
 }
 
-// typedef struct {
-//   float fCenter;
-//   float fBandwidth;
-//   float fGain;
-// } BASS_DX8_PARAMEQ;
+export class AudioEffectParamEq extends BaseAudioEffect {
+  // Center frequency, in hertz.
+  private _center: number;
+  // Bandwidth, in semitones, in the range from 1 to 36. The default value is 12.
+  private _bandwidth: number;
+  // Gain, in the range from -15 to 15. The default value is 0 dB.
+  private _gain: number;
+
+  public SIZE = 12;
+
+  public static OFFSET_CENTER = 0;
+  public static OFFSET_BANDWIDTH = 4;
+  public static OFFSET_GAIN = 8;
+
+  constructor() {
+    super();
+    this._datastruct = new Uint8Array(this.SIZE);
+    this._center = 0;
+    this._bandwidth = 0;
+    this._gain = 0;
+  }
+
+  public get DataStruct() {
+    return this._datastruct;
+  }
+
+  /* Call after datastruct was set or updated to read the values stored in the structure. */
+  public readValuesFromStruct() {
+    const dataView = this.DataView;
+    this._center = dataView.getFloat32(AudioEffectParamEq.OFFSET_CENTER);
+    this._bandwidth = dataView.getFloat32(AudioEffectParamEq.OFFSET_BANDWIDTH);
+    this._gain = dataView.getFloat32(AudioEffectParamEq.OFFSET_GAIN);
+  }
+
+  public toString() {
+    return `
+      <AudioEffectParamEq>:{
+        ${this._center},
+        ${this._bandwidth},
+        ${this._gain}
+      }
+    `;
+  }
+}
 
 export class AudioEffectReverb extends BaseAudioEffect {
   // Input gain of signal, in decibels (dB), in the range from -96 through 0. The default value is 0 dB.
@@ -685,9 +724,53 @@ export class AudioEffectReverb extends BaseAudioEffect {
   }
 }
 
-// typedef struct {
-//   float fTarget;
-//   float fCurrent;
-//   float fTime;
-//   DWORD lCurve;
-// } BASS_FX_VOLUME_PARAM;
+export class AudioEffectVolumeParam extends BaseAudioEffect {
+  // The new volume level... 0 = silent, 1.0 = normal, above 1.0 = amplification. The default value is 1.
+  private _target: number;
+  // The current volume level... -1 = leave existing current level when setting parameters. The default value is 1.
+  private _current: number;
+  // The time to take to transition from the current level to the new level, in seconds. The default value is 0.
+  private _time: number;
+  // The curve to use in the transition... 0 = linear, 1 = logarithmic. The default value is 0.
+  private _curve: number;
+
+  public SIZE = 16;
+
+  public static OFFSET_TARGET = 0;
+  public static OFFSET_CURRENT = 4;
+  public static OFFSET_TIME = 8;
+  public static OFFSET_CURVE = 12;
+
+  constructor() {
+    super();
+    this._datastruct = new Uint8Array(this.SIZE);
+    this._target = 0;
+    this._current = 0;
+    this._time = 0;
+    this._curve = 0;
+  }
+
+  public get DataStruct() {
+    return this._datastruct;
+  }
+
+  /* Call after datastruct was set or updated to read the values stored in the structure. */
+  public readValuesFromStruct() {
+    const dataView = this.DataView;
+    this._target = dataView.getFloat32(AudioEffectVolumeParam.OFFSET_TARGET);
+    this._current = dataView.getFloat32(AudioEffectVolumeParam.OFFSET_CURRENT);
+    this._time = dataView.getFloat32(AudioEffectVolumeParam.OFFSET_TIME);
+    this._curve = dataView.getInt32(AudioEffectVolumeParam.OFFSET_CURVE);
+  }
+
+  public toString() {
+    return `
+      <AudioEffectVolumeParam>:{
+        ${this._target},
+        ${this._current},
+        ${this._time},
+        ${this._curve}
+      }
+    `;
+  }
+}
