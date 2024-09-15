@@ -121,6 +121,7 @@ export const BASS_DEVICE_TYPE_LINE = 0x03000000;
 export const BASS_DEVICE_TYPE_MICROPHONE = 0x05000000;
 // An audio endpoint device that the user accesses remotely through a network.
 export const BASS_DEVICE_TYPE_NETWORK = 0x01000000;
+export const BASS_DEVICE_TYPE_MASK = 0xff000000;
 // An audio endpoint device that connects to an audio adapter through a Sony/Philips Digital Interface (S/PDIF) connector.
 export const BASS_DEVICE_TYPE_SPDIF = 0x09000000;
 // A set of speakers.
@@ -128,3 +129,21 @@ export const BASS_DEVICE_TYPE_SPEAKERS = 0x02000000;
 
 // BASS_ChannelSlideAttribute flags
 export const BASS_SLIDE_LOG = 0x1000000;
+
+// BASS_INFO flags (from DSOUND.H)
+export const DSCAPS_EMULDRIVER = 0x00000020; // device does not have hardware DirectSound support
+export const DSCAPS_CERTIFIED = 0x00000040; // device driver has been certified by Microsoft
+export const DSCAPS_HARDWARE = 0x80000000; // hardware mixed
+// Formats for RecordInfo format field
+export const WAVE_FORMAT_1M08 = 0x00000001; /* 11.025 kHz, Mono,   8-bit  */
+export const WAVE_FORMAT_1S08 = 0x00000002; /* 11.025 kHz, Stereo, 8-bit  */
+export const WAVE_FORMAT_1M16 = 0x00000004; /* 11.025 kHz, Mono,   16-bit */
+export const WAVE_FORMAT_1S16 = 0x00000008; /* 11.025 kHz, Stereo, 16-bit */
+export const WAVE_FORMAT_2M08 = 0x00000010; /* 22.05  kHz, Mono,   8-bit  */
+export const WAVE_FORMAT_2S08 = 0x00000020; /* 22.05  kHz, Stereo, 8-bit  */
+export const WAVE_FORMAT_2M16 = 0x00000040; /* 22.05  kHz, Mono,   16-bit */
+export const WAVE_FORMAT_2S16 = 0x00000080; /* 22.05  kHz, Stereo, 16-bit */
+export const WAVE_FORMAT_4M08 = 0x00000100; /* 44.1   kHz, Mono,   8-bit  */
+export const WAVE_FORMAT_4S08 = 0x00000200; /* 44.1   kHz, Stereo, 8-bit  */
+export const WAVE_FORMAT_4M16 = 0x00000400; /* 44.1   kHz, Mono,   16-bit */
+export const WAVE_FORMAT_4S16 = 0x00000800; /* 44.1   kHz, Stereo, 16-bit */

@@ -52,8 +52,8 @@ export abstract class BaseAudioEffect {
     return new Deno.UnsafePointerView(pointer);
   }
 
-  public abstract readValuesFromStruct();
-  public abstract toString();
+  public abstract readValuesFromStruct(): void;
+  public abstract toString(): string;
 }
 
 export class AudioEffectEcho extends BaseAudioEffect {

@@ -14,7 +14,6 @@ import {
   c_double,
   c_float,
   c_int_32,
-  c_int_64,
   c_ptr,
   c_void,
 } from "./ctypes.ts";
@@ -361,6 +360,44 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     ],
     result: DWORD,
   },
+
+  // Recording
+
+  // Frees all resources used by the recording device.
+  BASS_RecordFree: {
+    parameters: [],
+    result: c_bool,
+  },
+  // Retrieves the recording device setting of the current thread.
+  BASS_RecordGetDevice: {
+    parameters: [],
+    result: DWORD,
+  },
+  // Retrieves information on a recording device.
+  BASS_RecordGetDeviceInfo: {
+    parameters: [
+      DWORD, // device
+      buffer, // device info
+    ],
+    result: c_bool,
+  },
+  // Retrieves information on the recording device being used.
+  BASS_RecordGetInfo: {
+    parameters: [
+      buffer, // record info
+    ],
+    result: c_bool,
+  },
+  // Initializes a recording device.
+  BASS_RecordInit: {
+    parameters: [c_int_32],
+    result: c_bool,
+  },
+  // Sets the recording device to use for subsequent calls in the current thread.
+  BASS_RecordSetDevice: {
+    parameters: [DWORD],
+    result: c_bool,
+  },
 } as const);
 
 // Classic C Style API
@@ -458,3 +495,10 @@ export const BASS_MusicLoad = library.symbols.BASS_MusicLoad;
 export const BASS_MusicFree = library.symbols.BASS_MusicFree;
 export const BASS_SampleLoad = library.symbols.BASS_SampleLoad;
 export const BASS_SampleGetChannel = library.symbols.BASS_SampleGetChannel;
+export const BASS_RecordFree = library.symbols.BASS_RecordFree;
+export const BASS_RecordInit = library.symbols.BASS_RecordInit;
+export const BASS_RecordGetDevice = library.symbols.BASS_RecordGetDevice;
+export const BASS_RecordSetDevice = library.symbols.BASS_RecordSetDevice;
+export const BASS_RecordGetDeviceInfo =
+  library.symbols.BASS_RecordGetDeviceInfo;
+export const BASS_RecordGetInfo = library.symbols.BASS_RecordGetInfo;
