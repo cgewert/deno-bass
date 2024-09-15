@@ -88,7 +88,13 @@ const fileNameBuffer = ToCString(
   "./examples/01.mp3"
 );
 
-BASS_StreamCreateFile(false, fileNameBuffer, 0, 0, BASS_SAMPLE_FLOAT).then(
+BASS_StreamCreateFile(
+  false,
+  fileNameBuffer,
+  BigInt(0),
+  BigInt(0),
+  BASS_SAMPLE_FLOAT
+).then(
   (handle: number) => {
     let bassError = BASS_ErrorGetCode();
 
@@ -152,8 +158,11 @@ function play(streamHandle: number) {
   console.log("Comment: ", metaData.Comment);
   console.log("Genre ID: ", metaData.GenreId);
   console.log("Genre: ", metaData.Genre);
-  let playBackLength = BASS_ChannelGetLength(streamHandle, BASS_POS_BYTE);
-  if (playBackLength == -1) {
+  let playBackLength: bigint | number = BASS_ChannelGetLength(
+    streamHandle,
+    BASS_POS_BYTE
+  );
+  if (playBackLength == BigInt(-1)) {
     console.error(
       "Error while retrieving channels playback position: ",
       ErrorCodeToString(BASS_ErrorGetCode())
@@ -177,7 +186,7 @@ function play(streamHandle: number) {
 
   while (true) {
     let position = BASS_ChannelGetPosition(streamHandle, BASS_POS_BYTE);
-    if (position == -1) {
+    if (position == BigInt(-1)) {
       console.error(
         "Error while retrieving channels playback position: ",
         ErrorCodeToString(BASS_ErrorGetCode())

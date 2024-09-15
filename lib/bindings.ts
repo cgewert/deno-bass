@@ -40,7 +40,7 @@ if (osSpecificLibPath == "") {
 export const library = Deno.dlopen(osSpecificLibPath, {
   // Streams
   BASS_StreamCreateFile: {
-    parameters: [c_bool, "buffer", c_int_64, c_int_64, c_int_32],
+    parameters: [c_bool, "buffer", QWORD, QWORD, DWORD],
     result: HSTREAM,
     nonblocking: true,
   },
@@ -119,7 +119,7 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   },
   // Retrieves the immediate sample data (or an FFT representation of it) of a sample channel, stream, MOD music, or recording channel.
   BASS_ChannelGetData: {
-    parameters: [DWORD, buffer, QWORD],
+    parameters: [DWORD, buffer, DWORD],
     result: DWORD,
   },
   // Retrieves the device that a channel is using.
@@ -159,7 +159,7 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   // Pauses a sample, stream, MOD music, or recording.
   BASS_ChannelPause: { parameters: [QWORD], result: c_bool },
   // Starts/resumes playback of a sample, stream, MOD music, or a recording.
-  BASS_ChannelPlay: { parameters: [QWORD, c_bool], result: c_bool },
+  BASS_ChannelPlay: { parameters: [DWORD, c_bool], result: c_bool },
   // Removes a DSP function from a stream, MOD music, or recording channel.
   BASS_ChannelRemoveDSP: {
     parameters: [HDSP, buffer],
@@ -249,9 +249,9 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     result: c_bool,
   },
   // Starts/resumes playback of a sample, stream, MOD music, or a recording.
-  BASS_ChannelStart: { parameters: [QWORD], result: c_bool },
+  BASS_ChannelStart: { parameters: [DWORD], result: c_bool },
   // Stops a sample, stream, MOD music, or recording.
-  BASS_ChannelStop: { parameters: [QWORD], result: c_bool },
+  BASS_ChannelStop: { parameters: [DWORD], result: c_bool },
   // Updates the playback buffer of a stream or MOD music.
   BASS_ChannelUpdate: {
     parameters: [DWORD, DWORD],
@@ -275,7 +275,7 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   BASS_GetVersion: { parameters: [], result: DWORD },
   BASS_GetVolume: { parameters: [], result: c_float },
   BASS_Init: {
-    parameters: [c_int_64, DWORD, DWORD, HWND, c_ptr],
+    parameters: [c_int_32, DWORD, DWORD, HWND, c_ptr],
     result: c_bool,
   },
   // Checks if the output has been started and is active.

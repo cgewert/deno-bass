@@ -28,7 +28,7 @@ console.log("Press <Ctrl+C> to quit!");
 while (true) {
   var connected =
     BASS_StreamGetFilePosition(streamHandle, BASS_FILEPOS_CONNECTED) ==
-    StreamConnectionStatus.CONNECTED;
+    BigInt(StreamConnectionStatus.CONNECTED);
   console.log("Is stream connected: ", connected);
   const end = Date.now() + 1_000;
   while (Date.now() < end);

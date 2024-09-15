@@ -40,8 +40,8 @@ const fileNameBuffer = ToCString("./examples/bee.mp3");
 BASS_StreamCreateFile(
   false,
   fileNameBuffer,
-  0,
-  0,
+  BigInt(0),
+  BigInt(0),
   BASS_SAMPLE_3D | BASS_SAMPLE_LOOP
 ).then(
   (handle: number) => {

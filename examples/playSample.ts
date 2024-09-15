@@ -1,5 +1,5 @@
 /*
- *  This example shows how to play a *.mod music file.
+ *  This example shows how to play a sample file.
  */
 
 import {
@@ -10,14 +10,13 @@ import {
   BASS_ChannelSetAttribute,
   BASS_ErrorGetCode,
   BASS_Init,
-  BASS_MusicLoad,
   BASS_SampleGetChannel,
   BASS_SampleLoad,
   BASS_SetConfig,
   library,
 } from "../lib/bindings.ts";
 import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
-import { BASS_DEVICE_STEREO, BASS_MUSIC_AUTOFREE } from "../lib/flags.ts";
+import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
 import { BASS_POS_BYTE } from "../lib/modes.ts";
 import { BASS_CONFIG_UNICODE } from "../lib/options.ts";
 import {
@@ -48,7 +47,7 @@ const fileNameBuffer = ToCString(
 // length
 // max: number of simultaneous playbacks min 1 max 65535
 // flags: flags combination
-const sampleHandle = BASS_SampleLoad(false, fileNameBuffer, 0, 0, 1, 0);
+const sampleHandle = BASS_SampleLoad(false, fileNameBuffer, BigInt(0), 0, 1, 0);
 // Before playing a sample a channel handle must be obtained which is being used with channel play.
 const channelHandle = BASS_SampleGetChannel(sampleHandle, FLAGS);
 
@@ -76,8 +75,11 @@ function play(handle: number) {
   }
   console.log("Press <Ctrl+C> to exit!");
 
-  let playBackLength = BASS_ChannelGetLength(handle, BASS_POS_BYTE);
-  if (playBackLength == -1) {
+  let playBackLength: bigint | number = BASS_ChannelGetLength(
+    handle,
+    BASS_POS_BYTE
+  );
+  if (playBackLength == BigInt(-1)) {
     console.error(
       "Error while retrieving channels playback length position: ",
       ErrorCodeToString(BASS_ErrorGetCode())

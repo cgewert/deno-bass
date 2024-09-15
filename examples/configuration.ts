@@ -27,7 +27,7 @@ BASS_SetConfigPtr(
 
 // Reading the User Agent config value
 let userAgent: string = PointerToString(
-  BASS_GetConfigPtr(Options.BASS_CONFIG_NET_AGENT)
+  BASS_GetConfigPtr(Options.BASS_CONFIG_NET_AGENT) as Deno.PointerObject
 );
 console.log("User-Agent: ", userAgent);
 

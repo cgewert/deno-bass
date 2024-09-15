@@ -39,7 +39,14 @@ const fileNameBuffer = ToCString(
   // Insert a valid path to your mp3 file here
   FILE_NAME
 );
-const musicHandle = BASS_MusicLoad(false, fileNameBuffer, 0, 0, FLAGS, 0);
+const musicHandle = BASS_MusicLoad(
+  false,
+  fileNameBuffer,
+  BigInt(0),
+  0,
+  FLAGS,
+  0
+);
 
 if (musicHandle != 0) {
   console.log("Loaded music file successfully...");
@@ -65,8 +72,11 @@ function play(handle: number) {
   }
   console.log("Press <Ctrl+C> to exit!");
 
-  let playBackLength = BASS_ChannelGetLength(handle, BASS_POS_BYTE);
-  if (playBackLength == -1) {
+  let playBackLength: bigint | number = BASS_ChannelGetLength(
+    handle,
+    BASS_POS_BYTE
+  );
+  if (playBackLength == BigInt(-1)) {
     console.error(
       "Error while retrieving channels playback position: ",
       ErrorCodeToString(BASS_ErrorGetCode())
