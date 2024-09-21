@@ -121,12 +121,12 @@ $ deno test --allow-ffi --unstable-ffi
 |69|BASS_RecordGetDevice|✅|
 |70|BASS_RecordGetDeviceInfo|✅|
 |71|BASS_RecordGetInfo|✅|
-|72|BASS_RecordGetInput|❌|
-|73|BASS_RecordGetInputName|❌|
+|72|BASS_RecordGetInput|✅|
+|73|BASS_RecordGetInputName|✅|
 |74|BASS_RecordInit|✅|
-|75|BASS_RecordSetDevice|❌|
-|76|BASS_RecordSetInput|❌|
-|77|BASS_RecordStart|❌|
+|75|BASS_RecordSetDevice|✅|
+|76|BASS_RecordSetInput|✅|
+|77|BASS_RecordStart|✅|
 |78|BASS_SampleCreate|❌|
 |79|BASS_SampleFree|❌|
 |80|BASS_SampleGetChannel|✅|

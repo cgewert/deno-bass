@@ -12,6 +12,7 @@ export const HSTREAM = DWORD;
 export const HPLUGIN = DWORD;
 export const HMUSIC = DWORD;
 export const HSAMPLE = DWORD;
+export const HRECORD = DWORD;
 export const c_void = "void";
 export const c_ptr = "pointer";
 export const buffer = "buffer";

@@ -4,6 +4,7 @@ import {
   HFX,
   HMUSIC,
   HPLUGIN,
+  HRECORD,
   HSAMPLE,
   HSTREAM,
   HSYNC,
@@ -388,6 +389,21 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     ],
     result: c_bool,
   },
+  // Retrieves the current settings of a recording input source.
+  BASS_RecordGetInput: {
+    parameters: [
+      c_int_32, // input
+      buffer, // pointer to a float variable taking the volume value
+    ],
+    result: DWORD,
+  },
+  // Retrieves the text description of a recording input source.
+  BASS_RecordGetInputName: {
+    parameters: [
+      c_int_32, // The input to get the description of... 0 = first, -1 = master.
+    ],
+    result: buffer,
+  },
   // Initializes a recording device.
   BASS_RecordInit: {
     parameters: [c_int_32],
@@ -397,6 +413,28 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   BASS_RecordSetDevice: {
     parameters: [DWORD],
     result: c_bool,
+  },
+  // Adjusts the settings of a recording input source.
+  BASS_RecordSetInput: {
+    parameters: [
+      c_int_32, // The input to adjust the settings of... 0 = first, -1 = master.
+      DWORD /* The new setting... a combination of these flags.
+      BASS_INPUT_OFF	Disable the input. This flag cannot be used when the device supports only one input at a time.
+      BASS_INPUT_ON	Enable the input. If the device only allows one input at a time, then any previously enabled input will be disabled by this. */,
+      c_float, // The volume level... 0 (silent) to 1 (max), less than 0 = leave current.
+    ],
+    result: c_bool,
+  },
+  // Starts recording.
+  BASS_RecordStart: {
+    parameters: [
+      DWORD, // The sample rate to record at... 0 = device's current sample rate.
+      DWORD, // The number of channels... 1 = mono, 2 = stereo, etc. 0 = device's current channel count.
+      DWORD, // Flags
+      "function", // Record proc pointer
+      buffer, // user data
+    ],
+    result: HRECORD,
   },
 } as const);
 
@@ -502,3 +540,7 @@ export const BASS_RecordSetDevice = library.symbols.BASS_RecordSetDevice;
 export const BASS_RecordGetDeviceInfo =
   library.symbols.BASS_RecordGetDeviceInfo;
 export const BASS_RecordGetInfo = library.symbols.BASS_RecordGetInfo;
+export const BASS_RecordGetInput = library.symbols.BASS_RecordGetInput;
+export const BASS_RecordGetInputName = library.symbols.BASS_RecordGetInputName;
+export const BASS_RecordSetInput = library.symbols.BASS_RecordSetInput;
+export const BASS_RecordStart = library.symbols.BASS_RecordStart;
