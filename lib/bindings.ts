@@ -341,6 +341,18 @@ export const library = Deno.dlopen(osSpecificLibPath, {
 
   // Samples
 
+  // Creates a new sample.
+  BASS_SampleCreate: {
+    parameters: [
+      DWORD, // length
+      DWORD, // freq
+      DWORD, // channels
+      DWORD, // max
+      DWORD, // flags
+    ],
+    result: HSAMPLE,
+  },
+
   // Loads a WAV, AIFF, MP3, MP2, MP1, OGG or plugin supported sample.
   BASS_SampleLoad: {
     parameters: [
@@ -360,6 +372,14 @@ export const library = Deno.dlopen(osSpecificLibPath, {
       DWORD, // flags
     ],
     result: DWORD,
+  },
+  // Sets a sample's data.
+  BASS_SampleSetData: {
+    parameters: [
+      HSAMPLE, // sample handle
+      buffer, // pointer to data buffer
+    ],
+    result: c_bool,
   },
 
   // Recording
@@ -544,3 +564,5 @@ export const BASS_RecordGetInput = library.symbols.BASS_RecordGetInput;
 export const BASS_RecordGetInputName = library.symbols.BASS_RecordGetInputName;
 export const BASS_RecordSetInput = library.symbols.BASS_RecordSetInput;
 export const BASS_RecordStart = library.symbols.BASS_RecordStart;
+export const BASS_SampleCreate = library.symbols.BASS_SampleCreate;
+export const BASS_SampleSetData = library.symbols.BASS_SampleSetData;
