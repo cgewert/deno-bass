@@ -13,6 +13,7 @@ import {
   BASS_RecordInit,
   BASS_RecordStart,
   BASS_SampleCreate,
+  BASS_SampleFree,
   BASS_SampleGetChannel,
   BASS_SampleSetData,
   BASS_SetConfig,
@@ -199,4 +200,6 @@ setTimeout(() => {
     console.log("Press ctrl+c to exit!");
     while (true) {}
   }
+  // Free samples resources after usage
+  BASS_SampleFree(sample);
 }, 5000);

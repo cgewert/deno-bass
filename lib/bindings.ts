@@ -39,8 +39,33 @@ if (osSpecificLibPath == "") {
 
 export const library = Deno.dlopen(osSpecificLibPath, {
   // Streams
+
+  // Creates a user sample stream.
+  BASS_StreamCreate: {
+    parameters: [
+      DWORD, // frequency
+      DWORD, // channels
+      DWORD, // flags
+      "function", // function pointer to streamproc callback
+      buffer, // user data that will be passed to the callback as arg
+    ],
+    result: HSTREAM,
+    nonblocking: true,
+  },
   BASS_StreamCreateFile: {
     parameters: [c_bool, "buffer", QWORD, QWORD, DWORD],
+    result: HSTREAM,
+    nonblocking: true,
+  },
+  /* Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or 
+  plugin supported file via user callback functions. */
+  BASS_StreamCreateFileUser: {
+    parameters: [
+      DWORD, // system
+      DWORD, // flags
+      "function", // callback
+      buffer, // user data to pass to the callback
+    ],
     result: HSTREAM,
     nonblocking: true,
   },
@@ -353,6 +378,45 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     result: HSAMPLE,
   },
 
+  // Frees a sample's resources.
+  BASS_SampleFree: {
+    parameters: [
+      HSAMPLE, // sample handle
+    ],
+    result: c_bool,
+  },
+  // Creates/initializes a playback channel for a sample.
+  BASS_SampleGetChannel: {
+    parameters: [
+      HSAMPLE, // sample handle
+      DWORD, // flags
+    ],
+    result: DWORD,
+  },
+  // Retrieves all of a sample's existing channels.
+  BASS_SampleGetChannels: {
+    parameters: [
+      HSAMPLE, // sample handle
+      buffer, // pointer to HCHANNEL array
+    ],
+    result: DWORD,
+  },
+  // Retrieves a copy of a sample's data.
+  BASS_SampleGetData: {
+    parameters: [
+      HSAMPLE, // sample handle
+      buffer, // pointer to HCHANNEL array
+    ],
+    result: c_bool,
+  },
+  // Retrieves a sample's default attributes and other information.
+  BASS_SampleGetInfo: {
+    parameters: [
+      HSAMPLE, // sample handle
+      buffer, // pointer to BASS_SAMPLE array
+    ],
+    result: c_bool,
+  },
   // Loads a WAV, AIFF, MP3, MP2, MP1, OGG or plugin supported sample.
   BASS_SampleLoad: {
     parameters: [
@@ -365,14 +429,6 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     ],
     result: HSAMPLE,
   },
-  // Creates/initializes a playback channel for a sample.
-  BASS_SampleGetChannel: {
-    parameters: [
-      HSAMPLE, // sample handle
-      DWORD, // flags
-    ],
-    result: DWORD,
-  },
   // Sets a sample's data.
   BASS_SampleSetData: {
     parameters: [
@@ -381,7 +437,21 @@ export const library = Deno.dlopen(osSpecificLibPath, {
     ],
     result: c_bool,
   },
-
+  // Sets a sample's default attributes.
+  BASS_SampleSetInfo: {
+    parameters: [
+      HSAMPLE, // sample handle
+      buffer, // pointer to array
+    ],
+    result: c_bool,
+  },
+  // Stops and frees all of a sample's channels (HCHANNEL).
+  BASS_SampleStop: {
+    parameters: [
+      HSAMPLE, // sample handle
+    ],
+    result: c_bool,
+  },
   // Recording
 
   // Frees all resources used by the recording device.
@@ -551,8 +621,6 @@ export const BASS_StreamPutData = library.symbols.BASS_StreamPutData;
 export const BASS_StreamPutFileData = library.symbols.BASS_StreamPutFileData;
 export const BASS_MusicLoad = library.symbols.BASS_MusicLoad;
 export const BASS_MusicFree = library.symbols.BASS_MusicFree;
-export const BASS_SampleLoad = library.symbols.BASS_SampleLoad;
-export const BASS_SampleGetChannel = library.symbols.BASS_SampleGetChannel;
 export const BASS_RecordFree = library.symbols.BASS_RecordFree;
 export const BASS_RecordInit = library.symbols.BASS_RecordInit;
 export const BASS_RecordGetDevice = library.symbols.BASS_RecordGetDevice;
@@ -565,4 +633,15 @@ export const BASS_RecordGetInputName = library.symbols.BASS_RecordGetInputName;
 export const BASS_RecordSetInput = library.symbols.BASS_RecordSetInput;
 export const BASS_RecordStart = library.symbols.BASS_RecordStart;
 export const BASS_SampleCreate = library.symbols.BASS_SampleCreate;
+export const BASS_SampleFree = library.symbols.BASS_SampleFree;
 export const BASS_SampleSetData = library.symbols.BASS_SampleSetData;
+export const BASS_SampleLoad = library.symbols.BASS_SampleLoad;
+export const BASS_SampleGetChannel = library.symbols.BASS_SampleGetChannel;
+export const BASS_SampleGetChannels = library.symbols.BASS_SampleGetChannels;
+export const BASS_SampleGetData = library.symbols.BASS_SampleGetData;
+export const BASS_SampleGetInfo = library.symbols.BASS_SampleGetInfo;
+export const BASS_SampleSetInfo = library.symbols.BASS_SampleSetInfo;
+export const BASS_SampleStop = library.symbols.BASS_SampleStop;
+export const BASS_StreamCreate = library.symbols.BASS_StreamCreate;
+export const BASS_StreamCreateFileUser =
+  library.symbols.BASS_StreamCreateFileUser;
