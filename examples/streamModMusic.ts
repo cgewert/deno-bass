@@ -29,6 +29,8 @@ import {
   GetBASSErrorCode,
   ToCString,
 } from "../lib/utilities.ts";
+
+// Put a filepath to an existing *.mod music file here.
 const FILE_NAME = "./examples/space_debris.mod";
 const FLAGS = BASS_MUSIC_AUTOFREE;
 
