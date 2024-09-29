@@ -23,8 +23,11 @@ There is no release yet!
 ```sh
 import { BASS, Types, Options } from "https://raw.githubusercontent.com/cgewert/deno-bass/master/lib/mod.ts";
 ```
-2. Put a shared library of bass, specific to your platform into your working directory (e.g. the root folder of your main script).   
-**NOTE: Currently only Windows / Linux (bass.dll / libbass.so) are supported!**
+
+2. To use this lib you need a compiled shared library, specific for your platform installed globally. You can download it from [un4seen developments](https://www.un4seen.com/) website. For Windows this would be placing bass.dll into windows/system32 folder.
+You can also set up an environment variable named   
+**BASS_INSTALL_FOLDER** which points to a folder where you have installed the shared library file:
+BASS_INSTALL_FOLDER="C:\foobar"
 
 ### Important notes
 
@@ -35,7 +38,7 @@ You have to provide the correct shared library for your platform yourself. Downl
 Because FFI is an unstable Deno feature you have to run your code with --allow-ffi and --unstable flags provided:
 
 ```sh
-$ deno --allow-ffi --unstable-ffi yourscript.ts
+$ deno --allow-env --allow-ffi --unstable-ffi yourscript.ts
 ```
 
 ### Test coverage
@@ -43,7 +46,7 @@ $ deno --allow-ffi --unstable-ffi yourscript.ts
 Use Deno to run tests:
 
 ```sh
-$ deno test --allow-ffi --unstable-ffi
+$ deno test --allow-env --allow-ffi --unstable-ffi
 ```
 
 ### State of the lib

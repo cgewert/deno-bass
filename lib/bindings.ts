@@ -20,21 +20,25 @@ import {
 } from "./ctypes.ts";
 import { SEPARATOR } from "std/path/mod.ts";
 
+const BASS_INSTALL_FOLDER = Deno.env.get("BASS_INSTALL_FOLDER");
+
 // Platform specific initialization
-let osSpecificLibPath = "";
+let osSpecificLibPath = `${BASS_INSTALL_FOLDER}${SEPARATOR}` ?? "";
+if (osSpecificLibPath)
+  console.log("Looking for bass in folder: ", BASS_INSTALL_FOLDER);
+
 switch (Deno.build.os) {
   case "windows":
-    osSpecificLibPath = `.${SEPARATOR}bass.dll`;
+    osSpecificLibPath += "bass.dll";
     break;
   case "linux":
-    osSpecificLibPath = `.${SEPARATOR}libbass.so`;
+    osSpecificLibPath = "libbass.so";
+    break;
+  case "darwin":
+    osSpecificLibPath = "libbass.dylib";
     break;
   default:
     break;
-}
-if (osSpecificLibPath == "") {
-  console.error("Error detecting OS specific shared library.");
-  Deno.exit(-1);
 }
 
 export const library = Deno.dlopen(osSpecificLibPath, {

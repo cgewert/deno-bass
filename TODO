@@ -4,8 +4,8 @@
   ✔ Examine how to retrieve a list of symbols inside the bass dll, or from the source code @done(24-07-12 22:45)
   ✔ Complete FX classes @done(24-09-14 18:18)
   ✔ Complete bindings @started(24-08-30 23:30) @done(24-09-23 20:58) @lasted(3w2d21h28m28s)
+  ✔ Introduce BASS_INSTALL_FOLDER const @done(24-09-29 21:36)
   ☐ Research Observable Properties to observe changes to the struct fields (e.g. Infostruct in DeviceInfo)
-  ☐ Introduce MODULE_ROOT constant
   ☐ Implement Example with GUI
   ☐ Add more unit tests
   ☐ Add tsconfig to repo
