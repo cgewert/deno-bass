@@ -24,8 +24,6 @@ const BASS_INSTALL_FOLDER = Deno.env.get("BASS_INSTALL_FOLDER");
 
 // Platform specific initialization
 let osSpecificLibPath = `${BASS_INSTALL_FOLDER}${SEPARATOR}` ?? "";
-if (osSpecificLibPath)
-  console.log("Looking for bass in folder: ", BASS_INSTALL_FOLDER);
 
 switch (Deno.build.os) {
   case "windows":

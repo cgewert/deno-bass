@@ -17,23 +17,23 @@ import {
   BASS_SampleGetChannel,
   BASS_SampleSetData,
   BASS_SetConfig,
-} from "../lib/bindings.ts";
-import { buffer, c_bool, DWORD, HRECORD } from "../lib/ctypes.ts";
+} from "../../lib/bindings.ts";
+import { buffer, c_bool, DWORD, HRECORD } from "../../lib/ctypes.ts";
 import {
   BASS_DEVICE_ENABLED,
   BASS_DEVICE_STEREO,
   BASS_SAMPLE_LOOP,
   DSCAPS_CERTIFIED,
   DSCAPS_EMULDRIVER,
-} from "../lib/flags.ts";
-import { Options } from "../lib/mod.ts";
-import { DeviceInfo } from "../lib/types/DeviceInfo.ts";
-import { RecordInfo } from "../lib/types/RecordInfo.ts";
+} from "../../lib/flags.ts";
+import { Options } from "../../lib/mod.ts";
+import { DeviceInfo } from "../../lib/types/DeviceInfo.ts";
+import { RecordInfo } from "../../lib/types/RecordInfo.ts";
 import {
   GetBASSErrorCode,
   IsMicrophone,
   PointerToString,
-} from "../lib/utilities.ts";
+} from "../../lib/utilities.ts";
 
 // -1 will map to the os default recording device.
 const DEVICE = -1;

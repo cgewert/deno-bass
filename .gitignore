@@ -1,2 +1,5 @@
 *.mp3
 *.mod
+*.dll
+.vscode
+*.wav

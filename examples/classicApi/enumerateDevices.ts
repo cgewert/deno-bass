@@ -8,9 +8,9 @@
  *  code will be set.
  */
 
-import { BASS_GetDeviceInfo, BASS_SetConfig } from "../lib/bindings.ts";
-import { Options } from "../lib/mod.ts";
-import { DeviceInfo } from "../lib/types/DeviceInfo.ts";
+import { BASS_GetDeviceInfo, BASS_SetConfig } from "../../lib/bindings.ts";
+import { Options } from "../../lib/mod.ts";
+import { DeviceInfo } from "../../lib/types/DeviceInfo.ts";
 
 // Activate Unicode encoding.
 BASS_SetConfig(Options.BASS_CONFIG_UNICODE, 1);

@@ -1,8 +1,8 @@
 /* Loading addons and parsing info from them. */
 
-import { BASS_Init, BASS_PluginLoad } from "../lib/bindings.ts";
-import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
-import { GetBASSErrorCode, ToCString } from "../lib/utilities.ts";
+import { BASS_Init, BASS_PluginLoad } from "../../lib/bindings.ts";
+import { BASS_DEVICE_STEREO } from "../../lib/flags.ts";
+import { GetBASSErrorCode, ToCString } from "../../lib/utilities.ts";
 import { SEPARATOR } from "std/path/mod.ts";
 
 const defaultDevice = -1;

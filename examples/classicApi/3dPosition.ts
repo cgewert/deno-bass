@@ -9,21 +9,21 @@ import {
   BASS_Set3DFactors,
   BASS_Set3DPosition,
   BASS_StreamCreateFile,
-} from "../lib/bindings.ts";
-import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
-import { BASS_OK } from "../lib/errors.ts";
+} from "../../lib/bindings.ts";
+import { BASS_ATTRIB_VOL } from "../../lib/channelAttributes.ts";
+import { BASS_OK } from "../../lib/errors.ts";
 import {
   BASS_DEVICE_MONO,
   BASS_SAMPLE_3D,
   BASS_SAMPLE_LOOP,
-} from "../lib/flags.ts";
-import { BASS3DVector } from "../lib/types/BASS3DVector.ts";
-import { ChannelInfo } from "../lib/types/ChannelInfo.ts";
+} from "../../lib/flags.ts";
+import { BASS3DVector } from "../../lib/types/BASS3DVector.ts";
+import { ChannelInfo } from "../../lib/types/ChannelInfo.ts";
 import {
   ErrorCodeToString,
   GetBASSErrorCode,
   ToCString,
-} from "../lib/utilities.ts";
+} from "../../lib/utilities.ts";
 
 const defaultDevice = -1;
 const frequency = 44100;
@@ -33,8 +33,10 @@ const INCREMENT = 2.5; // meters per second
 
 BASS_Init(defaultDevice, frequency, BASS_DEVICE_MONO, windowHandle, null);
 
-// Audio source must be monoaural
-const fileNameBuffer = ToCString("./examples/bee.mp3");
+// Audio source must be monoaural, enter a valid filepath here.
+const fileNameBuffer = ToCString(
+  "E:\\Programmieren\\deno-bass\\examples\\classicApi/bee.mp3"
+);
 
 // Streamed file must be flagged with 3D mode.
 BASS_StreamCreateFile(
@@ -51,7 +53,7 @@ BASS_StreamCreateFile(
       console.log("Error while opening Stream: ");
       console.log(ErrorCodeToString(bassError));
     } else {
-      console.log("Opened Stream File!");
+      console.log("Opened Stream File! Handle: ", handle);
       const channelInfo = new ChannelInfo(handle);
       console.log("Amount of channels: ", channelInfo.Channels);
       play(handle);

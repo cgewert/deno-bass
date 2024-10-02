@@ -5,10 +5,10 @@
  *  Also some utility lambdas can be used to retrieve specific device capabilities.
  */
 
-import { BASS_SetConfig } from "../lib/bindings.ts";
-import { BASS_CONFIG_UNICODE } from "../lib/options.ts";
-import { DeviceInfo } from "../lib/types/DeviceInfo.ts";
-import { IsHeadphone, IsMicrophone, IsEnabled } from "../lib/utilities.ts";
+import { BASS_SetConfig } from "../../lib/bindings.ts";
+import { BASS_CONFIG_UNICODE } from "../../lib/options.ts";
+import { DeviceInfo } from "../../lib/types/DeviceInfo.ts";
+import { IsHeadphone, IsMicrophone, IsEnabled } from "../../lib/utilities.ts";
 
 // Activate unicode encoding in the bass audio library.
 BASS_SetConfig(BASS_CONFIG_UNICODE, 1);

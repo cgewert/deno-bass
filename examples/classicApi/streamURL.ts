@@ -7,13 +7,13 @@ import {
   BASS_ChannelPlay,
   BASS_ErrorGetCode,
   BASS_StreamGetFilePosition,
-} from "../lib/bindings.ts";
-import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
+} from "../../lib/bindings.ts";
+import { BASS_DEVICE_STEREO } from "../../lib/flags.ts";
 import {
   BASS_FILEPOS_CONNECTED,
   StreamConnectionStatus,
-} from "../lib/modes.ts";
-import { ToCString, ErrorCodeToString } from "../lib/utilities.ts";
+} from "../../lib/modes.ts";
+import { ToCString, ErrorCodeToString } from "../../lib/utilities.ts";
 
 BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);
 const url = ToCString("http://uk3.internet-radio.com:8405/live");

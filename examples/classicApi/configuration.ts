@@ -7,9 +7,9 @@ import {
   BASS_GetConfigPtr,
   BASS_SetConfig,
   BASS_SetConfigPtr,
-} from "../lib/bindings.ts";
-import { Options } from "../lib/mod.ts";
-import { PointerToString, ToCString } from "../lib/utilities.ts";
+} from "../../lib/bindings.ts";
+import { Options } from "../../lib/mod.ts";
+import { PointerToString, ToCString } from "../../lib/utilities.ts";
 
 // Reading the desired UNICODE configuration value => Should be 0 by default
 let configValue: number = BASS_GetConfig(Options.BASS_CONFIG_UNICODE);

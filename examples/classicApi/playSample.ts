@@ -1,5 +1,5 @@
 /*
- *  This example shows how to play a *.mod music file.
+ *  This example shows how to play a sample file.
  */
 
 import {
@@ -10,51 +10,52 @@ import {
   BASS_ChannelSetAttribute,
   BASS_ErrorGetCode,
   BASS_Init,
-  BASS_MusicLoad,
+  BASS_SampleGetChannel,
+  BASS_SampleLoad,
   BASS_SetConfig,
   library,
-} from "../lib/bindings.ts";
-import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
-import { BASS_DEVICE_STEREO, BASS_MUSIC_AUTOFREE } from "../lib/flags.ts";
-import { BASS_POS_BYTE } from "../lib/modes.ts";
-import { BASS_CONFIG_UNICODE } from "../lib/options.ts";
+} from "../../lib/bindings.ts";
+import { BASS_ATTRIB_VOL } from "../../lib/channelAttributes.ts";
+import { BASS_DEVICE_STEREO } from "../../lib/flags.ts";
+import { BASS_POS_BYTE } from "../../lib/modes.ts";
+import { BASS_CONFIG_UNICODE } from "../../lib/options.ts";
 import {
   BASS_ACTIVE_PAUSED,
   BASS_ACTIVE_PAUSED_DEVICE,
   BASS_ACTIVE_PLAYING,
   BASS_ACTIVE_STOPPED,
-} from "../lib/retvals.ts";
+} from "../../lib/retvals.ts";
 import {
   ErrorCodeToString,
   GetBASSErrorCode,
   ToCString,
-} from "../lib/utilities.ts";
-
-// Put a filepath to an existing *.mod music file here.
-const FILE_NAME = "./examples/space_debris.mod";
-const FLAGS = BASS_MUSIC_AUTOFREE;
+} from "../../lib/utilities.ts";
+const FILE_NAME = "./examples/01.mp3";
+const FLAGS = 0;
 
 BASS_SetConfig(BASS_CONFIG_UNICODE, 1);
 BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);
 console.log("Initialized BASS... ", GetBASSErrorCode());
 const fileNameBuffer = ToCString(
-  // Insert a valid path to your mp3 file here
+  // Insert a valid path to your sample file here
   FILE_NAME
 );
-const musicHandle = BASS_MusicLoad(
-  false,
-  fileNameBuffer,
-  BigInt(0),
-  0,
-  FLAGS,
-  0
-);
+// BASS_SampleLoad Parameters
+// mem: Play from memory
+// file: filename
+// offset: playback start from offset
+// length
+// max: number of simultaneous playbacks min 1 max 65535
+// flags: flags combination
+const sampleHandle = BASS_SampleLoad(false, fileNameBuffer, BigInt(0), 0, 1, 0);
+// Before playing a sample a channel handle must be obtained which is being used with channel play.
+const channelHandle = BASS_SampleGetChannel(sampleHandle, FLAGS);
 
-if (musicHandle != 0) {
-  console.log("Loaded music file successfully...");
-  play(musicHandle);
+if (channelHandle != 0) {
+  console.log("Loaded sample file successfully...");
+  play(channelHandle);
 } else {
-  console.log("Could not load music file!");
+  console.log("Could not load sample file!");
   Deno.exit(1);
 }
 
@@ -80,13 +81,13 @@ function play(handle: number) {
   );
   if (playBackLength == BigInt(-1)) {
     console.error(
-      "Error while retrieving channels playback position: ",
+      "Error while retrieving channels playback length position: ",
       ErrorCodeToString(BASS_ErrorGetCode())
     );
     Deno.exit(-1);
   }
   playBackLength = BASS_ChannelBytes2Seconds(handle, playBackLength);
-  console.log("Music file playback length: ", playBackLength);
+  console.log("Sample file playback length: ", playBackLength);
 
   while (true) {
     const end = Date.now() + 1_000;

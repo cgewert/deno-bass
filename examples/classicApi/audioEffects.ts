@@ -8,11 +8,11 @@ import {
   BASS_FXGetParameters,
   BASS_Init,
   BASS_StreamCreateFile,
-} from "../lib/bindings.ts";
-import { BASS_ATTRIB_VOL } from "../lib/channelAttributes.ts";
-import { BASS_DEVICE_STEREO } from "../lib/flags.ts";
-import { AudioEffect, AudioEffectDistortion } from "../lib/fx.ts";
-import { ToCString } from "../lib/utilities.ts";
+} from "../../lib/bindings.ts";
+import { BASS_ATTRIB_VOL } from "../../lib/channelAttributes.ts";
+import { BASS_DEVICE_STEREO } from "../../lib/flags.ts";
+import { AudioEffect, AudioEffectDistortion } from "../../lib/fx.ts";
+import { ToCString } from "../../lib/utilities.ts";
 
 const VOLUME = 0.03;
 // INSERT YOUR OWN FILENAME HERE
@@ -21,10 +21,12 @@ const FILENAME = ToCString("./examples/01.mp3");
 let hfx = 0;
 
 BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);
-BASS_StreamCreateFile(false, FILENAME, 0, 0, 0).then((handle: number) => {
-  BASS_ChannelSetAttribute(handle, BASS_ATTRIB_VOL, VOLUME);
-  play(handle);
-});
+BASS_StreamCreateFile(false, FILENAME, BigInt(0), BigInt(0), 0).then(
+  (handle: number) => {
+    BASS_ChannelSetAttribute(handle, BASS_ATTRIB_VOL, VOLUME);
+    play(handle);
+  }
+);
 
 function play(handle: number) {
   const start = Date.now();
