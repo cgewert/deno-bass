@@ -14,7 +14,7 @@ const initParams: BASSInitParams = {
 };
 // Create an instance of the BASS class, this will automatically initialize bass.
 const bassInstance = new BASS(initParams);
-// You can suppress console output by setting IsVerbose to false (defaults to true)
+// You can suppress or activate console output by setting IsVerbose (defaults to true)
 bassInstance.IsVerbose = false;
 // Call Free() to release all reserved resources:
 // e.g. before closing the application.

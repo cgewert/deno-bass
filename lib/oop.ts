@@ -21,6 +21,7 @@ export interface BASSInitParams {
   device: number;
   flags: BASSInitFlags;
   windowHandle: number;
+  isVerbose?: boolean;
 }
 
 type LoggingLevel = "ERROR" | "LOG" | "WARNING";
@@ -94,6 +95,7 @@ export class BASS {
     this.Device = initParams.device;
     this.Flags = initParams.flags;
     this.WindowHandle = initParams.windowHandle;
+    this.IsVerbose = initParams.isVerbose ?? true;
     this.Init();
   }
 
