@@ -91,6 +91,21 @@ export const BASS_DEVICE_AUDIOTRACK = 0x20000; // use AudioTrack output
 export const BASS_DEVICE_DSOUND = 0x40000; // use DirectSound output
 export const BASS_DEVICE_SOFTWARE = 0x80000; // disable hardware/fastpath output
 
+// BASS Init flags must be a value inside this set or 0.
+export type BASSInitFlags =
+  | typeof BASS_DEVICE_16BITS
+  | typeof BASS_DEVICE_MONO
+  | typeof BASS_DEVICE_STEREO
+  | typeof BASS_DEVICE_SPEAKERS
+  | typeof BASS_DEVICE_NOSPEAKER
+  | typeof BASS_DEVICE_FREQ
+  | typeof BASS_DEVICE_DSOUND
+  | typeof BASS_DEVICE_AUDIOTRACK
+  | typeof BASS_DEVICE_DMIX
+  | typeof BASS_DEVICE_SOFTWARE
+  | typeof BASS_DEVICE_REINIT
+  | 0;
+
 // BASS Device flags
 
 // The device is enabled. It will not be possible to initialize the device if this flag is not present.

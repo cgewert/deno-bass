@@ -25,7 +25,7 @@ import { BASS, Types, Options } from "https://raw.githubusercontent.com/cgewert/
 ```
 
 2. To use this lib you need a compiled shared library, specific for your platform installed globally. You can download it from [un4seen developments](https://www.un4seen.com/) website. For Windows this would be placing bass.dll into windows/system32 folder.
-You can also set up an environment variable named   
+You can also set up an environment variable named
 **BASS_INSTALL_FOLDER** which points to a folder where you have installed the shared library file:
 BASS_INSTALL_FOLDER="C:\foobar"
 

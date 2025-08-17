@@ -18,7 +18,7 @@ BASS_SetConfig(Options.BASS_CONFIG_UNICODE, 1);
 // If a device info object is created with an empty constructor parameter
 // use readValuesFromStruct() to update the device info objects properties.
 let deviceInfo = new DeviceInfo();
-// Each device has a unique device index starting with 0.
+// Each device has a unique device index starting with -1.
 let deviceIndex = 0;
 
 while (BASS_GetDeviceInfo(deviceIndex, deviceInfo.Infostruct)) {

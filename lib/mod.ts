@@ -11,4 +11,4 @@ export * as BASS_TYPES from "./bassTypes.ts";
 export * as FX from "./fx.ts";
 export * as ChannelTypes from "./channelTypes.ts";
 export * as ChannelModes from "./modes.ts";
-export * as OOP from "./oop.ts";
+export * as OOP from "./oop/oop.ts";

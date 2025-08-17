@@ -1,20 +1,14 @@
-import { BASS_Free, BASS_Init } from "./bindings.ts";
 import {
-  BASS_DEVICE_16BITS,
-  BASS_DEVICE_AUDIOTRACK,
-  BASS_DEVICE_DMIX,
-  BASS_DEVICE_DSOUND,
-  BASS_DEVICE_FREQ,
-  BASS_DEVICE_MONO,
-  BASS_DEVICE_NOSPEAKER,
-  BASS_DEVICE_REINIT,
-  BASS_DEVICE_SOFTWARE,
-  BASS_DEVICE_SPEAKERS,
-  BASS_DEVICE_STEREO,
-} from "./flags.ts";
-import { GetBASSErrorCode } from "./utilities.ts";
-
-export const DESKTOP_WINDOW_HANDLE = 0;
+  BASS_Init,
+  BASS_Free,
+  BASS_SetConfig,
+  BASS_GetDevice,
+} from "../bindings.ts";
+import { GetBASSErrorCode } from "../utilities.ts";
+import { DESKTOP_WINDOW_HANDLE, GetDeviceInfo } from "./oop.ts";
+import { BASS_DEVICE_STEREO, BASSInitFlags } from "../flags.ts";
+import { Options } from "../mod.ts";
+import { DeviceInfo } from "../types/DeviceInfo.ts";
 
 export interface BASSInitParams {
   freq: number;
@@ -24,22 +18,11 @@ export interface BASSInitParams {
   isVerbose?: boolean;
 }
 
-type LoggingLevel = "ERROR" | "LOG" | "WARNING";
-
-// BASS Init flags must be a value inside this set or 0.
-export type BASSInitFlags =
-  | typeof BASS_DEVICE_16BITS
-  | typeof BASS_DEVICE_MONO
-  | typeof BASS_DEVICE_STEREO
-  | typeof BASS_DEVICE_SPEAKERS
-  | typeof BASS_DEVICE_NOSPEAKER
-  | typeof BASS_DEVICE_FREQ
-  | typeof BASS_DEVICE_DSOUND
-  | typeof BASS_DEVICE_AUDIOTRACK
-  | typeof BASS_DEVICE_DMIX
-  | typeof BASS_DEVICE_SOFTWARE
-  | typeof BASS_DEVICE_REINIT
-  | 0;
+enum LoggingLevel {
+  ERROR = "ERROR",
+  LOG = "LOG",
+  WARNING = "WARNING",
+}
 
 /* 
     Base Class for all of BASS functionality. 
@@ -47,6 +30,7 @@ export type BASSInitFlags =
     TODO: Think about tracking initialized devices.
 */
 export class BASS {
+  private _deviceInfo: DeviceInfo | undefined;
   private _isVerbose: boolean = true;
   // Determines if class instance will print output to the console.
   public get IsVerbose(): boolean {
@@ -74,6 +58,10 @@ export class BASS {
     this._device = value;
   }
 
+  public get DeviceName(): string {
+    return this._deviceInfo?.Name ?? "Unknown Device";
+  }
+
   private _flags: BASSInitFlags = 0;
   public get Flags(): BASSInitFlags {
     return this._flags;
@@ -83,17 +71,25 @@ export class BASS {
   }
 
   private _windowHandle: number = DESKTOP_WINDOW_HANDLE;
-  public get Windowhandle(): number {
+  public get WindowHandle(): number {
     return this._windowHandle;
   }
   public set WindowHandle(value: number) {
     this._windowHandle = value;
   }
 
-  constructor(initParams: BASSInitParams) {
+  constructor(
+    initParams: BASSInitParams = {
+      device: -1,
+      flags: BASS_DEVICE_STEREO,
+      windowHandle: DESKTOP_WINDOW_HANDLE,
+      freq: 44100,
+      isVerbose: true,
+    }
+  ) {
     this.Frequency = initParams.freq;
-    this.Device = initParams.device;
     this.Flags = initParams.flags;
+    this.Device = initParams.device;
     this.WindowHandle = initParams.windowHandle;
     this.IsVerbose = initParams.isVerbose ?? true;
     this.Init();
@@ -102,6 +98,8 @@ export class BASS {
   // (Re-)initializes BASS.
   Init() {
     this.Free();
+    // Activate Unicode encoding.
+    BASS_SetConfig(Options.BASS_CONFIG_UNICODE, 1);
     // Initializing the library
     let success = false;
     try {
@@ -109,7 +107,7 @@ export class BASS {
         this.Device,
         this.Frequency,
         this.Flags,
-        this.Windowhandle,
+        this.WindowHandle,
         null
       );
     } catch (error: unknown) {
@@ -117,14 +115,25 @@ export class BASS {
         `Critical error during BASS initialization: ${
           (error as Error).message
         }`,
-        "ERROR"
+        LoggingLevel.ERROR
       );
     } finally {
       if (!success) {
-        this.speak("Could not initialize BASS!", "ERROR");
-        this.speak(`BASS Error Code: ${GetBASSErrorCode()}`, "ERROR");
+        this.speak("Could not initialize BASS!", LoggingLevel.ERROR);
+        this.speak(
+          `BASS Error Code: ${GetBASSErrorCode()}`,
+          LoggingLevel.ERROR
+        );
       } else {
-        this.speak("BASS was initialized.", "LOG");
+        const deviceId = BASS_GetDevice();
+        // Translate BASS_Init device number to real device id
+        this.Device = deviceId;
+        // Create a new DeviceInfo instance to hold device information.
+        this._deviceInfo = GetDeviceInfo(this.Device);
+        this.speak(
+          `BASS was initialized: ${this.DeviceName}, ${this.Frequency}, ${this.Flags}, ${this.WindowHandle}`,
+          LoggingLevel.LOG
+        );
       }
     }
   }
@@ -134,19 +143,28 @@ export class BASS {
     Therefore you must call Init() before using any of BASS functionality again.
    */
   Free() {
-    BASS_Free();
+    if (!BASS_Free()) {
+      this.speak(
+        `Failed to free BASS resources: Error Code: ${GetBASSErrorCode()}`,
+        LoggingLevel.ERROR
+      );
+    }
   }
 
+  /***
+   * Writes a message to the console.
+   * Will be suppressed if IsVerbose is false.
+   */
   speak(text: string, level: LoggingLevel) {
     if (this.IsVerbose) {
       switch (level) {
-        case "ERROR":
+        case LoggingLevel.ERROR:
           console.error(text);
           break;
-        case "LOG":
+        case LoggingLevel.LOG:
           console.log(text);
           break;
-        case "WARNING":
+        case LoggingLevel.WARNING:
           console.warn(text);
           break;
       }
