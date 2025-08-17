@@ -28,15 +28,13 @@ import {
 const defaultDevice = -1;
 const frequency = 44100;
 const windowHandle = 0;
-const VOLUME = 1.0;
+const VOLUME = 25.0;
 const INCREMENT = 2.5; // meters per second
 
 BASS_Init(defaultDevice, frequency, BASS_DEVICE_MONO, windowHandle, null);
 
 // Audio source must be monoaural, enter a valid filepath here.
-const fileNameBuffer = ToCString(
-  "E:\\Programmieren\\deno-bass\\examples\\classicApi/bee.mp3"
-);
+const fileNameBuffer = ToCString("..\\sounds\\bee.mp3");
 
 // Streamed file must be flagged with 3D mode.
 BASS_StreamCreateFile(

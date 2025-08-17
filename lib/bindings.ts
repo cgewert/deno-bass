@@ -21,9 +21,13 @@ import {
 import { SEPARATOR } from "std/path/mod.ts";
 
 const BASS_INSTALL_FOLDER = Deno.env.get("BASS_INSTALL_FOLDER");
+if (BASS_INSTALL_FOLDER !== undefined)
+  console.info("Using environment variable for BASS : ", BASS_INSTALL_FOLDER);
 
 // Platform specific initialization
-let osSpecificLibPath = `${BASS_INSTALL_FOLDER}${SEPARATOR}` ?? "";
+let osSpecificLibPath = BASS_INSTALL_FOLDER
+  ? `${BASS_INSTALL_FOLDER}${SEPARATOR}`
+  : "";
 
 switch (Deno.build.os) {
   case "windows":
