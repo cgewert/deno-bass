@@ -61,7 +61,6 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   BASS_StreamCreateFile: {
     parameters: [c_bool, "buffer", QWORD, QWORD, DWORD],
     result: HSTREAM,
-    nonblocking: true,
   },
   /* Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or 
   plugin supported file via user callback functions. */

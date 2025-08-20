@@ -184,7 +184,7 @@ export class AudioEffectChorus extends BaseAudioEffect {
     this._delay = 0.0;
   }
 
-  public get DataStruct() {
+  public override get DataStruct() {
     return this._datastruct;
   }
 

@@ -1,18 +1,33 @@
 /*
     This example demonstrates how to make use of the deno-bass OOP API.
 */
-
 import { BASS } from "../../lib/oop/bass.ts";
 
-// Create an instance of the BASS class, this will automatically initialize bass.
-const bassInstance = new BASS();
-console.log("Initialized BASS using Device: " + bassInstance.DeviceName);
+// Create an instance of the BASS class, this will automatically initialize bass on the current thread.
+const bass = new BASS();
+
 // You can suppress or activate console output by setting IsVerbose (defaults to true)
-bassInstance.IsVerbose = false;
+bass.IsVerbose = true;
+
+// Retrieve BASS information from the class instance
+console.log("BASS CPU Usage: " + bass.CPU);
+console.log("BASS Library Filename: " + bass.FileName);
+console.log("BASS Device Name: " + bass.DeviceName);
+console.log("Device started? " + bass.HasDeviceStarted);
+
+// Start streaming of a local file
+const filePath =
+  "C:\\Users\\cgewe\\Downloads\\horn_ost_mp3_1409180821\\Horn Original Soundtrack\\Austin Wintory - Horn - 14 The Knighting.mp3";
+
+const success = bass.StreamFromFile(filePath);
+if (success) {
+  console.log("Streaming started successfully!");
+  alert("Press ENTER to exit!");
+} else {
+  console.log("Failed to start streaming.");
+  // Retrieves the last occured errorcode as string
+  console.log(bass.GetLastError(true));
+}
+
 // Call Free() to release all reserved resources before exiting your application:
-bassInstance.Free();
-// Switch the playback device by providing another value for the device property and calling Init().
-bassInstance.Device = 0; // 0 is the NO SOUND device.
-bassInstance.Init();
-console.log("Initialized BASS using Device: " + bassInstance.DeviceName);
-bassInstance.Free();
+bass.Free();

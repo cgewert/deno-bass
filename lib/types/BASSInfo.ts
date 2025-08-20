@@ -43,10 +43,15 @@ export class BASSInfo {
   constructor() {
     this._datastruct = new Uint8Array(BASSInfo.SIZE);
     this.update();
+    //console.log(this.toString());
   }
 
   public get DataStruct() {
     return this._datastruct;
+  }
+
+  public get DataView() {
+    return new DataView(this._datastruct.buffer);
   }
 
   public update() {
@@ -62,25 +67,22 @@ export class BASSInfo {
 
   /* Call after datastruct was set or updated to read the values stored in the structure. */
   public readValuesFromStruct() {
-    const pointer = Deno.UnsafePointer.of(
-      this._datastruct
-    ) as Deno.PointerObject;
-    const dataView = new Deno.UnsafePointerView(pointer);
+    const dv = this.DataView;
 
-    this.bassInfo.flags = dataView.getInt32(BASSInfo.OFFSET_FLAGS);
-    this.bassInfo.hwsize = dataView.getInt32(BASSInfo.OFFSET_HWSIZE);
-    this.bassInfo.hwfree = dataView.getInt32(BASSInfo.OFFSET_HWFREE);
-    this.bassInfo.freesam = dataView.getInt32(BASSInfo.OFFSET_FREESAM);
-    this.bassInfo.free3d = dataView.getInt32(BASSInfo.OFFSET_FREE3D);
-    this.bassInfo.minrate = dataView.getInt32(BASSInfo.OFFSET_MINRATE);
-    this.bassInfo.maxrate = dataView.getInt32(BASSInfo.OFFSET_MAXRATE);
-    this.bassInfo.eax = dataView.getBool(BASSInfo.OFFSET_EAX);
-    this.bassInfo.minbuf = dataView.getInt32(BASSInfo.OFFSET_MINBUF);
-    this.bassInfo.dsver = dataView.getInt32(BASSInfo.OFFSET_DSVER);
-    this.bassInfo.latency = dataView.getInt32(BASSInfo.OFFSET_LATENCY);
-    this.bassInfo.initflags = dataView.getInt32(BASSInfo.OFFSET_INITFLAGS);
-    this.bassInfo.speakers = dataView.getInt32(BASSInfo.OFFSET_SPEAKERS);
-    this.bassInfo.freq = dataView.getInt32(BASSInfo.OFFSET_FREQ);
+    this.bassInfo.flags = dv.getUint32(BASSInfo.OFFSET_FLAGS);
+    this.bassInfo.hwsize = dv.getUint32(BASSInfo.OFFSET_HWSIZE);
+    this.bassInfo.hwfree = dv.getUint32(BASSInfo.OFFSET_HWFREE);
+    this.bassInfo.freesam = dv.getUint32(BASSInfo.OFFSET_FREESAM);
+    this.bassInfo.free3d = dv.getUint32(BASSInfo.OFFSET_FREE3D);
+    this.bassInfo.minrate = dv.getUint32(BASSInfo.OFFSET_MINRATE);
+    this.bassInfo.maxrate = dv.getUint32(BASSInfo.OFFSET_MAXRATE);
+    //this.bassInfo.eax = dv.getBool(BASSInfo.OFFSET_EAX);
+    this.bassInfo.minbuf = dv.getUint32(BASSInfo.OFFSET_MINBUF);
+    this.bassInfo.dsver = dv.getUint32(BASSInfo.OFFSET_DSVER);
+    this.bassInfo.latency = dv.getUint32(BASSInfo.OFFSET_LATENCY);
+    this.bassInfo.initflags = dv.getUint32(BASSInfo.OFFSET_INITFLAGS);
+    this.bassInfo.speakers = dv.getUint32(BASSInfo.OFFSET_SPEAKERS, true);
+    this.bassInfo.freq = dv.getUint32(BASSInfo.OFFSET_FREQ);
   }
 
   public toString() {
@@ -94,12 +96,12 @@ export class BASSInfo {
         ${this.bassInfo.minrate}
         ${this.bassInfo.maxrate}
         ${this.bassInfo.eax}
-        ${this.bassInfo.minbuf}
-        ${this.bassInfo.dsver}
-        ${this.bassInfo.latency}
-        ${this.bassInfo.initflags}
-        ${this.bassInfo.speakers}
-        ${this.bassInfo.freq}
+        Minbuf: ${this.bassInfo.minbuf}
+        DirectSound Version: ${this.bassInfo.dsver}
+        Latency: ${this.bassInfo.latency}
+        Init flags: ${this.bassInfo.initflags}
+        Available speakers: ${this.bassInfo.speakers}
+        Sample Rate: ${this.bassInfo.freq}
       }
     `;
   }

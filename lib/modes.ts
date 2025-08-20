@@ -31,3 +31,9 @@ export enum StreamConnectionStatus {
   CONNECTED = 1,
   RECONNECTING = 2,
 }
+
+export enum DeviceStatus {
+  NOT_STARTED = 0,
+  STARTED_PLAYING = 1,
+  STARTED_NOT_PLAYING = 2,
+}
