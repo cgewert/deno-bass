@@ -13,12 +13,16 @@
   ☐ Add class for BASS_SAMPLE struct
   ☐ Create OOP API for deno-bass @started(24-10-02 22:56)
 
-  ☐ Automatically re-init BASS when the Device property was set on the bass class instance @started(25-08-20 13:09)
+  ✔ Automatically re-init BASS when the Device property was set on the bass class instance @started(25-08-20 13:09) @done(25-08-21 18:37) @lasted(1d5h28m51s)
   ✔ Find a way to determine if basslib is initialized to prevent a call to free without having resources reserved @done(25-08-20 14:36)
   ☐ Check if UNICODE config option works for linux
   ☐ Allow global volume control for mods, musics, samples via bass class instance (See BASS_SetConfig)
-  ☐ BASS_Info Class needs to be tested and verified (values seem to be off)
+  ☐ Add methods for getting audio levels and spectrum analysis
+  ✔ BASS_Info Class needs to be tested and verified (values seem to be off) @done(25-08-21 18:38)
 
   BASS_Info Class:
-    Init flags, Available speakers and sample rate are not read correctly
-    and provide wrong values.
+    Init flags, Available speakers and sample rate are not read correctly other values are correct.
+    As of now no error has been found. Structure of memory block seems fine
+    and reading the values works for some parts correctly. A C program doing the same
+    thing produces the expected results the typescript implementation needs
+    further investigation.
