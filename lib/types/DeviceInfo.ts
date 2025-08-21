@@ -1,4 +1,5 @@
 import { BASS_GetDeviceInfo } from "../bindings.ts";
+import { BASS_DEVICE_INIT } from "../flags.ts";
 import { Utilities } from "../mod.ts";
 
 export class DeviceInfo {
@@ -42,6 +43,13 @@ export class DeviceInfo {
 
   public set Flags(value: number) {
     this._flags = value;
+  }
+
+  /**
+   * Returns true if the device is initialized (e.g. by having called BASS_Init).
+   */
+  public get IsInitialized(): boolean {
+    return Boolean(this._flags & BASS_DEVICE_INIT);
   }
 
   public get Driver() {

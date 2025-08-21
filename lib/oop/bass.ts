@@ -10,6 +10,8 @@ import {
   BASS_IsStarted,
   BASS_StreamCreateFile,
   BASS_ChannelStart,
+  BASS_SetDevice,
+  BASS_ChannelPause,
 } from "../bindings.ts";
 import { GetBASSErrorCode, PointerToString, ToCString } from "../utilities.ts";
 import { DESKTOP_WINDOW_HANDLE, GetDeviceInfo } from "./oop.ts";
@@ -47,6 +49,7 @@ export class BASS {
   private _isVerbose: boolean = true;
   // Stores all active channels by their handle
   private _channels: Array<number> = [];
+  private _frequency: number = 44100;
   // Determines if class instance will print output to the console.
   public get IsVerbose(): boolean {
     return this._isVerbose;
@@ -77,20 +80,52 @@ export class BASS {
 
   // The output rate.
   public get Frequency(): number {
-    return this._bassInfo?.bassInfo.freq ?? 0;
+    return this._frequency;
+  }
+  public set Frequency(value: number) {
+    if (value <= 0) return;
+    this._frequency = value;
   }
 
   private _device: number = 0;
   public get Device(): number {
     return this._device;
   }
-  // BASS allows values for devices ranging from -1 (default device) to n
+  // -1      Default device
+  // 0       No Sound
+  // 1..n    First real device
   public set Device(value: number) {
     if (value < -1) throw new Error("Value must be >= -1!");
+    value = Math.abs(value); // Make -1 to 1 to get the first real device as default device
+    this.speak(
+      "Setting device from " + this._device + " to " + value,
+      LoggingLevel.LOG
+    );
+    // Prevent reinitialization of already initialized devices
+    if (value === this._device) return;
     this._device = value;
-
-    // Automatically re-init BASS when the Device property is set
-    //this.Init();
+    const di = GetDeviceInfo(value);
+    if (!di.IsInitialized) {
+      if (
+        !BASS_Init(value, this.Frequency, this.Flags, this.WindowHandle, null)
+      ) {
+        throw new Error(
+          "Failed to initialize BASS with device " +
+            value +
+            " Error: " +
+            GetBASSErrorCode()
+        );
+      }
+      this.speak(`Initialized device successfully: ${value}`, LoggingLevel.LOG);
+    }
+    if (!BASS_SetDevice(value)) {
+      throw new Error(
+        "Failed to set device " + value + " Error: " + GetBASSErrorCode()
+      );
+    } else {
+      // Update Device Info
+      this._deviceInfo = di;
+    }
   }
 
   public get DeviceName(): string {
@@ -139,24 +174,25 @@ export class BASS {
     }
   ) {
     this.Flags = initParams.flags;
-    this.Device = initParams.device;
+    this._device = initParams.device;
+    this.Frequency = initParams.freq;
     this.WindowHandle = initParams.windowHandle;
     this.IsVerbose = initParams.isVerbose ?? true;
     // Activate Unicode encoding.
     BASS_SetConfig(Options.BASS_CONFIG_UNICODE, 1);
-    this.Init(initParams);
+    this.Init();
     this.getBASSInfo();
   }
 
   // (Re-)initializes BASS.
-  Init(params: BASSInitParams) {
+  Init() {
     if (this.HasDeviceStarted) this.Free();
     // Initializing the library
     let success = false;
     try {
       success = BASS_Init(
         this.Device,
-        params.freq,
+        this.Frequency,
         this.Flags,
         this.WindowHandle,
         null
@@ -210,13 +246,22 @@ export class BASS {
     this._bassInfo.readValuesFromStruct();
   }
 
-  // Creates a stream from a MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file.
+  /**
+   * Creates a stream from a MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file.
+   * @param filePath The path to the file to stream.
+   * @param autoplay Whether to start playback automatically.
+   * @param offset The starting position in the file (in bytes).
+   * @param length The length of the file to stream (in bytes).
+   * @param flags Flags to modify the stream behavior.
+   * @returns The handle of the created stream, or 0 on failure.
+   */
   public StreamFromFile(
     filePath: string,
+    autoplay: boolean = true,
     offset: number = 0,
     length: number = 0,
     flags: number = BASS_SAMPLE_FLOAT
-  ): boolean {
+  ): number {
     if (this.HasDeviceStarted) {
       const hstream = BASS_StreamCreateFile(
         false,
@@ -228,7 +273,16 @@ export class BASS {
       // Create a channel for the stream and add the channel handle to the channel list
       if (BASS_ErrorGetCode() === BASS_OK && BASS_ChannelStart(hstream)) {
         this._channels.push(hstream);
-        return BASS_ErrorGetCode() === BASS_OK;
+        // If autoplay is false set the stream on "paused"
+        if (!autoplay) {
+          if (!this.Pause(hstream)) {
+            this.speak(
+              `Failed to pause stream for file: ${filePath}`,
+              LoggingLevel.ERROR
+            );
+          }
+        }
+        return hstream;
       } else {
         this.speak(
           `Failed to create stream for file: ${filePath}`,
@@ -238,7 +292,7 @@ export class BASS {
           `BASS Error Code: ${GetBASSErrorCode()}, Streamhandle: ${hstream}`,
           LoggingLevel.ERROR
         );
-        return false;
+        return 0;
       }
     }
     // BASS_Init was not called previously
@@ -246,7 +300,33 @@ export class BASS {
       `Call BASS_init() before using any BASS streaming functions!`,
       LoggingLevel.ERROR
     );
-    return false;
+    return 0;
+  }
+
+  /**
+   * Pauses a sample, stream, MOD music, or recording.
+   * Error codes
+   * BASS_ERROR_HANDLE handle is not a valid channel.
+   * BASS_ERROR_DECODE handle is a decoding channel, so cannot be played or paused.
+   * BASS_ERROR_NOPLAY The channel is not playing.
+   * @param handle The handle of the stream or sample to pause.
+   * @returns True if successful, false otherwise.
+   */
+  public Pause(handle: number): boolean {
+    return BASS_ChannelPause(handle);
+  }
+
+  /**
+   * Starts/resumes playback of a sample, stream, MOD music, or a recording.
+   * Error codes
+   * BASS_ERROR_HANDLE handle is not a valid channel.
+   * BASS_ERROR_DECODE handle is a decoding channel, so cannot be played.
+   * BASS_ERROR_START The output is paused/stopped, use BASS_Start to start it.
+   * @param handle The handle of the stream or sample to start.
+   * @returns True if successful, false otherwise.
+   */
+  public Start(handle: number): boolean {
+    return BASS_ChannelStart(handle);
   }
 
   /***

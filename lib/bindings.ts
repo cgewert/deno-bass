@@ -187,7 +187,7 @@ export const library = Deno.dlopen(osSpecificLibPath, {
   // Locks a stream, MOD music or recording channel to the current thread.
   BASS_ChannelLock: { parameters: [DWORD, c_bool], result: c_bool },
   // Pauses a sample, stream, MOD music, or recording.
-  BASS_ChannelPause: { parameters: [QWORD], result: c_bool },
+  BASS_ChannelPause: { parameters: [DWORD], result: c_bool },
   // Starts/resumes playback of a sample, stream, MOD music, or a recording.
   BASS_ChannelPlay: { parameters: [DWORD, c_bool], result: c_bool },
   // Removes a DSP function from a stream, MOD music, or recording channel.
