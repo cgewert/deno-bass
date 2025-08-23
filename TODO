@@ -15,6 +15,7 @@
 
   ✔ Automatically re-init BASS when the Device property was set on the bass class instance @started(25-08-20 13:09) @done(25-08-21 18:37) @lasted(1d5h28m51s)
   ✔ Find a way to determine if basslib is initialized to prevent a call to free without having resources reserved @done(25-08-20 14:36)
+  ☐ Implement Stream Class @started(25-08-23 15:19)
   ☐ Check if UNICODE config option works for linux
   ☐ Allow global volume control for mods, musics, samples via bass class instance (See BASS_SetConfig)
   ☐ Add methods for getting audio levels and spectrum analysis

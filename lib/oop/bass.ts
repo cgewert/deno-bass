@@ -25,6 +25,8 @@ import { DeviceInfo } from "../types/DeviceInfo.ts";
 import { BASSInfo } from "../types/BASSInfo.ts";
 import { BASS_OK } from "../errors.ts";
 import { DeviceStatus } from "../modes.ts";
+import { Stream } from "./Stream.ts";
+import { StreamFactory } from "./factories/StreamFactory.ts";
 
 export interface BASSInitParams {
   freq: number;
@@ -253,7 +255,7 @@ export class BASS {
    * @param offset The starting position in the file (in bytes).
    * @param length The length of the file to stream (in bytes).
    * @param flags Flags to modify the stream behavior.
-   * @returns The handle of the created stream, or 0 on failure.
+   * @returns The handle of the created stream, or null on failure.
    */
   public StreamFromFile(
     filePath: string,
@@ -261,38 +263,36 @@ export class BASS {
     offset: number = 0,
     length: number = 0,
     flags: number = BASS_SAMPLE_FLOAT
-  ): number {
+  ): Stream | null {
     if (this.HasDeviceStarted) {
-      const hstream = BASS_StreamCreateFile(
-        false,
-        ToCString(filePath),
-        BigInt(offset),
-        BigInt(length),
+      const stream = StreamFactory.createFileStream(
+        filePath,
+        offset,
+        length,
         flags
       );
-      // Create a channel for the stream and add the channel handle to the channel list
-      if (BASS_ErrorGetCode() === BASS_OK && BASS_ChannelStart(hstream)) {
-        this._channels.push(hstream);
+      if (BASS_ErrorGetCode() === BASS_OK && stream?.start()) {
+        this._channels.push(stream!.Handle);
         // If autoplay is false set the stream on "paused"
         if (!autoplay) {
-          if (!this.Pause(hstream)) {
+          if (!stream.pause()) {
             this.speak(
               `Failed to pause stream for file: ${filePath}`,
               LoggingLevel.ERROR
             );
           }
         }
-        return hstream;
+        return stream;
       } else {
         this.speak(
           `Failed to create stream for file: ${filePath}`,
           LoggingLevel.ERROR
         );
         this.speak(
-          `BASS Error Code: ${GetBASSErrorCode()}, Streamhandle: ${hstream}`,
+          `BASS Error Code: ${GetBASSErrorCode()}, Streamhandle: ${stream}`,
           LoggingLevel.ERROR
         );
-        return 0;
+        return null;
       }
     }
     // BASS_Init was not called previously
@@ -300,33 +300,15 @@ export class BASS {
       `Call BASS_init() before using any BASS streaming functions!`,
       LoggingLevel.ERROR
     );
-    return 0;
+    return null;
   }
 
-  /**
-   * Pauses a sample, stream, MOD music, or recording.
-   * Error codes
-   * BASS_ERROR_HANDLE handle is not a valid channel.
-   * BASS_ERROR_DECODE handle is a decoding channel, so cannot be played or paused.
-   * BASS_ERROR_NOPLAY The channel is not playing.
-   * @param handle The handle of the stream or sample to pause.
-   * @returns True if successful, false otherwise.
-   */
-  public Pause(handle: number): boolean {
-    return BASS_ChannelPause(handle);
+  public Pause(): boolean {
+    return true;
   }
 
-  /**
-   * Starts/resumes playback of a sample, stream, MOD music, or a recording.
-   * Error codes
-   * BASS_ERROR_HANDLE handle is not a valid channel.
-   * BASS_ERROR_DECODE handle is a decoding channel, so cannot be played.
-   * BASS_ERROR_START The output is paused/stopped, use BASS_Start to start it.
-   * @param handle The handle of the stream or sample to start.
-   * @returns True if successful, false otherwise.
-   */
-  public Start(handle: number): boolean {
-    return BASS_ChannelStart(handle);
+  public Start(): boolean {
+    return true;
   }
 
   /***
