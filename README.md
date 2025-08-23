@@ -18,6 +18,18 @@ HAVE THIS IN MIND BEFORE USING IT 🚧
 
 There is no release yet!
 
+Short example for impatient ones:
+
+```sh
+import { BASS } from "../../lib/oop/bass.ts";
+
+const bass = new BASS();
+const stream = bass.StreamFromFile("filename.mp3", false); // false means no autoplay
+stream?.play();
+alert("Press ENTER to exit");
+bass.free();    // Free reserved memory and resources
+```
+
 1. One can import the module easily directly from Github:
 
 ```sh
