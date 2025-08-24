@@ -2,9 +2,15 @@
     This example demonstrates how to make use of the deno-bass OOP API.
 */
 import { BASS } from "../../lib/oop/bass.ts";
+import { DeviceInfo } from "../../lib/types/mod.ts";
 
 // Create an instance of the BASS class, this will automatically initialize bass on the current thread.
 const bass = new BASS();
+// Get a list of available audio devices
+const audioDevices = bass.getDeviceList();
+audioDevices.forEach((device: DeviceInfo) => {
+  console.log("Device found: ", device.Name);
+});
 // You can suppress or activate console output by setting IsVerbose (defaults to true)
 bass.IsVerbose = true;
 // Retrieve BASS information from the class instance

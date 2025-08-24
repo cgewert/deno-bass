@@ -8,10 +8,8 @@ import {
   BASS_GetCPU,
   BASS_ErrorGetCode,
   BASS_IsStarted,
-  BASS_StreamCreateFile,
-  BASS_ChannelStart,
   BASS_SetDevice,
-  BASS_ChannelPause,
+  BASS_GetDeviceInfo,
 } from "../bindings.ts";
 import { GetBASSErrorCode, PointerToString, ToCString } from "../utilities.ts";
 import { DESKTOP_WINDOW_HANDLE, GetDeviceInfo } from "./oop.ts";
@@ -309,6 +307,27 @@ export class BASS {
 
   public Start(): boolean {
     return true;
+  }
+
+  /**
+   * Retrieves a list of audio output devices.
+   * @returns An array of DeviceInfo objects representing the available audio devices.
+   */
+  public getDeviceList(): DeviceInfo[] {
+    const devices: DeviceInfo[] = [];
+    let deviceIndex = 0;
+    let hasDevice = true;
+    do {
+      const di = new DeviceInfo(deviceIndex);
+      hasDevice = BASS_GetDeviceInfo(deviceIndex, di.Infostruct);
+      if (hasDevice) {
+        di.readValuesFromStruct();
+        di.DeviceIndex = deviceIndex;
+        devices.push(di);
+        deviceIndex++;
+      }
+    } while (hasDevice);
+    return devices;
   }
 
   /***

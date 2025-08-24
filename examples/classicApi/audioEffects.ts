@@ -21,12 +21,9 @@ const FILENAME = ToCString("./examples/01.mp3");
 let hfx = 0;
 
 BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, null);
-BASS_StreamCreateFile(false, FILENAME, BigInt(0), BigInt(0), 0).then(
-  (handle: number) => {
-    BASS_ChannelSetAttribute(handle, BASS_ATTRIB_VOL, VOLUME);
-    play(handle);
-  }
-);
+const handle = BASS_StreamCreateFile(false, FILENAME, BigInt(0), BigInt(0), 0);
+BASS_ChannelSetAttribute(handle, BASS_ATTRIB_VOL, VOLUME);
+play(handle);
 
 function play(handle: number) {
   const start = Date.now();

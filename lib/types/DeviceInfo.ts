@@ -7,6 +7,7 @@ export class DeviceInfo {
   private _name: string;
   private _flags: number;
   private _driver: string;
+  private _deviceIndex: number = 0;
 
   public static SIZE = 24;
 
@@ -22,6 +23,16 @@ export class DeviceInfo {
     if (device_idx > -1) {
       BASS_GetDeviceInfo(device_idx, this._infostruct);
       this.readValuesFromStruct();
+    }
+  }
+
+  public get DeviceIndex(): number {
+    return this._deviceIndex;
+  }
+  public set DeviceIndex(value: number) {
+    if (value < 0) throw new Error("Invalid device index");
+    if (value !== this._deviceIndex) {
+      this._deviceIndex = value;
     }
   }
 
@@ -67,11 +78,14 @@ export class DeviceInfo {
       this._infostruct,
       DeviceInfo.OFFSET_NAME
     );
+
     let name = "";
-    try {
-      name = Deno.UnsafePointerView.getCString(deviceNamePointer);
-    } catch (err) {
-      console.log("Error while getting device info: ", err);
+    if (deviceNamePointer) {
+      try {
+        name = Deno.UnsafePointerView.getCString(deviceNamePointer);
+      } catch (err) {
+        console.log("Error while getting device info: ", err);
+      }
     }
     this.Name = name;
     // Reading device driver
@@ -80,18 +94,20 @@ export class DeviceInfo {
       DeviceInfo.OFFSET_DRIVER
     );
     let driverIdentification = "";
-    try {
-      driverIdentification = Deno.UnsafePointerView.getCString(
-        driverIdentificationPointer
+    if (driverIdentificationPointer) {
+      try {
+        driverIdentification = Deno.UnsafePointerView.getCString(
+          driverIdentificationPointer
+        );
+      } catch (err) {
+        console.log("Error while getting device info: ", err);
+      }
+      this.Driver = driverIdentification;
+      // Reading flags
+      this.Flags = new DataView(this._infostruct.buffer).getUint32(
+        DeviceInfo.OFFSET_FLAGS,
+        true
       );
-    } catch (err) {
-      console.log("Error while getting device info: ", err);
     }
-    this.Driver = driverIdentification;
-    // Reading flags
-    this.Flags = new DataView(this._infostruct.buffer).getUint32(
-      DeviceInfo.OFFSET_FLAGS,
-      true
-    );
   }
 }

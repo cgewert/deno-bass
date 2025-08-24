@@ -4,65 +4,65 @@
  */
 
 import {
-  BASS_ChannelBytes2Seconds,
-  BASS_ChannelFlags,
-  BASS_ChannelFree,
-  BASS_ChannelGetAttributeEx,
-  BASS_ChannelGetData,
-  BASS_ChannelGetDevice,
-  BASS_ChannelGetLength,
-  BASS_ChannelGetLevelEx,
-  BASS_ChannelGetPosition,
-  BASS_ChannelIsActive,
-  BASS_ChannelIsSliding,
-  BASS_ChannelPlay,
-  BASS_ChannelSetAttribute,
-  BASS_ChannelSetAttributeEx,
-  BASS_ChannelSlideAttribute,
-  BASS_ChannelStop,
-  BASS_ErrorGetCode,
-  BASS_Free,
-  BASS_GetConfig,
-  BASS_Init,
-  BASS_IsStarted,
   BASS_SetConfig,
   BASS_Start,
+  BASS_IsStarted,
+  BASS_Init,
   BASS_StreamCreateFile,
+  BASS_ErrorGetCode,
+  BASS_ChannelSetAttribute,
+  BASS_GetConfig,
+  BASS_ChannelPlay,
+  BASS_ChannelGetLength,
+  BASS_ChannelBytes2Seconds,
+  BASS_ChannelGetPosition,
   BASS_Update,
+  BASS_ChannelFlags,
+  BASS_ChannelSlideAttribute,
+  BASS_ChannelGetData,
+  BASS_ChannelIsActive,
+  BASS_ChannelIsSliding,
+  BASS_ChannelGetDevice,
+  BASS_ChannelGetLevelEx,
+  BASS_ChannelStop,
+  BASS_ChannelFree,
+  BASS_Free,
   library,
-} from "../lib/bindings.ts";
+  BASS_ChannelSetAttributeEx,
+  BASS_ChannelGetAttributeEx,
+} from "../../lib/bindings.ts";
 import {
+  BASS_ATTRIB_VOL,
   BASS_ATTRIB_BITRATE,
   BASS_ATTRIB_FREQ,
   BASS_ATTRIB_USER,
-  BASS_ATTRIB_VOL,
-} from "../lib/channelAttributes.ts";
-import { BASS_OK } from "../lib/errors.ts";
+} from "../../lib/channelAttributes.ts";
+import { BASS_OK } from "../../lib/errors.ts";
 import {
-  BASS_DATA_FFT256,
   BASS_DEVICE_STEREO,
-  BASS_LEVEL_STEREO,
   BASS_SAMPLE_FLOAT,
   BASS_SAMPLE_LOOP,
-} from "../lib/flags.ts";
-import { BASS_POS_BYTE } from "../lib/modes.ts";
-import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../lib/options.ts";
+  BASS_DATA_FFT256,
+  BASS_LEVEL_STEREO,
+} from "../../lib/flags.ts";
+import { BASS_POS_BYTE } from "../../lib/modes.ts";
+import { BASS_CONFIG_UNICODE, BASS_CONFIG_HANDLES } from "../../lib/options.ts";
 import {
+  BASS_ACTIVE_PLAYING,
   BASS_ACTIVE_PAUSED,
   BASS_ACTIVE_PAUSED_DEVICE,
-  BASS_ACTIVE_PLAYING,
   BASS_ACTIVE_STOPPED,
-} from "../lib/retvals.ts";
-import { BASSInfo } from "../lib/types/BASSInfo.ts";
-import { ChannelInfo } from "../lib/types/ChannelInfo.ts";
-import { ID3v1Tag } from "../lib/types/ID3v1Tag.ts";
+} from "../../lib/retvals.ts";
+import { BASSInfo } from "../../lib/types/BASSInfo.ts";
+import { ID3v1Tag } from "../../lib/types/ID3v1Tag.ts";
+import { ChannelInfo } from "../../lib/types/mod.ts";
 import {
-  ErrorCodeToString,
   GetBASSErrorCode,
-  QueryChannelAttributeValue,
   ToCString,
+  ErrorCodeToString,
   UInt8BufferToString,
-} from "../lib/utilities.ts";
+  QueryChannelAttributeValue,
+} from "../../lib/utilities.ts";
 
 BASS_SetConfig(BASS_CONFIG_UNICODE, 1);
 let isOutputStartedYet = BASS_Start();
@@ -88,30 +88,16 @@ const fileNameBuffer = ToCString(
   "./examples/01.mp3"
 );
 
-BASS_StreamCreateFile(
+const handle = BASS_StreamCreateFile(
   false,
   fileNameBuffer,
   BigInt(0),
   BigInt(0),
   BASS_SAMPLE_FLOAT
-).then(
-  (handle: number) => {
-    let bassError = BASS_ErrorGetCode();
-
-    if (bassError != BASS_OK) {
-      console.log("Error while opening Stream: ");
-      console.log(ErrorCodeToString(bassError));
-      console.log("Handle: ", handle);
-    } else {
-      console.log("Opened Stream File!");
-      console.log("Stream Handle: ", handle.toString(16));
-      play(handle);
-    }
-  },
-  (_createError) => {
-    console.log("Something unexpected happened!?: ", _createError);
-  }
 );
+console.log("Opened Stream File!");
+console.log("Stream Handle: ", handle.toString(16));
+play(handle);
 
 function play(streamHandle: number) {
   // Set volume for the playing channel stream
